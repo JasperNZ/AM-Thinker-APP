@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <assemblyIdentity name="Pt4ProjectAddin" version="1.0.0.0"></assemblyIdentity>
+
+  <clrClass clsid="{106eb6fb-6864-4598-9d95-c7e7a143af98}" progid="Pt4ProjectAddin.StandardAddInServer" threadingModel="Both" name="Pt4ProjectAddin.Pt4ProjectAddin.StandardAddInServer" runtimeVersion=""></clrClass>
+
+  <file name="Pt4ProjectAddin.dll" hashalg="SHA1"></file>
+
+</assembly>
