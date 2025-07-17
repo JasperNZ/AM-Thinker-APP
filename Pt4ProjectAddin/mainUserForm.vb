@@ -404,7 +404,7 @@ Public Class mainUserForm
                 MEXTLTS = LTSLMEXT
             End If
             If PPE = "High" Then
-                MEXTPPE = PPEH
+                MEXTPPE = PPEHMEXT
             ElseIf PPE = "Medium" Then
                 MEXTPPE = PPEMMEXT
             Else
@@ -438,7 +438,7 @@ Public Class mainUserForm
             If LTS = "High" Then
                 MJETLTS = LTSHMJET
             ElseIf LTS = "Medium" Then
-                vLTS = LTSMMJET
+                MJETLTS = LTSMMJET
             Else
                 MJETLTS = LTSLMJET
             End If

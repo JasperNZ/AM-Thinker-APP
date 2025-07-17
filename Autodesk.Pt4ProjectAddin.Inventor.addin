@@ -1,5 +1,6 @@
 <Addin Type="Standard">
   <!--Created for Autodesk Inventor Version 28.0-->
+  <!--Temporary DisplayName, Description to load the add-in-->
   <ClassId>{106eb6fb-6864-4598-9d95-c7e7a143af98}</ClassId>
   <ClientId>{106eb6fb-6864-4598-9d95-c7e7a143af98}</ClientId>
   <DisplayName>Pt4ProjectAddin</DisplayName>
