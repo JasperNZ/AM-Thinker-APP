@@ -3,24 +3,6 @@ Imports System.Windows.Forms
 Imports Inventor
 
 Public Class mainUserForm
-
-
-    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSource1.CurrentChanged
-
-    End Sub
-
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPrecisionOfPart.SelectedIndexChanged
-
-    End Sub
-
-    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
-    End Sub
-
-    Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-
-    End Sub
-
     'When Compute Button is pressed
     Private Sub ButtonCompute_Click(sender As Object, e As EventArgs) Handles ButtonCompute.Click
         'this is code to initiate the draft analyssi to veiw the overhangs of a model from a user selected face, i dont know how to get the computer to interperet the data
@@ -259,7 +241,11 @@ Public Class mainUserForm
         Dim RED As Double
         Dim GREEN As Double
         If FinalScore < RED Then
-
+            MsgBox("Part is not suitable for Additive Manufacture")
+        ElseIf FinalScore > GREEN Then
+            MsgBox("Part is Suitable for Additive Manufacture")
+        Else
+            MsgBox("Part might be suitable for Additive Manufacture after some adjustments")
         End If
 #End Region
     End Sub
