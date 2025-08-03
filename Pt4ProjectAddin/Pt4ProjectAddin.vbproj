@@ -97,6 +97,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StandardAddInServer.vb" />
+    <Compile Include="TestingClass.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pt4ProjectAddin.X.manifest" />

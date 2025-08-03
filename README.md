@@ -13,3 +13,33 @@ Instructions to use Github:<br>
 7.) Push to origin - located on the header bar, this finalises the files to be sent to the remote repository (origin) to be stored and shared among users.  
 8.) Fetch/Pull from origin - you may see this when other users edit the code. This is the act of extracting the files from the remote repository. Pull completely replaces the local repository with the files relevant to the remote repository, e.g files not uploaded, specific to your device like a json path file, etc. Fetch is likely to be used when we need to merge changes where you may have made local changes and another user has already made progress and uploaded to the remote repository. This requires the changes to be merged as it could laed to potential conflict in logic and is resolved within the IDE.  
 9.) Branches - This creates copies of the main code that allows divergence for when multiple users are editing the main code. Each individual can save their progress and later merge it together to keep their changes intact.
+
+
+Code Implementation: <br>
+- Using Inventor API and VB.NET: <br>
+- 3 materials of Plastic, Ceramic, Metal. 6 AM technologies of MEX, MJT, BJT, VPP, DED, PBF. 18 combinations
+- Class-based approach of utilising hiearchy of classes to represent the materials and technologies.
+	-	 ENUMS for Materials, numbers and Technologies
+	- 	Or create a visual clas of AM technology, the inherit it to each type, ie MEX metal, MJT plastic, etc.
+		- Each class has 7 parameters, and maybe a scoring function?
+- Other classes include a mainuserform to input answers, calculate score, Static weightings?
+- 
+
+
+
+
+
+
+
+
+
+Using VS and VB.NET: <br>
+1.) Ensure Solution Explorer set to Solution view
+2.) Load Project
+3.) Add --> existing item 
+4.) Enjoy debugging and class hierarchy
+
+
+Useful file locations:<br>
+To add the plugin to Inventor by including the .dll and .addin file for tidiness.
+.\AppData\Roaming\Autodesk\ApplicationPlugins\Pt4ProjectAddin

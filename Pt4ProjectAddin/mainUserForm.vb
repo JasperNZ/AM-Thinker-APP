@@ -29,7 +29,9 @@ Public Class mainUserForm
         'invdoc = g_inventorApplication.ActiveDocument
         'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
         'Dim draftdata = dranaly.AttributeSets()
-
+        Dim myTest As New TestingClass()
+        Dim testString As String = myTest.testHello()
+        MessageBox.Show(testString)
 
 #Region "dims for user input"
         'Dims from Machine Selection
@@ -59,6 +61,9 @@ Public Class mainUserForm
         Dim LTS As Double
         Dim COM As Double
         Dim IMP As Double
+
+        IMF = 0.1
+        COP = 0.1
 #End Region
 #Region "Material Extrusion Weighting"
         Dim MEXPOP As Double
@@ -258,9 +263,11 @@ Public Class mainUserForm
 #Region "Mark Final Score Against Thresholds"
         Dim RED As Double
         Dim GREEN As Double
-        If FinalScore < RED Then
-
-        End If
+        GREEN = 10
+        RED = 20
+        ' If FinalScore < RED Then
+        '
+        ' End If
 #End Region
     End Sub
 
