@@ -1,0 +1,42 @@
+{
+  "ProjectInfo": {
+    "ProjectName": "AM Selection Filter",
+    "Comment": "testing json files as a possible and viable solution for storing large amounts of information such as AHP weightings, materials + AM technology combinations"
+  },
+  "AHPWeights": {
+    "Precision": 0.067,
+    "LeadTime": 0.128,
+    "PartComplexity": 0.243,
+    "Quantity": 0.067,
+    "OverhangArea": 0.128,
+    "ImpossibleMachining": 0.243,
+    "PostProcessingEffort": 0.243
+  },
+  "MEX_Plastic": {
+    "Precision": {"Low": 1, "Medium": 3, "High": 5},
+    "LeadTime": {"Low": 1, "Medium": 3, "High": 5},
+    "PartComplexity": {"Low": 1, "Medium": 3, "High": 5},
+    "Quantity": {"Low": 1, "Medium": 3, "High": 5},
+    "OverhangArea": {"Low": 1, "Medium": 3, "High": 5},
+    "ImpossibleMachining": {"Low": 1, "Medium": 3, "High": 5},
+    "PostProcessingEffort": {"Low": 1, "Medium": 3, "High": 5},
+  },
+  "MEX_Ceramic": {
+    "Precision": {"Low": 1, "Medium": 3, "High": 5},
+    "LeadTime": {"Low": 1, "Medium": 3, "High": 5},
+    "PartComplexity": {"Low": 1, "Medium": 3, "High": 5},
+    "Quantity": {"Low": 1, "Medium": 3, "High": 5},
+    "OverhangArea": {"Low": 1, "Medium": 3, "High": 5},
+    "ImpossibleMachining": {"Low": 1, "Medium": 3, "High": 5},
+    "PostProcessingEffort": {"Low": 1, "Medium": 3, "High": 5},
+  },
+  "MEX_Metal": {
+    "Precision": {"Low": 1, "Medium": 3, "High": 5},
+    "LeadTime": {"Low": 1, "Medium": 3, "High": 5},
+    "PartComplexity": {"Low": 1, "Medium": 3, "High": 5},
+    "Quantity": {"Low": 1, "Medium": 3, "High": 5},
+    "OverhangArea": {"Low": 1, "Medium": 3, "High": 5},
+    "ImpossibleMachining": {"Low": 1, "Medium": 3, "High": 5},
+    "PostProcessingEffort": {"Low": 1, "Medium": 3, "High": 5},
+  }
+}

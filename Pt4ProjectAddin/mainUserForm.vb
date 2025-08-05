@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports Inventor
+Imports Newtonsoft.Json
 
 Public Class mainUserForm
 
@@ -29,9 +30,7 @@ Public Class mainUserForm
         'invdoc = g_inventorApplication.ActiveDocument
         'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
         'Dim draftdata = dranaly.AttributeSets()
-        Dim myTest As New TestingClass()
-        Dim testString As String = myTest.testHello()
-        MessageBox.Show(testString)
+
 
 #Region "dims for user input"
         'Dims from Machine Selection

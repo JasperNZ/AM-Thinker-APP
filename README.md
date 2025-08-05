@@ -22,7 +22,7 @@ Code Implementation: <br>
 	-	 ENUMS for Materials, numbers and Technologies
 	- 	Or create a visual clas of AM technology, the inherit it to each type, ie MEX metal, MJT plastic, etc.
 		- Each class has 7 parameters, and maybe a scoring function?
-- Other classes include a mainuserform to input answers, calculate score, Static weightings?
+- Other classes include a mainuserform to input answers, calculate score, Static weightings/variables, geometric analysis?
 - 
 
 
@@ -43,3 +43,6 @@ Using VS and VB.NET: <br>
 Useful file locations:<br>
 To add the plugin to Inventor by including the .dll and .addin file for tidiness.
 .\AppData\Roaming\Autodesk\ApplicationPlugins\Pt4ProjectAddin
+
+.dll file might be useful if we use JSON files.
+https://www.nuget.org/packages/Newtonsoft.Json
