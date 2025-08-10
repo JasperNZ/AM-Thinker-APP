@@ -39,6 +39,7 @@ Using VS and VB.NET: <br>
 3.) Add --> existing item 
 4.) Enjoy debugging and class hierarchy
 
+Consider a list of 18 elements for each category, easy access to the elements, but very hard to read/edit.
 
 Useful file locations:<br>
 To add the plugin to Inventor by including the .dll and .addin file for tidiness.
