@@ -100,7 +100,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StandardAddInServer.vb" />
-    <Compile Include="TestingClass.vb" />
+    <Compile Include="ConventionalMachiningUtility.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json">

@@ -31,6 +31,13 @@ Public Class mainUserForm
         'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
         'Dim draftdata = dranaly.AttributeSets()
 
+        'extracting inventor and part (NO ASSEMBLIES!) information for analysis
+        ' I have also realized that calling with no parts will crash the code... might need an error handler class
+        Dim inventorApp As Inventor.Application = Marshal.GetActiveObject("Inventor.Application")
+        Dim partDoc As PartDocument = CType(inventorApp.ActiveDocument, PartDocument)
+        Dim CMAnalyser As New ConventionalMachiningUtility(inventorApp, partDoc)
+        Dim CMResults = CMAnalyser.CheckAllFeatures()
+
 
 #Region "dims for user input"
         'Dims from Machine Selection
