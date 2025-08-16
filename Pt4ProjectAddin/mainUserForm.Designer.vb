@@ -44,6 +44,7 @@ Partial Class mainUserForm
         Me.CheckBoxMaterialJetting = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMaterialExtrusion = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxIMFP = New System.Windows.Forms.CheckBox()
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -144,7 +145,7 @@ Partial Class mainUserForm
         Me.ComboBoxIntendedUseOfPart.AllowDrop = True
         Me.ComboBoxIntendedUseOfPart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxIntendedUseOfPart.FormattingEnabled = True
-        Me.ComboBoxIntendedUseOfPart.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare part", "Mass Production"})
+        Me.ComboBoxIntendedUseOfPart.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare part", "Mass Production", "Prototype"})
         Me.ComboBoxIntendedUseOfPart.Location = New System.Drawing.Point(199, 178)
         Me.ComboBoxIntendedUseOfPart.Name = "ComboBoxIntendedUseOfPart"
         Me.ComboBoxIntendedUseOfPart.Size = New System.Drawing.Size(181, 28)
@@ -252,11 +253,23 @@ Partial Class mainUserForm
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "GroupBox1"
         '
+        'CheckBoxIMFP
+        '
+        Me.CheckBoxIMFP.AutoSize = True
+        Me.CheckBoxIMFP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBoxIMFP.Location = New System.Drawing.Point(25, 272)
+        Me.CheckBoxIMFP.Name = "CheckBoxIMFP"
+        Me.CheckBoxIMFP.Size = New System.Drawing.Size(314, 24)
+        Me.CheckBoxIMFP.TabIndex = 22
+        Me.CheckBoxIMFP.Text = "Impossible Machining Features Present"
+        Me.CheckBoxIMFP.UseVisualStyleBackColor = True
+        '
         'mainUserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(755, 393)
+        Me.Controls.Add(Me.CheckBoxIMFP)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.ComboBoxMaterial)
@@ -302,4 +315,5 @@ Partial Class mainUserForm
     Friend WithEvents CheckBoxMaterialJetting As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxMaterialExtrusion As Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
+    Friend WithEvents CheckBoxIMFP As Windows.Forms.CheckBox
 End Class

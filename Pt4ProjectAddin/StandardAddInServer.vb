@@ -3,8 +3,8 @@ Imports Inventor
 Imports Microsoft.Win32
 
 Namespace Pt4ProjectAddin
-    <ProgIdAttribute("Pt4ProjectAddin.StandardAddInServer"), _
-    GuidAttribute("106eb6fb-6864-4598-9d95-c7e7a143af98")> _
+    <ProgIdAttribute("Pt4ProjectAddin.StandardAddInServer"),
+    GuidAttribute("106eb6fb-6864-4598-9d95-c7e7a143af98")>
     Public Class StandardAddInServer
         Implements Inventor.ApplicationAddInServer
 
@@ -103,8 +103,12 @@ Namespace Pt4ProjectAddin
 
     End Class
 End Namespace
-
-
+Public Class MachineWeight
+    Public PrescisionOfPart As Double
+    Public PostProcessingEffort As Double
+    Public Overhang As Double
+    Public IntendedUseOfPart As Double
+End Class
 Public Module Globals
     ' Inventor application object.
     Public g_inventorApplication As Inventor.Application
@@ -145,6 +149,17 @@ Public Module Globals
         'return the complexity ratio
         Return complex
 
+    End Function
+
+#End Region
+
+#Region "get user to select face to touch build plate"
+    Public Function GetBaseFace() As Object
+        Dim invDoc As Document
+        invDoc = g_inventorApplication.ActiveDocument
+        Dim BaseFace As Object
+        BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
+        Return BaseFace
     End Function
 
 #End Region
