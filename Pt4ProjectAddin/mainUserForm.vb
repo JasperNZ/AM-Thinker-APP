@@ -1,27 +1,8 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports Inventor
-Imports Newtonsoft.Json
 
 Public Class mainUserForm
-
-
-    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSource1.CurrentChanged
-
-    End Sub
-
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPrecisionOfPart.SelectedIndexChanged
-
-    End Sub
-
-    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
-    End Sub
-
-    Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-
-    End Sub
-
     'When Compute Button is pressed
     Private Sub ButtonCompute_Click(sender As Object, e As EventArgs) Handles ButtonCompute.Click
         'this is code to initiate the draft analyssi to veiw the overhangs of a model from a user selected face, i dont know how to get the computer to interperet the data
@@ -30,13 +11,6 @@ Public Class mainUserForm
         'invdoc = g_inventorApplication.ActiveDocument
         'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
         'Dim draftdata = dranaly.AttributeSets()
-
-        'extracting inventor and part (NO ASSEMBLIES!) information for analysis
-        ' I have also realized that calling with no parts will crash the code... might need an error handler class
-        Dim inventorApp As Inventor.Application = Marshal.GetActiveObject("Inventor.Application")
-        Dim partDoc As PartDocument = CType(inventorApp.ActiveDocument, PartDocument)
-        Dim CMAnalyser As New ConventionalMachiningUtility(inventorApp, partDoc)
-        Dim CMResults = CMAnalyser.CheckAllFeatures()
 
 
 #Region "dims for user input"
@@ -67,9 +41,6 @@ Public Class mainUserForm
         Dim LTS As Double
         Dim COM As Double
         Dim IMP As Double
-
-        IMF = 0.1
-        COP = 0.1
 #End Region
 #Region "Material Extrusion Weighting"
         Dim MEXPOP As Double
@@ -269,11 +240,13 @@ Public Class mainUserForm
 #Region "Mark Final Score Against Thresholds"
         Dim RED As Double
         Dim GREEN As Double
-        GREEN = 10
-        RED = 20
-        ' If FinalScore < RED Then
-        '
-        ' End If
+        If FinalScore < RED Then
+            MsgBox("Part is not suitable for Additive Manufacture")
+        ElseIf FinalScore > GREEN Then
+            MsgBox("Part is Suitable for Additive Manufacture")
+        Else
+            MsgBox("Part might be suitable for Additive Manufacture after some adjustments")
+        End If
 #End Region
     End Sub
 
