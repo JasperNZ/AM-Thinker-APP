@@ -4,6 +4,7 @@ Imports Inventor
 
 Public Class mainUserForm
     'When Compute Button is pressed
+    'Function computes the various parameters of the object and applies the AM analysis given the users input, once the Compute Button is pressed. 
     Private Sub ButtonCompute_Click(sender As Object, e As EventArgs) Handles ButtonCompute.Click
         'this is code to initiate the draft analyssi to veiw the overhangs of a model from a user selected face, i dont know how to get the computer to interperet the data
         'Dim BaseFace As Object = GetBaseFace()
@@ -11,6 +12,29 @@ Public Class mainUserForm
         'invdoc = g_inventorApplication.ActiveDocument
         'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
         'Dim draftdata = dranaly.AttributeSets()
+
+        'extracting inventor and part (NO ASSEMBLIES!) information for analysis
+        ' I have also realized that calling with no parts will crash the code... might need an error handler class
+        'I am also now upset that the code after megining with the main branch now got deleted :(
+        Dim inventorApp As Inventor.Application = Marshal.GetActiveObject("Inventor.Application")
+        Dim partDoc As PartDocument = CType(inventorApp.ActiveDocument, PartDocument)
+        Dim CMAnalyser As New ConventionalMachiningUtility(inventorApp, partDoc)
+        Dim CMResults = CMAnalyser.CheckAllFeatures()
+
+        'writingnotes on how this code works
+        'checks the tick boxes of machines, and the material text (replace with dictionary and list looping using booleans)
+        'declaring variables for the AM technology's respective categorical value
+        'using the checkstate to create boolean variables (think booleans are 1 or 0 anyways, will research)
+        'If else statements then further applying material and technology combinations
+        'converting the inputted text into the categorical numerical value
+        'suddenly calls complexity function to calculate the numerical value
+        'calculates baseline score
+        'calculates every score for each combination
+        'aggregate score (we could replace with a loop)
+        'calculates final score
+        'then start making comments with traffic light
+
+
 
 
 #Region "dims for user input"
