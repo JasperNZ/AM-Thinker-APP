@@ -13,3 +13,15 @@ Instructions to use Github:<br>
 7.) Push to origin - located on the header bar, this finalises the files to be sent to the remote repository (origin) to be stored and shared among users.  
 8.) Fetch/Pull from origin - you may see this when other users edit the code. This is the act of extracting the files from the remote repository. Pull completely replaces the local repository with the files relevant to the remote repository, e.g files not uploaded, specific to your device like a json path file, etc. Fetch is likely to be used when we need to merge changes where you may have made local changes and another user has already made progress and uploaded to the remote repository. This requires the changes to be merged as it could laed to potential conflict in logic and is resolved within the IDE.  
 9.) Branches - This creates copies of the main code that allows divergence for when multiple users are editing the main code. Each individual can save their progress and later merge it together to keep their changes intact.
+
+
+TODO list:
+- create helper functions in a separate file/class (geometry stuff like part complexity and overhang)
+- pure functionalities, putting the right numbers for all combinations
+- report about future-proofing and considerations for advancements
+- improve coding comments and consistent coding conventions to unionize the code
+- bug fixing and error handler (ErrorHandler.vb)
+- improve the UI/UX
+- Final message box and interpretation
+- other nice design features for user 
+- fix the select profile loop (trying to use tuples, but it's not working???????)

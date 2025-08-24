@@ -89,13 +89,17 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AMProfile.vb" />
     <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="CeramicProfiles.vb" />
     <Compile Include="mainUserForm.Designer.vb">
       <DependentUpon>mainUserForm.vb</DependentUpon>
     </Compile>
     <Compile Include="mainUserForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MetalProfiles.vb" />
+    <Compile Include="PlasticProfiles.vb" />
     <Compile Include="StandardAddInServer.vb" />
   </ItemGroup>
   <ItemGroup>
