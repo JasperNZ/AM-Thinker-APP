@@ -25,3 +25,4 @@ TODO list:
 - Final message box and interpretation
 - other nice design features for user 
 - fix the select profile loop (trying to use tuples, but it's not working???????)
+- score, traffic color, and feedback/comment file (helper message handler file)

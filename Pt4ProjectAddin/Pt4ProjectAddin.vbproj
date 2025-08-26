@@ -92,6 +92,7 @@
     <Compile Include="AMProfile.vb" />
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="CeramicProfiles.vb" />
+    <Compile Include="GeometryHelper.vb" />
     <Compile Include="mainUserForm.Designer.vb">
       <DependentUpon>mainUserForm.vb</DependentUpon>
     </Compile>

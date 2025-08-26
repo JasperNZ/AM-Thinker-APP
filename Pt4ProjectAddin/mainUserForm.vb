@@ -302,8 +302,8 @@ Public Class mainUserForm
     '        End If
     '#End Region
     '#Region "Calculate complexity"
-    '        Dim NumCOM As Double
-    '        NumCOM = GetPartComplexity()
+            Dim NumCOM As Double
+            NumCOM = GetPartComplexity()
     '#End Region
     '#Region "Impossible Machining Features Numerical Value"
     '        Dim NumIMFP As Integer
