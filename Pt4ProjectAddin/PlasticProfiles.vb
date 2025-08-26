@@ -216,7 +216,7 @@ Public Class PlasticBJT
 
 End Class
 
-'Plastic VPP class (should not be possible and all 0s, but there for future editing)
+'Plastic VPP class 
 Public Class PlasticVPP
     Inherits AMProfile
 
