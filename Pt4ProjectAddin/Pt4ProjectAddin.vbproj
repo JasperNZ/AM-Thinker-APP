@@ -102,6 +102,11 @@
     </Compile>
     <Compile Include="MetalProfiles.vb" />
     <Compile Include="PlasticProfiles.vb" />
+    <Compile Include="Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StandardAddInServer.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +156,7 @@
     <EmbeddedResource Include="Resources.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

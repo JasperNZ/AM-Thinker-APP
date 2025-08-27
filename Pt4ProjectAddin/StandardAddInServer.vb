@@ -1,5 +1,6 @@
 'Imports stdole
 Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Inventor
 Imports Microsoft.Win32
@@ -33,11 +34,13 @@ Namespace Pt4ProjectAddin
             ' Create a Bitmap from the embedded resource
             'Dim bmp As New Bitmap(My.Resources.AMIcon)
             'Dim bmp As New Bitmap(Pt4ProjectAddin.My.Resources.ResourceManager.GetObject("AMIcon"))
+            'Dim bmp As Bitmap
+            'Using ms As New MemoryStream(Pt4ProjectAddin.My.Resources.Resources.IMG_6626)
+            '    bmp = New Bitmap(ms)
+            'End Using
 
-
-
-            ' Convert to IPictureDisp using the PictureDispConverter
-            Dim iconDisp As IPictureDisp = PictureDispConverter.ToIPictureDisp(bmp)
+            '' Convert to IPictureDisp
+            ''Dim iconDisp As Object = PictureDispConverter.ToIPictureDisp(bmp)
 
             ' Create the button with the icon
             '        m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID",
