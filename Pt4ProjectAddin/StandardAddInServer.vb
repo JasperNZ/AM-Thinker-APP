@@ -1,3 +1,5 @@
+'Imports stdole
+Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports Inventor
 Imports Microsoft.Win32
@@ -28,8 +30,20 @@ Namespace Pt4ProjectAddin
             ' Sample to illustrate creating a button definition.
             'Dim largeIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourBigImage)
             'Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourSmallImage)
-            Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
-            m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID", CommandTypesEnum.kShapeEditCmdType, AddInClientID)
+            ' Create a Bitmap from the embedded resource
+            'Dim bmp As New Bitmap(My.Resources.AMIcon)
+            'Dim bmp As New Bitmap(Pt4ProjectAddin.My.Resources.ResourceManager.GetObject("AMIcon"))
+
+
+
+            ' Convert to IPictureDisp using the PictureDispConverter
+            Dim iconDisp As IPictureDisp = PictureDispConverter.ToIPictureDisp(bmp)
+
+            ' Create the button with the icon
+            '        m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID",
+            'CommandTypesEnum.kShapeEditCmdType, AddInClientID(), iconDisp, Nothing)
+            '        Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
+            '        m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID", CommandTypesEnum.kShapeEditCmdType, AddInClientID)
 
             ' Add to the user interface, if it's the first time.
             If firstTime Then
@@ -82,7 +96,7 @@ Namespace Pt4ProjectAddin
             Dim toolsTab As RibbonTab = partRibbon.RibbonTabs.Item("id_TabTools")
 
             '' Create a new panel.
-            Dim customPanel As RibbonPanel = toolsTab.RibbonPanels.Add("AM Thinker", "AM Thinker ID", AddInClientID)
+            Dim customPanel As RibbonPanel = toolsTab.RibbonPanels.Add("AM Thinker", "AM Thinker ID", AddInClientID())
 
             '' Add a button.
             customPanel.CommandControls.AddButton(m_sampleButton)
@@ -195,16 +209,19 @@ Public Module Globals
     ' as a resource of the project.
     '
     ' Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.MyIcon)
+    <ComImport(), Guid("00020400-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
+    Public Interface IPictureDisp
+    End Interface
 
     Public NotInheritable Class PictureDispConverter
-        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)> _
-        Private Shared Function OleCreatePictureIndirect( _
-            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object, _
-            ByRef iid As Guid, _
-            <MarshalAs(UnmanagedType.Bool)> ByVal fOwn As Boolean) As stdole.IPictureDisp
+        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)>
+        Private Shared Function OleCreatePictureIndirect(
+            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object,
+            ByRef iid As Guid,
+            <MarshalAs(UnmanagedType.Bool)> ByVal fOwn As Boolean) As IPictureDisp
         End Function
 
-        Shared iPictureDispGuid As Guid = GetType(stdole.IPictureDisp).GUID
+        Shared iPictureDispGuid As Guid = GetType(IPictureDisp).GUID
 
         Private NotInheritable Class PICTDESC
             Private Sub New()
@@ -214,7 +231,7 @@ Public Module Globals
             Public Const PICTYPE_BITMAP As Short = 1
             Public Const PICTYPE_ICON As Short = 3
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Icon
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Icon))
                 Friend picType As Integer = PICTDESC.PICTYPE_ICON
@@ -227,7 +244,7 @@ Public Module Globals
                 End Sub
             End Class
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Bitmap
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Bitmap))
                 Friend picType As Integer = PICTDESC.PICTYPE_BITMAP
@@ -241,16 +258,17 @@ Public Module Globals
             End Class
         End Class
 
-        Public Shared Function ToIPictureDisp(ByVal icon As System.Drawing.Icon) As stdole.IPictureDisp
+        Public Shared Function ToIPictureDisp(ByVal icon As System.Drawing.Icon) As IPictureDisp
             Dim pictIcon As New PICTDESC.Icon(icon)
             Return OleCreatePictureIndirect(pictIcon, iPictureDispGuid, True)
         End Function
 
-        Public Shared Function ToIPictureDisp(ByVal bmp As System.Drawing.Bitmap) As stdole.IPictureDisp
+        Public Shared Function ToIPictureDisp(ByVal bmp As System.Drawing.Bitmap) As IPictureDisp
             Dim pictBmp As New PICTDESC.Bitmap(bmp)
             Return OleCreatePictureIndirect(pictBmp, iPictureDispGuid, True)
         End Function
     End Class
+
 #End Region
 
 End Module

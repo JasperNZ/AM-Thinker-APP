@@ -28,11 +28,11 @@ Public MustInherit Class AMProfile
 		}
 	End Sub
 
-    'Function to shift weightings according to the selected part purpose.
-    Protected MustOverride Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
+	'Function to shift weightings according to the selected part purpose.
+	Protected MustOverride Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
 
-    'A public sub to adjust the weights, as the protected function should only be called from the child class.
-    Public Sub AdjustWeightsForPurpose(partPurpose As String)
+	'A public sub to adjust the weights, as the protected function should only be called from the child class.
+	Public Sub AdjustWeightsForPurpose(partPurpose As String)
 		' Get the adjusted weights from the child class implementation
 		Dim adjustedWeights = IntendedPartPurpose(partPurpose)
 		' Overwrite the profile's internal Weights dictionary

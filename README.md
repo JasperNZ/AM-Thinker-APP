@@ -26,3 +26,6 @@ TODO list:
 - other nice design features for user 
 - fix the select profile loop (trying to use tuples, but it's not working???????)
 - score, traffic color, and feedback/comment file (helper message handler file)
+- fix up options selection, ensure all are properly typed consistent strings, (otherwise we need a string parse class >:))
+- Fix looping dictionary for errors to be in proper order of visual selection.
+- Considering adding a little icon next to the AM thinker?

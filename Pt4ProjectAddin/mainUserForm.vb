@@ -7,6 +7,11 @@ Public Class mainUserForm
     'later used for looping and creating AM profiles
     Private ProfileFactory As New Dictionary(Of String, Func(Of AMProfile))
 
+    Public Sub New()
+        InitializeComponent()
+        InitializeProfileFactory()
+    End Sub
+
     Public Sub InitializeProfileFactory()
         ' Metal
         ProfileFactory.Add("Metal|MEX", Function() New MetalMEX())
@@ -36,13 +41,6 @@ Public Class mainUserForm
     'When Compute Button is pressed
     'Function computes the various parameters of the object and applies the AM analysis given the users input, once the Compute Button is pressed. 
     Private Sub ButtonCompute_Click(sender As Object, e As EventArgs) Handles ButtonCompute.Click
-        'this is code to initiate the draft analyssi to veiw the overhangs of a model from a user selected face, i dont know how to get the computer to interperet the data
-        'Dim BaseFace As Object = GetBaseFace()
-        'Dim invdoc As Document
-        'invdoc = g_inventorApplication.ActiveDocument
-        'Dim dranaly As DraftAnalyses = invdoc.AnalysisManager.DraftAnalyses.Add(0, 45, BaseFace)
-        'Dim draftdata = dranaly.AttributeSets()
-
         'extracting inventor and part (NO ASSEMBLIES!) information for analysis
         ' I have also realized that calling with no parts will crash the code... might need an error handler class
         'I am also now upset that the code after megining with the main branch now got deleted :(
@@ -63,6 +61,11 @@ Public Class mainUserForm
         'aggregate score (we could replace with a loop)
         'calculates final score
         'then start making comments with traffic light
+
+        'preliminary checks forcing user to input all necessary information before computing
+        If Not ErrorHandler.ValidateSelections(Me) Then
+            Return ' Stop if validation fails
+        End If
 
         'attempting my code - essentially a way of getting ready for if-else statements using a loop.
         Dim techMap As New Dictionary(Of String, CheckBox) From {
@@ -302,8 +305,8 @@ Public Class mainUserForm
     '        End If
     '#End Region
     '#Region "Calculate complexity"
-            Dim NumCOM As Double
-            NumCOM = GetPartComplexity()
+    'Dim NumCOM As Double
+    '        NumCOM = GetPartComplexity()
     '#End Region
     '#Region "Impossible Machining Features Numerical Value"
     '        Dim NumIMFP As Integer

@@ -16,7 +16,7 @@ Public Class PlasticMEX
                 {"Precision", New Dictionary(Of String, Integer) From {{"Low", 3}, {"Medium", 6}, {"High", 10}}},
                 {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 4}, {"Medium", 7}, {"High", 9}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 2}, {"Medium", 5}, {"High", 8}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Low", 2}, {"Medium", 4}, {"High", 7}}}
+                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 2}, {"Low Volume Production", 4}, {"High Volume Production", 7}}}
             }
         End Get
     End Property
@@ -54,13 +54,16 @@ Public Class PlasticMEX
     Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
         Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
         Select Case partPurpose
-            Case "Prototype"
+            Case "Unique Custom Part"
                 adjustedWeights("Precision") *= 0.5
                 adjustedWeights("LeadTime") *= 1.5
-            Case "Production"
+            Case "Critical Spare Part"
                 adjustedWeights("Precision") *= 1.5
                 adjustedWeights("LeadTime") *= 0.5
-            Case "Functional Testing"
+            Case "Mass Production"
+                adjustedWeights("Precision") *= 1.2
+                adjustedWeights("LeadTime") *= 1.2
+            Case "Prototype"
                 adjustedWeights("Precision") *= 1.2
                 adjustedWeights("LeadTime") *= 1.2
             Case Else
