@@ -94,8 +94,6 @@ Public Class mainUserForm
             profile.AdjustWeightsForPurpose(ComboBoxIntendedUseOfPart.Text)
         Next
 
-        Dim GeometryHelper As New GeometricalHelper(Marshal.GetActiveObject("Inventor.Application"))
-
         'preparing to pass in user inputs to each classes' CalculateScore function
         Dim categoricalInputs As New Dictionary(Of String, String) From {
             {"Precision", ComboBoxPrecisionOfPart.Text},
@@ -104,7 +102,7 @@ Public Class mainUserForm
             {"Volume", ComboBoxVolumeOfProduction.Text}
         }
         Dim numericInputs As New Dictionary(Of String, Double) From {
-            {"Complexity", GeometryHelper.GetPartComplexity()},     ' i think this is the function??
+            {"Complexity", GetPartComplexity()},     ' i think this is the function??
             {"Overhang", 0}   'idk we can have a function called GetOverhangComplexity()
         }
         Dim hasImpossibleFeatures As Boolean = CheckBoxIMFP.Checked
@@ -115,7 +113,6 @@ Public Class mainUserForm
         Dim criteria As New ManufacturingCriteria(categoricalInputs, numericInputs, hasImpossibleFeatures)
         Dim bestScore As Double = Double.MinValue
         Dim bestProfile As AMProfile = Nothing
-
 
         For Each profile In selectedProfiles
             Dim score = profile.CalculateScore(criteria)
