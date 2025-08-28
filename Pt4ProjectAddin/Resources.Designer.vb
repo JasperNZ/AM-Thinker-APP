@@ -25,7 +25,7 @@ Namespace My.Resources
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>
-    Public Class Resources
+    Friend Class Resources
 
         Private Shared resourceMan As Global.System.Resources.ResourceManager
 
@@ -87,7 +87,17 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
-        Public Shared ReadOnly Property TestImage() As Byte()
+        Public Shared ReadOnly Property IMG_6627() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("IMG_6627", resourceCulture)
+                Return CType(obj, Byte())
+            End Get
+        End Property
+
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend Shared ReadOnly Property TestImage() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("TestImage", resourceCulture)
                 Return CType(obj, Byte())

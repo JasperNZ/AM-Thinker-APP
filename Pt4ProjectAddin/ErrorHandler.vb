@@ -47,6 +47,10 @@ Public Class ErrorHandler
         MessageBox.Show("Please select a volume requirement.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
+    'Public Shared Sub IncorrectMaterialSelected()
+    '    MessageBox.Show()
+    'End Sub
+
     ' Centralized validation method
     Public Shared Function ValidateSelections(form As Form) As Boolean
         Dim validations As New Dictionary(Of ComboBox, Action) From {
