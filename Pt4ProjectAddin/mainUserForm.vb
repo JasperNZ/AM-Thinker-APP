@@ -125,7 +125,7 @@ Public Class mainUserForm
             End If
         Next
 
-        'for testing purposes - needs to be to 0dp next time, needs edits
+        'for testing purposes
         MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
     End Sub
 

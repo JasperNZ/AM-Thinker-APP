@@ -251,7 +251,7 @@ Partial Class mainUserForm
         Me.GroupBox1.Size = New System.Drawing.Size(252, 210)
         Me.GroupBox1.TabIndex = 20
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "GroupBox1"
+        Me.GroupBox1.Text = "Select Available Technology"
         '
         'CheckBoxIMFP
         '

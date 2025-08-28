@@ -47,6 +47,7 @@ Namespace Pt4ProjectAddin
                     iconDisp, iconDisp)
                 If firstTime Then
                     AddToUserInterface()
+                    MsgBox("Button Created: " & m_sampleButton.DisplayName)
                 End If
             Catch ex As Exception
                 MsgBox("Activate Error: " & ex.Message)
@@ -144,6 +145,42 @@ Public Module Globals
         Return guid
     End Function
 #End Region
+
+#Region "function to get part complexity"
+    Public Function GetPartComplexity() As Double
+        ' Get the active document.
+        Dim invDoc As Document
+        invDoc = g_inventorApplication.ActiveDocument
+        ' Get the design tracking property set.
+        Dim invDesignInfo As PropertySet
+        invDesignInfo = invDoc.PropertySets.Item("Design Tracking Properties")
+        ' Get the volume property.
+        Dim invPartNumberProperty As [Property]
+        invPartNumberProperty = invDesignInfo.Item("Volume")
+        'Get the surface area property.
+        Dim invPartAreaproperty As [Property]
+        invPartAreaproperty = invDesignInfo.Item("SurfaceArea")
+        'create the complexity ratio
+        Dim complex As Double
+        complex = CDbl(invPartAreaproperty.Value / invPartNumberProperty.Value)
+        'return the complexity ratio
+        Return complex
+
+    End Function
+
+#End Region
+
+#Region "get user to select face to touch build plate"
+    Public Function GetBaseFace() As Object
+        Dim invDoc As Document
+        invDoc = g_inventorApplication.ActiveDocument
+        Dim BaseFace As Object
+        BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
+        Return BaseFace
+    End Function
+
+#End Region
+
 #Region "hWnd Wrapper Class"
     ' This class is used to wrap a Win32 hWnd as a .Net IWind32Window class.
     ' This is primarily used for parenting a dialog to the Inventor window.
