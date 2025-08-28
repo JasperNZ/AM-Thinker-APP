@@ -67,9 +67,29 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
-        Public Shared ReadOnly Property IMG_6626() As Byte()
+        Friend Shared ReadOnly Property AMIcon() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("AMIcon", resourceCulture)
+                Return CType(obj, Byte())
+            End Get
+        End Property
+
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend Shared ReadOnly Property IMG_6626() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("IMG_6626", resourceCulture)
+                Return CType(obj, Byte())
+            End Get
+        End Property
+
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Public Shared ReadOnly Property TestImage() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TestImage", resourceCulture)
                 Return CType(obj, Byte())
             End Get
         End Property

@@ -108,6 +108,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StandardAddInServer.vb" />
+    <Compile Include="TestIcon.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pt4ProjectAddin.X.manifest" />

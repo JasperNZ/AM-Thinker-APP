@@ -6,11 +6,11 @@ Public MustInherit Class AMProfile
 	'properties include the materials and AM technology as strings
 	Public Property Material As String
 	Public Property Technology As String
-	Protected Weights As Dictionary(Of String, Double)
+    Protected Weights As Dictionary(Of String, Double)
 
-	'common property with differing values for each AM technology
-	'Mapping categorical inputs into numerical values of the criteria using dictionaries
-	Protected MustOverride ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    'common property with differing values for each AM technology 1-5 rating for each criteria
+    'Mapping categorical inputs into numerical values of the criteria using dictionaries
+    Protected MustOverride ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
 
 
 	'other properties requiring main code to calculate first, before being passed to the class

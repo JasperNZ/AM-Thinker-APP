@@ -20,38 +20,38 @@ Namespace Pt4ProjectAddin
         ' to the Inventor Application object. The FirstTime flag indicates if the AddIn is loaded for
         ' the first time. However, with the introduction of the ribbon this argument is always true.
         Public Sub Activate(ByVal addInSiteObject As Inventor.ApplicationAddInSite, ByVal firstTime As Boolean) Implements Inventor.ApplicationAddInServer.Activate
-            ' Initialize AddIn members.
-            g_inventorApplication = addInSiteObject.Application
+            Try
+                ' Initialize AddIn members FIRST
+                g_inventorApplication = addInSiteObject.Application
 
-            ' Connect to the user-interface events to handle a ribbon reset.
-            m_uiEvents = g_inventorApplication.UserInterfaceManager.UserInterfaceEvents
+                ' Connect to the user-interface events to handle a ribbon reset
+                m_uiEvents = g_inventorApplication.UserInterfaceManager.UserInterfaceEvents
 
-            ' TODO: Add button definitions.
+                ' Create icon using TestIcon helper
+                Dim iconHelper As New TestIcon()
+                Dim bmp As Bitmap = iconHelper.LoadBitmapFromResources()
 
-            ' Sample to illustrate creating a button definition.
-            'Dim largeIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourBigImage)
-            'Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourSmallImage)
-            ' Create a Bitmap from the embedded resource
-            'Dim bmp As New Bitmap(My.Resources.AMIcon)
-            'Dim bmp As New Bitmap(Pt4ProjectAddin.My.Resources.ResourceManager.GetObject("AMIcon"))
-            'Dim bmp As Bitmap
-            'Using ms As New MemoryStream(Pt4ProjectAddin.My.Resources.Resources.IMG_6626)
-            '    bmp = New Bitmap(ms)
-            'End Using
+                ' Convert to IPictureDisp for Inventor
+                Dim iconDisp As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(bmp)
 
-            '' Convert to IPictureDisp
-            ''Dim iconDisp As Object = PictureDispConverter.ToIPictureDisp(bmp)
+                ' Now you can safely get ControlDefinitions
+                Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
 
-            ' Create the button with the icon
-            '        m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID",
-            'CommandTypesEnum.kShapeEditCmdType, AddInClientID(), iconDisp, Nothing)
-            '        Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
-            '        m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID", CommandTypesEnum.kShapeEditCmdType, AddInClientID)
-
-            ' Add to the user interface, if it's the first time.
-            If firstTime Then
-                AddToUserInterface()
-            End If
+                ' Create the button with the icon
+                m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker",
+                    "AM Thinker ID",
+                    CommandTypesEnum.kShapeEditCmdType,
+                    AddInClientID,
+                    "Launch AM Thinker Tool",
+                    "Open the AM Thinker Add-in for analysis",
+                    iconDisp, iconDisp)
+                If firstTime Then
+                    AddToUserInterface()
+                    MsgBox("Button Created: " & m_sampleButton.DisplayName)
+                End If
+            Catch ex As Exception
+                MsgBox("Activate Error: " & ex.Message)
+            End Try
         End Sub
 
         ' This method is called by Inventor when the AddIn is unloaded. The AddIn will be
@@ -102,7 +102,7 @@ Namespace Pt4ProjectAddin
             Dim customPanel As RibbonPanel = toolsTab.RibbonPanels.Add("AM Thinker", "AM Thinker ID", AddInClientID())
 
             '' Add a button.
-            customPanel.CommandControls.AddButton(m_sampleButton)
+            customPanel.CommandControls.AddButton(m_sampleButton, True)
         End Sub
 
         Private Sub m_uiEvents_OnResetRibbonInterface(Context As NameValueMap) Handles m_uiEvents.OnResetRibbonInterface
@@ -145,42 +145,6 @@ Public Module Globals
         Return guid
     End Function
 #End Region
-
-#Region "function to get part complexity"
-    Public Function GetPartComplexity() As Double
-        ' Get the active document.
-        Dim invDoc As Document
-        invDoc = g_inventorApplication.ActiveDocument
-        ' Get the design tracking property set.
-        Dim invDesignInfo As PropertySet
-        invDesignInfo = invDoc.PropertySets.Item("Design Tracking Properties")
-        ' Get the volume property.
-        Dim invPartNumberProperty As [Property]
-        invPartNumberProperty = invDesignInfo.Item("Volume")
-        'Get the surface area property.
-        Dim invPartAreaproperty As [Property]
-        invPartAreaproperty = invDesignInfo.Item("SurfaceArea")
-        'create the complexity ratio
-        Dim complex As Double
-        complex = CDbl(invPartAreaproperty.Value / invPartNumberProperty.Value)
-        'return the complexity ratio
-        Return complex
-
-    End Function
-
-#End Region
-
-#Region "get user to select face to touch build plate"
-    Public Function GetBaseFace() As Object
-        Dim invDoc As Document
-        invDoc = g_inventorApplication.ActiveDocument
-        Dim BaseFace As Object
-        BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
-        Return BaseFace
-    End Function
-
-#End Region
-
 #Region "hWnd Wrapper Class"
     ' This class is used to wrap a Win32 hWnd as a .Net IWind32Window class.
     ' This is primarily used for parenting a dialog to the Inventor window.

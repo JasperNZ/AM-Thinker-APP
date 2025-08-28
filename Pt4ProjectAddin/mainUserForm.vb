@@ -94,6 +94,8 @@ Public Class mainUserForm
             profile.AdjustWeightsForPurpose(ComboBoxIntendedUseOfPart.Text)
         Next
 
+        Dim GeometryHelper As New GeometricalHelper(Marshal.GetActiveObject("Inventor.Application"))
+
         'preparing to pass in user inputs to each classes' CalculateScore function
         Dim categoricalInputs As New Dictionary(Of String, String) From {
             {"Precision", ComboBoxPrecisionOfPart.Text},
@@ -102,7 +104,7 @@ Public Class mainUserForm
             {"Volume", ComboBoxVolumeOfProduction.Text}
         }
         Dim numericInputs As New Dictionary(Of String, Double) From {
-            {"Complexity", GetPartComplexity()},     ' i think this is the function??
+            {"Complexity", GeometryHelper.GetPartComplexity()},     ' i think this is the function??
             {"Overhang", 0}   'idk we can have a function called GetOverhangComplexity()
         }
         Dim hasImpossibleFeatures As Boolean = CheckBoxIMFP.Checked
@@ -112,7 +114,8 @@ Public Class mainUserForm
         'I don't know how to handle multiple profiles with the same score... (maybe a list of tied profiles and present them all? if >1 loop length?)
         Dim criteria As New ManufacturingCriteria(categoricalInputs, numericInputs, hasImpossibleFeatures)
         Dim bestScore As Double = Double.MinValue
-        Dim bestProfile As AMProfile
+        Dim bestProfile As AMProfile = Nothing
+
 
         For Each profile In selectedProfiles
             Dim score = profile.CalculateScore(criteria)
@@ -122,8 +125,8 @@ Public Class mainUserForm
             End If
         Next
 
-        'for testing purposes
-        'MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
+        'for testing purposes - needs to be to 0dp next time, needs edits
+        MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
     End Sub
 
 
