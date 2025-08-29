@@ -1,4 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿' File contains the design layout of the main user form and the backend logic.
+' Stylistic decision to use dropdownlists to avoid user input errors.
+' Material selection as dropdown list to avoid AM analysis conflicts.
+Imports System.Drawing
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class mainUserForm
     Inherits System.Windows.Forms.Form
 
@@ -45,8 +50,10 @@ Partial Class mainUserForm
         Me.CheckBoxMaterialExtrusion = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.CheckBoxIMFP = New System.Windows.Forms.CheckBox()
+        Me.groupRequirements = New System.Windows.Forms.GroupBox()
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
+        Me.groupRequirements.SuspendLayout()
         Me.SuspendLayout()
         '
         'ButtonCompute
@@ -66,9 +73,6 @@ Partial Class mainUserForm
         Me.Label1.Size = New System.Drawing.Size(124, 20)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Precision of Part"
-        '
-        'BindingSource1
-        '
         '
         'ComboBoxPrecisionOfPart
         '
@@ -164,8 +168,8 @@ Partial Class mainUserForm
         'ComboBoxMaterial
         '
         Me.ComboBoxMaterial.AllowDrop = True
-        Me.ComboBoxMaterial.FormattingEnabled = True
         Me.ComboBoxMaterial.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxMaterial.FormattingEnabled = True
         Me.ComboBoxMaterial.Items.AddRange(New Object() {"Metal", "Plastic", "Ceramic"})
         Me.ComboBoxMaterial.Location = New System.Drawing.Point(199, 212)
         Me.ComboBoxMaterial.Name = "ComboBoxMaterial"
@@ -249,9 +253,9 @@ Partial Class mainUserForm
         Me.GroupBox1.Controls.Add(Me.CheckBoxPowederBedFusion)
         Me.GroupBox1.Controls.Add(Me.CheckBoxBinderJetting)
         Me.GroupBox1.Controls.Add(Me.CheckBoxVatPhotopolymerisation)
-        Me.GroupBox1.Location = New System.Drawing.Point(434, 30)
+        Me.GroupBox1.Location = New System.Drawing.Point(463, 23)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(252, 210)
+        Me.GroupBox1.Size = New System.Drawing.Size(256, 254)
         Me.GroupBox1.TabIndex = 20
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Select Available AM Technology"
@@ -260,12 +264,33 @@ Partial Class mainUserForm
         '
         Me.CheckBoxIMFP.AutoSize = True
         Me.CheckBoxIMFP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBoxIMFP.Location = New System.Drawing.Point(25, 272)
+        Me.CheckBoxIMFP.Location = New System.Drawing.Point(25, 283)
         Me.CheckBoxIMFP.Name = "CheckBoxIMFP"
         Me.CheckBoxIMFP.Size = New System.Drawing.Size(314, 24)
         Me.CheckBoxIMFP.TabIndex = 22
         Me.CheckBoxIMFP.Text = "Impossible Machining Features Present"
         Me.CheckBoxIMFP.UseVisualStyleBackColor = True
+        '
+        'groupRequirements
+        '
+        Me.groupRequirements.Controls.Add(Me.Label6)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxMaterial)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxIntendedUseOfPart)
+        Me.groupRequirements.Controls.Add(Me.Label5)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxVolumeOfProduction)
+        Me.groupRequirements.Controls.Add(Me.Label3)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxPostProcessingEffort)
+        Me.groupRequirements.Controls.Add(Me.Label4)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxLeadTimeSignificance)
+        Me.groupRequirements.Controls.Add(Me.Label2)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxPrecisionOfPart)
+        Me.groupRequirements.Controls.Add(Me.Label1)
+        Me.groupRequirements.Location = New System.Drawing.Point(25, 23)
+        Me.groupRequirements.Name = "groupRequirements"
+        Me.groupRequirements.Size = New System.Drawing.Size(403, 254)
+        Me.groupRequirements.TabIndex = 23
+        Me.groupRequirements.TabStop = False
+        Me.groupRequirements.Text = "Input Part Requirements"
         '
         'mainUserForm
         '
@@ -274,24 +299,15 @@ Partial Class mainUserForm
         Me.ClientSize = New System.Drawing.Size(755, 393)
         Me.Controls.Add(Me.CheckBoxIMFP)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.ComboBoxMaterial)
-        Me.Controls.Add(Me.ComboBoxIntendedUseOfPart)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.ComboBoxVolumeOfProduction)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.ComboBoxPostProcessingEffort)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.ComboBoxLeadTimeSignificance)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.ComboBoxPrecisionOfPart)
-        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ButtonCompute)
+        Me.Controls.Add(Me.groupRequirements)
         Me.Name = "mainUserForm"
         Me.Text = "AM Thinker - Analyzing your parts and needs!"
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.groupRequirements.ResumeLayout(False)
+        Me.groupRequirements.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -319,4 +335,5 @@ Partial Class mainUserForm
     Friend WithEvents CheckBoxMaterialExtrusion As Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
     Friend WithEvents CheckBoxIMFP As Windows.Forms.CheckBox
+    Friend WithEvents groupRequirements As Windows.Forms.GroupBox
 End Class
