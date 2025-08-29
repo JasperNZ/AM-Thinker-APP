@@ -7,6 +7,8 @@ Imports System.Drawing
 Partial Class mainUserForm
     Inherits System.Windows.Forms.Form
 
+    Private toolTip1 As System.Windows.Forms.ToolTip
+
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -28,20 +30,21 @@ Partial Class mainUserForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.ButtonCompute = New System.Windows.Forms.Button()
+        Me.toolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.ButtonCompute = New System.Windows.Forms.Button()
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.ComboBoxPrecisionOfPart = New System.Windows.Forms.ComboBox()
         Me.ComboBoxLeadTimeSignificance = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.ComboBoxVolumeOfProduction = New System.Windows.Forms.ComboBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.ComboBoxPostProcessingEffort = New System.Windows.Forms.ComboBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.ComboBoxIntendedUseOfPart = New System.Windows.Forms.ComboBox()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.ComboBoxMaterial = New System.Windows.Forms.ComboBox()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.CheckBoxDirectedEnergyDeposition = New System.Windows.Forms.CheckBox()
         Me.CheckBoxPowederBedFusion = New System.Windows.Forms.CheckBox()
         Me.CheckBoxVatPhotopolymerisation = New System.Windows.Forms.CheckBox()
@@ -56,14 +59,12 @@ Partial Class mainUserForm
         Me.groupRequirements.SuspendLayout()
         Me.SuspendLayout()
         '
-        'ButtonCompute
+        'toolTip1
         '
-        Me.ButtonCompute.Location = New System.Drawing.Point(25, 323)
-        Me.ButtonCompute.Name = "ButtonCompute"
-        Me.ButtonCompute.Size = New System.Drawing.Size(182, 52)
-        Me.ButtonCompute.TabIndex = 0
-        Me.ButtonCompute.Text = "Compute"
-        Me.ButtonCompute.UseVisualStyleBackColor = True
+        Me.toolTip1.AutoPopDelay = 5000
+        Me.toolTip1.InitialDelay = 500
+        Me.toolTip1.ReshowDelay = 100
+        Me.toolTip1.ShowAlways = True
         '
         'Label1
         '
@@ -73,6 +74,66 @@ Partial Class mainUserForm
         Me.Label1.Size = New System.Drawing.Size(124, 20)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Precision of Part"
+        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part (High = tight tolerances).")
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(21, 79)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(173, 20)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Lead Time Significance"
+        Me.toolTip1.SetToolTip(Me.Label2, "Indicate how important delivery speed is for this part.")
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(21, 147)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(161, 20)
+        Me.Label3.TabIndex = 7
+        Me.Label3.Text = "Volume of Production"
+        Me.toolTip1.SetToolTip(Me.Label3, "Choose how much post-processing effort is acceptable.")
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(21, 113)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(167, 20)
+        Me.Label4.TabIndex = 5
+        Me.Label4.Text = "Post Processing Effort"
+        Me.toolTip1.SetToolTip(Me.Label4, "Specify expected production quantity.")
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(21, 181)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(157, 20)
+        Me.Label5.TabIndex = 9
+        Me.Label5.Text = "Intended Use of Part"
+        Me.toolTip1.SetToolTip(Me.Label5, "Select the purpose of the part (prototype, spare, etc.).")
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(21, 215)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(65, 20)
+        Me.Label6.TabIndex = 12
+        Me.Label6.Text = "Material"
+        Me.toolTip1.SetToolTip(Me.Label6, "Select the base material type for manufacturing.")
+        '
+        'ButtonCompute
+        '
+        Me.ButtonCompute.Location = New System.Drawing.Point(25, 323)
+        Me.ButtonCompute.Name = "ButtonCompute"
+        Me.ButtonCompute.Size = New System.Drawing.Size(182, 52)
+        Me.ButtonCompute.TabIndex = 0
+        Me.ButtonCompute.Text = "Compute"
+        Me.ButtonCompute.UseVisualStyleBackColor = True
         '
         'ComboBoxPrecisionOfPart
         '
@@ -96,15 +157,6 @@ Partial Class mainUserForm
         Me.ComboBoxLeadTimeSignificance.Size = New System.Drawing.Size(181, 28)
         Me.ComboBoxLeadTimeSignificance.TabIndex = 4
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(21, 79)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(173, 20)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Lead Time Significance"
-        '
         'ComboBoxVolumeOfProduction
         '
         Me.ComboBoxVolumeOfProduction.AllowDrop = True
@@ -115,15 +167,6 @@ Partial Class mainUserForm
         Me.ComboBoxVolumeOfProduction.Name = "ComboBoxVolumeOfProduction"
         Me.ComboBoxVolumeOfProduction.Size = New System.Drawing.Size(181, 28)
         Me.ComboBoxVolumeOfProduction.TabIndex = 8
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(21, 147)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(161, 20)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Volume of Production"
         '
         'ComboBoxPostProcessingEffort
         '
@@ -136,34 +179,16 @@ Partial Class mainUserForm
         Me.ComboBoxPostProcessingEffort.Size = New System.Drawing.Size(181, 28)
         Me.ComboBoxPostProcessingEffort.TabIndex = 6
         '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(21, 113)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(167, 20)
-        Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Post Processing Effort"
-        '
         'ComboBoxIntendedUseOfPart
         '
         Me.ComboBoxIntendedUseOfPart.AllowDrop = True
         Me.ComboBoxIntendedUseOfPart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxIntendedUseOfPart.FormattingEnabled = True
-        Me.ComboBoxIntendedUseOfPart.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare part", "Mass Production", "Prototype"})
+        Me.ComboBoxIntendedUseOfPart.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare Part", "Mass Production", "Functional Prototype", "Aesthetic Prototype"})
         Me.ComboBoxIntendedUseOfPart.Location = New System.Drawing.Point(199, 178)
         Me.ComboBoxIntendedUseOfPart.Name = "ComboBoxIntendedUseOfPart"
         Me.ComboBoxIntendedUseOfPart.Size = New System.Drawing.Size(181, 28)
         Me.ComboBoxIntendedUseOfPart.TabIndex = 10
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(21, 181)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(157, 20)
-        Me.Label5.TabIndex = 9
-        Me.Label5.Text = "Intended Use of Part"
         '
         'ComboBoxMaterial
         '
@@ -175,15 +200,6 @@ Partial Class mainUserForm
         Me.ComboBoxMaterial.Name = "ComboBoxMaterial"
         Me.ComboBoxMaterial.Size = New System.Drawing.Size(181, 28)
         Me.ComboBoxMaterial.TabIndex = 11
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(21, 215)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(65, 20)
-        Me.Label6.TabIndex = 12
-        Me.Label6.Text = "Material"
         '
         'CheckBoxDirectedEnergyDeposition
         '
@@ -313,6 +329,7 @@ Partial Class mainUserForm
 
     End Sub
 
+    'Form controls declaration
     Friend WithEvents ButtonCompute As Windows.Forms.Button
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents BindingSource1 As Windows.Forms.BindingSource

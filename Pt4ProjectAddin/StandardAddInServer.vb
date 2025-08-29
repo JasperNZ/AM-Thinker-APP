@@ -47,6 +47,7 @@ Namespace Pt4ProjectAddin
                     iconDisp, iconDisp)
                 If firstTime Then
                     AddToUserInterface()
+                    'MsgBox("Button Created: " & m_sampleButton.DisplayName)
                 End If
             Catch ex As Exception
                 MsgBox("Activate Error: " & ex.Message)

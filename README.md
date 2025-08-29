@@ -21,11 +21,18 @@ TODO list:
 - report about future-proofing and considerations for advancements
 - improve coding comments and consistent coding conventions to unionize the code
 - bug fixing and error handler (ErrorHandler.vb)
-- improve the UI/UX
+- improve the UI/UX DONE
 - Final message box and interpretation
 - other nice design features for user 
 - fix the select profile loop (trying to use tuples, but it's not working???????)
 - score, traffic color, and feedback/comment file (helper message handler file)
-- fix up options selection, ensure all are properly typed consistent strings, (otherwise we need a string parse class >:))
 - Fix looping dictionary for errors to be in proper order of visual selection.
-- Considering adding a little icon next to the AM thinker?
+- Fix dictionary to look through valid machine selection.
+- Considering adding a little icon next to the AM thinker? DONE
+
+- Fix technology name for all DONE
+- Fix Intended part purpose naming function for all DONE
+- Fix deadend scores for each profile DONE
+- R&D scores remain non-deadend.
+- Apply tooltips to all relevant sections
+- Preferably apply regions in the mainUserForm Designer form. for easier readability
