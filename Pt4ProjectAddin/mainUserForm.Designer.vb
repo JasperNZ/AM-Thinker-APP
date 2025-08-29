@@ -61,9 +61,9 @@ Partial Class mainUserForm
         '
         'toolTip1
         '
-        Me.toolTip1.AutoPopDelay = 5000
-        Me.toolTip1.InitialDelay = 500
-        Me.toolTip1.ReshowDelay = 100
+        Me.toolTip1.AutoPopDelay = 2000
+        Me.toolTip1.InitialDelay = 100
+        Me.toolTip1.ReshowDelay = 10
         Me.toolTip1.ShowAlways = True
         '
         'Label1
@@ -94,7 +94,7 @@ Partial Class mainUserForm
         Me.Label3.Size = New System.Drawing.Size(161, 20)
         Me.Label3.TabIndex = 7
         Me.Label3.Text = "Volume of Production"
-        Me.toolTip1.SetToolTip(Me.Label3, "Choose how much post-processing effort is acceptable.")
+        Me.toolTip1.SetToolTip(Me.Label3, "Specify expected production quantity.")
         '
         'Label4
         '
@@ -104,7 +104,7 @@ Partial Class mainUserForm
         Me.Label4.Size = New System.Drawing.Size(167, 20)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Post Processing Effort"
-        Me.toolTip1.SetToolTip(Me.Label4, "Specify expected production quantity.")
+        Me.toolTip1.SetToolTip(Me.Label4, "Choose how much post-processing effort is acceptable.")
         '
         'Label5
         '
@@ -326,7 +326,16 @@ Partial Class mainUserForm
         Me.groupRequirements.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+    End Sub
 
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Underline all labels that act as tooltips
+        Me.Label1.Font = New Font(Me.Label1.Font, FontStyle.Underline)
+        Me.Label2.Font = New Font(Me.Label2.Font, FontStyle.Underline)
+        Me.Label3.Font = New Font(Me.Label3.Font, FontStyle.Underline)
+        Me.Label4.Font = New Font(Me.Label4.Font, FontStyle.Underline)
+        Me.Label5.Font = New Font(Me.Label5.Font, FontStyle.Underline)
+        Me.Label6.Font = New Font(Me.Label6.Font, FontStyle.Underline)
     End Sub
 
     'Form controls declaration
