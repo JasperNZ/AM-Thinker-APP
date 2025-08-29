@@ -73,6 +73,7 @@ Partial Class mainUserForm
         'ComboBoxPrecisionOfPart
         '
         Me.ComboBoxPrecisionOfPart.AllowDrop = True
+        Me.ComboBoxPrecisionOfPart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxPrecisionOfPart.FormattingEnabled = True
         Me.ComboBoxPrecisionOfPart.Items.AddRange(New Object() {"High", "Medium", "Low"})
         Me.ComboBoxPrecisionOfPart.Location = New System.Drawing.Point(199, 42)
@@ -162,7 +163,9 @@ Partial Class mainUserForm
         '
         'ComboBoxMaterial
         '
+        Me.ComboBoxMaterial.AllowDrop = True
         Me.ComboBoxMaterial.FormattingEnabled = True
+        Me.ComboBoxMaterial.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxMaterial.Items.AddRange(New Object() {"Metal", "Plastic", "Ceramic"})
         Me.ComboBoxMaterial.Location = New System.Drawing.Point(199, 212)
         Me.ComboBoxMaterial.Name = "ComboBoxMaterial"
@@ -251,7 +254,7 @@ Partial Class mainUserForm
         Me.GroupBox1.Size = New System.Drawing.Size(252, 210)
         Me.GroupBox1.TabIndex = 20
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Select Available Technology"
+        Me.GroupBox1.Text = "Select Available AM Technology"
         '
         'CheckBoxIMFP
         '
@@ -285,7 +288,7 @@ Partial Class mainUserForm
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ButtonCompute)
         Me.Name = "mainUserForm"
-        Me.Text = " "
+        Me.Text = "AM Thinker - Analyzing your parts and needs!"
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
