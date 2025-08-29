@@ -126,7 +126,5 @@ Public Class mainUserForm
         MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
     End Sub
 
-    Private Sub ComboBoxPrecisionOfPart_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPrecisionOfPart.SelectedIndexChanged
 
-    End Sub
 End Class

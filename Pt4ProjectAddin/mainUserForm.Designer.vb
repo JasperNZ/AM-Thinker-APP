@@ -204,7 +204,7 @@ Partial Class mainUserForm
         'CheckBoxDirectedEnergyDeposition
         '
         Me.CheckBoxDirectedEnergyDeposition.AutoSize = True
-        Me.CheckBoxDirectedEnergyDeposition.Location = New System.Drawing.Point(6, 175)
+        Me.CheckBoxDirectedEnergyDeposition.Location = New System.Drawing.Point(6, 211)
         Me.CheckBoxDirectedEnergyDeposition.Name = "CheckBoxDirectedEnergyDeposition"
         Me.CheckBoxDirectedEnergyDeposition.Size = New System.Drawing.Size(229, 24)
         Me.CheckBoxDirectedEnergyDeposition.TabIndex = 19
@@ -214,7 +214,7 @@ Partial Class mainUserForm
         'CheckBoxPowederBedFusion
         '
         Me.CheckBoxPowederBedFusion.AutoSize = True
-        Me.CheckBoxPowederBedFusion.Location = New System.Drawing.Point(6, 145)
+        Me.CheckBoxPowederBedFusion.Location = New System.Drawing.Point(6, 177)
         Me.CheckBoxPowederBedFusion.Name = "CheckBoxPowederBedFusion"
         Me.CheckBoxPowederBedFusion.Size = New System.Drawing.Size(173, 24)
         Me.CheckBoxPowederBedFusion.TabIndex = 18
@@ -224,7 +224,7 @@ Partial Class mainUserForm
         'CheckBoxVatPhotopolymerisation
         '
         Me.CheckBoxVatPhotopolymerisation.AutoSize = True
-        Me.CheckBoxVatPhotopolymerisation.Location = New System.Drawing.Point(6, 115)
+        Me.CheckBoxVatPhotopolymerisation.Location = New System.Drawing.Point(6, 143)
         Me.CheckBoxVatPhotopolymerisation.Name = "CheckBoxVatPhotopolymerisation"
         Me.CheckBoxVatPhotopolymerisation.Size = New System.Drawing.Size(207, 24)
         Me.CheckBoxVatPhotopolymerisation.TabIndex = 17
@@ -234,7 +234,7 @@ Partial Class mainUserForm
         'CheckBoxBinderJetting
         '
         Me.CheckBoxBinderJetting.AutoSize = True
-        Me.CheckBoxBinderJetting.Location = New System.Drawing.Point(6, 85)
+        Me.CheckBoxBinderJetting.Location = New System.Drawing.Point(6, 109)
         Me.CheckBoxBinderJetting.Name = "CheckBoxBinderJetting"
         Me.CheckBoxBinderJetting.Size = New System.Drawing.Size(133, 24)
         Me.CheckBoxBinderJetting.TabIndex = 16
@@ -244,7 +244,7 @@ Partial Class mainUserForm
         'CheckBoxMaterialJetting
         '
         Me.CheckBoxMaterialJetting.AutoSize = True
-        Me.CheckBoxMaterialJetting.Location = New System.Drawing.Point(6, 55)
+        Me.CheckBoxMaterialJetting.Location = New System.Drawing.Point(6, 75)
         Me.CheckBoxMaterialJetting.Name = "CheckBoxMaterialJetting"
         Me.CheckBoxMaterialJetting.Size = New System.Drawing.Size(143, 24)
         Me.CheckBoxMaterialJetting.TabIndex = 15
@@ -254,7 +254,7 @@ Partial Class mainUserForm
         'CheckBoxMaterialExtrusion
         '
         Me.CheckBoxMaterialExtrusion.AutoSize = True
-        Me.CheckBoxMaterialExtrusion.Location = New System.Drawing.Point(6, 25)
+        Me.CheckBoxMaterialExtrusion.Location = New System.Drawing.Point(6, 41)
         Me.CheckBoxMaterialExtrusion.Name = "CheckBoxMaterialExtrusion"
         Me.CheckBoxMaterialExtrusion.Size = New System.Drawing.Size(161, 24)
         Me.CheckBoxMaterialExtrusion.TabIndex = 14
@@ -326,6 +326,7 @@ Partial Class mainUserForm
         Me.groupRequirements.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
+
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load

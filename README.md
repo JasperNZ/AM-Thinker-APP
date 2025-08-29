@@ -36,3 +36,4 @@ TODO list:
 - R&D scores remain non-deadend.
 - Apply tooltips to all relevant sections
 - Preferably apply regions in the mainUserForm Designer form. for easier readability
+- Might add a special comment property for each AM profile. Incompatible profiles can then be noted

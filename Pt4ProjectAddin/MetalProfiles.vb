@@ -105,7 +105,7 @@ Public Class MetalMEX
     End Function
 End Class
 
-'Metal MJT class
+'Metal MJT class (set to 0s)
 Public Class MetalMJT
     Inherits AMProfile
 
@@ -316,7 +316,7 @@ Public Class MetalBJT
     End Function
 End Class
 
-'Metal VPP class (should not be possible and all 0s, but there for future editing)
+'Metal VPP class (should not be possible and all 0s)
 Public Class MetalVPP
     Inherits AMProfile
 
