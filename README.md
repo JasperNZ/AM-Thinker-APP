@@ -16,6 +16,7 @@ Instructions to use Github:<br>
 
 
 TODO list:
+URGENT:
 - create helper functions in a separate file/class (geometry stuff like part complexity and overhang)
 - pure functionalities, putting the right numbers for all combinations
 - report about future-proofing and considerations for advancements
@@ -30,10 +31,12 @@ TODO list:
 - Fix dictionary to look through valid machine selection.
 - Considering adding a little icon next to the AM thinker? DONE
 
-- Fix technology name for all DONE
-- Fix Intended part purpose naming function for all DONE
-- Fix deadend scores for each profile DONE
+
+NICE TO HAVE:
 - R&D scores remain non-deadend.
 - Apply tooltips to all relevant sections
 - Preferably apply regions in the mainUserForm Designer form. for easier readability
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
+- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
+
+COMPLETED:

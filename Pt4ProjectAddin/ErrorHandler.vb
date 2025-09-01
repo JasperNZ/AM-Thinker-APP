@@ -67,6 +67,4 @@ Public Class ErrorHandler
 
         Return True ' All inputs are valid
     End Function
-
-
 End Class

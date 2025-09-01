@@ -62,7 +62,7 @@ Public MustInherit Class AMProfile
 		score += interpretedComplexity * Weights("Complexity")
 		score += interpretedOverhang * Weights("Overhang")
 		score += impossibleFeatureValue * Weights("ImpossibleFeatures")
-		Return score
+		Return score * 10
 	End Function
 
 End Class

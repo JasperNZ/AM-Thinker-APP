@@ -63,9 +63,9 @@ Public Class mainUserForm
         'then start making comments with traffic light
 
         'preliminary checks forcing user to input all necessary information before computing
-        If Not ErrorHandler.ValidateSelections(Me) Then
-            Return ' Stop if validation fails
-        End If
+        'If Not ErrorHandler.ValidateSelections(Me) Then
+        '    Return ' Stop if validation fails
+        'End If
 
         'attempting my code - essentially a way of getting ready for if-else statements using a loop.
         Dim techMap As New Dictionary(Of String, CheckBox) From {

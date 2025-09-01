@@ -1,6 +1,6 @@
 Imports System.Collections.Generic
 
-'Ceramic MEX class - R&D
+'Ceramic MEX class
 Public Class CeramicMEX
     Inherits AMProfile
 
@@ -315,7 +315,7 @@ Public Class CeramicBJT
     End Function
 End Class
 
-'Ceramic VPP class - R&D
+'Ceramic VPP class 
 Public Class CeramicVPP
     Inherits AMProfile
 
