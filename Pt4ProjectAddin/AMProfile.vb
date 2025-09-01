@@ -62,7 +62,8 @@ Public MustInherit Class AMProfile
 		score += interpretedComplexity * Weights("Complexity")
 		score += interpretedOverhang * Weights("Overhang")
 		score += impossibleFeatureValue * Weights("ImpossibleFeatures")
-		Return score * 10
+		score = score * 10 'due to scale of variables 1-10
+		Return Math.Round(Math.Max(0, Math.Min(score, 100))) 'ideally should constrain values between 0 and 100.
 	End Function
 
 End Class

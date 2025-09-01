@@ -49,14 +49,16 @@ Public Class ErrorHandler
 
     ' Centralized validation method
     Public Shared Function ValidateSelections(form As Form) As Boolean
+        Dim groupBox As GroupBox = DirectCast(form.Controls("groupRequirements"), GroupBox)
+
         Dim validations As New Dictionary(Of ComboBox, Action) From {
-            {DirectCast(form.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected},
-            {DirectCast(form.Controls("ComboBoxIntendedUseOfPart"), ComboBox), AddressOf NoPartPurposeSelected},
-            {DirectCast(form.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
-            {DirectCast(form.Controls("ComboBoxLeadTimeSignificance"), ComboBox), AddressOf NoLeadTimeSelected},
-            {DirectCast(form.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
-            {DirectCast(form.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected}
-        }
+        {DirectCast(groupBox.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected},
+        {DirectCast(groupBox.Controls("ComboBoxIntendedUseOfPart"), ComboBox), AddressOf NoPartPurposeSelected},
+        {DirectCast(groupBox.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
+        {DirectCast(groupBox.Controls("ComboBoxLeadTimeSignificance"), ComboBox), AddressOf NoLeadTimeSelected},
+        {DirectCast(groupBox.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
+        {DirectCast(groupBox.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected}
+    }
 
         For Each item In validations
             If String.IsNullOrWhiteSpace(item.Key.Text) Then
@@ -64,7 +66,6 @@ Public Class ErrorHandler
                 Return False ' Validation failed
             End If
         Next
-
         Return True ' All inputs are valid
     End Function
 End Class
