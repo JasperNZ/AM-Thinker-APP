@@ -73,7 +73,7 @@ Public Class mainUserForm
             {"MEX", CheckBoxMaterialExtrusion},
             {"VPP", CheckBoxVatPhotopolymerisation},
             {"DED", CheckBoxDirectedEnergyDeposition},
-            {"IMFP", CheckBoxIMFP},
+            {"IMFP", CheckBoxIMFP}, 'why did i put this here??? need to test removing it won't break code
             {"MJT", CheckBoxMaterialJetting},
             {"BJT", CheckBoxBinderJetting}
         }
@@ -94,6 +94,10 @@ Public Class mainUserForm
             profile.AdjustWeightsForPurpose(ComboBoxIntendedUseOfPart.Text)
         Next
 
+        'getting the geometrical helper
+        Dim GeoChecker As New GeometricalHelper(g_inventorApplication)
+
+
         'preparing to pass in user inputs to each classes' CalculateScore function
         Dim categoricalInputs As New Dictionary(Of String, String) From {
             {"Precision", ComboBoxPrecisionOfPart.Text},
@@ -102,7 +106,7 @@ Public Class mainUserForm
             {"Volume", ComboBoxVolumeOfProduction.Text}
         }
         Dim numericInputs As New Dictionary(Of String, Double) From {
-            {"Complexity", GetPartComplexity()},     ' i think this is the function??
+            {"Complexity", GeoChecker.CalculatePartComplexity()},     ' i think this is the function??
             {"Overhang", 0}   'idk we can have a function called GetOverhangComplexity()
         }
         Dim hasImpossibleFeatures As Boolean = CheckBoxIMFP.Checked
@@ -122,7 +126,7 @@ Public Class mainUserForm
             End If
         Next
 
-        'for testing purposes - needs finality
+        'for testing purposes - needs finality and cases for multiple solutions suggested TODO
         MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
     End Sub
 

@@ -1,10 +1,12 @@
+Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports Inventor
 
 'Helper class used for any geometrical related calculations and analysis required. 
 'Used for Overhang, Part complexity, etc in an automated manner (untested)
 'TryCast usually means we only read the active part document the user is currently viewing.
 Public Class GeometricalHelper
-    Private _app As Inventor.Application
+    Private ReadOnly _app As Inventor.Application
 
     'constructor essentially passing the Inventor application object to the class
     'that's how we can access the properties of the part
@@ -42,7 +44,7 @@ Public Class GeometricalHelper
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.")
         Dim compDef = doc.ComponentDefinition
-        Return compDef.MassProperties.SurfaceArea
+        Return compDef.MassProperties.Area
     End Function
 
     'function to calculate the overhang area of the part (in cm^2)
@@ -70,7 +72,7 @@ Public Class GeometricalHelper
     Public Function CalculatePartComplexity() As Double
         Dim volume As Double = GetVolume()
         Dim surfaceArea As Double = GetSurfaceArea()
-        If volume = 0 Then Return 0
-        Return surfaceArea / volume ' Higher ratio indicates higher complexity
+        If volume = 0 Then Return 0 ' edge case to somehow avoid crashing by dividing by 0
+        Return (surfaceArea / volume) ' Higher ratio indicates higher complexity
     End Function
 End Class

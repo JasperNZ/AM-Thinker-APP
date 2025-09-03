@@ -2,6 +2,7 @@
 Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports Inventor
 Imports Microsoft.Win32
 
@@ -48,6 +49,8 @@ Namespace Pt4ProjectAddin
                 If firstTime Then
                     AddToUserInterface()
                     'MsgBox("Button Created: " & m_sampleButton.DisplayName)
+                    'MessageBox.Show(System.Runtime.InteropServices.Marshal.GetType().Assembly.FullName)
+                    'MessageBox.Show(Environment.Version.ToString())
                 End If
             Catch ex As Exception
                 MsgBox("Activate Error: " & ex.Message)
