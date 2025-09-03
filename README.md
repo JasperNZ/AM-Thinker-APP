@@ -21,23 +21,24 @@ URGENT:
 - pure functionalities, putting the right numbers for all combinations
 - report about future-proofing and considerations for advancements
 - improve coding comments and consistent coding conventions to unionize the code
-- bug fixing and error handler (ErrorHandler.vb)
-- improve the UI/UX DONE
 - Final message box and interpretation
-- other nice design features for user 
 - fix the select profile loop (trying to use tuples, but it's not working???????)
 - score, traffic color, and feedback/comment file (helper message handler file)
 - Fix looping dictionary for errors to be in proper order of visual selection.
 - Fix dictionary to look through valid machine selection.
-- Considering adding a little icon next to the AM thinker? DONE
-- R&D scores remain non-deadend.
-- Apply tooltips to all relevant sections
-- Preferably apply regions in the mainUserForm Designer form. for easier readability
+- R&D scores remain non-deadend. (consult olaf)
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
-- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
 - Fix messages on tooltips to be more useful and not in the way of user selection options.
+- Temporary messagebox to inform user of selecting base face to print. (need to test Felix function)
 
 NICE TO HAVE:
+- other nice design features for user 
+- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
 
 
 COMPLETED:
+- make bug fixing and error handler (ErrorHandler.vb) DONE
+- improve the UI/UX DONE
+- Considering adding a little icon next to the AM thinker? DONE
+- Apply tooltips to all relevant sections DONE
+- Preferably apply group boxes in the mainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
