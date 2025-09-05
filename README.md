@@ -30,7 +30,13 @@ URGENT:
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
 - Fix messages on tooltips to be more useful and not in the way of user selection options.
 - Temporary messagebox to inform user of selecting base face to print. (need to test Felix function)
+- Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
+- Double check geometry features output correct numbers and units
+- partition important message strings into a list and loop to output in messagebox? more reesearch
+- Consider if we can do this for multiple parts, and assemblies.
+- testing testing
 
+- 
 NICE TO HAVE:
 - other nice design features for user 
 - Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
