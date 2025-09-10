@@ -174,6 +174,8 @@ Public Module Globals
 #End Region
 
 #Region "get user to select face to touch build plate"
+
+    'base face funciton works fine, but Getsurface is trying to use a variable not accessible.
     Public Function GetBaseFace() As Object
         Dim invDoc As Document
         invDoc = g_inventorApplication.ActiveDocument
@@ -181,6 +183,54 @@ Public Module Globals
         BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
         Return BaseFace
     End Function
+
+    'Public Function GetSurface() As Double
+    '    Dim oPartDoc As PartDocument
+    '    oPartDoc = g_inventorApplication.ActiveDocument
+
+    '    Dim oPartDef As PartComponentDefinition
+    '    oPartDef = oPartDoc.ComponentDefinition
+
+    '    Dim oSurfaceBody As SurfaceBody
+    '    Dim oFace As Face
+    '    Dim faceCount As Long
+    '    faceCount = 0
+    '    Dim eval As SurfaceEvaluator
+    '    Dim Baseeval As SurfaceEvaluator
+    '    Baseeval = BaseFace.Evaluator
+    '    Dim basecenter(1) As Double
+    '    basecenter(0) = (Baseeval.ParamRangeRect.MinPoint.X + Baseeval.ParamRangeRect.MaxPoint.X) / 2
+    '    basecenter(1) = (Baseeval.ParamRangeRect.MinPoint.Y + Baseeval.ParamRangeRect.MaxPoint.Y) / 2
+    '    Dim Normal(2) As Double
+    '    Call Baseeval.GetNormal(basecenter, Normal)
+    '    Dim Basevector As UnitVector
+    '    Basevector = g_inventorApplication.TransientGeometry.CreateUnitVector(Normal(0), Normal(1), Normal(2))
+    '    Dim TotalArea As Double = 0
+    '    Dim area As Double
+    '    For Each oSurfaceBody In oPartDef.SurfaceBodies
+    '        For Each oFace In oSurfaceBody.Faces
+    '            eval = oFace.Evaluator
+    '            Dim center(1) As Double
+    '            center(0) = (eval.ParamRangeRect.MinPoint.X + eval.ParamRangeRect.MaxPoint.X) / 2
+    '            center(1) = (eval.ParamRangeRect.MinPoint.Y + eval.ParamRangeRect.MaxPoint.Y) / 2
+    '            Dim NormalTest(2) As Double
+    '            Call eval.GetNormal(center, NormalTest)
+    '            Dim Testvector As UnitVector
+    '            Testvector = g_inventorApplication.TransientGeometry.CreateUnitVector(NormalTest(0), NormalTest(1), NormalTest(2))
+    '            Dim angle As Double
+    '            angle = Basevector.AngleTo(Testvector)
+    '            If angle < 0.785 Then
+    '                area = eval.Area
+    '                TotalArea = TotalArea + area
+    '            End If
+    '            area = 0
+    '        Next
+    '    Next
+    '    Dim basearea As Double
+    '    basearea = Baseeval.Area
+    '    TotalArea = TotalArea - basearea
+    '    Return TotalArea
+    'End Function
 
 #End Region
 
