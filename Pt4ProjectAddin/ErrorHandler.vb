@@ -55,7 +55,7 @@ Public Class ErrorHandler
         {DirectCast(groupBox.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected},
         {DirectCast(groupBox.Controls("ComboBoxIntendedUseOfPart"), ComboBox), AddressOf NoPartPurposeSelected},
         {DirectCast(groupBox.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
-        {DirectCast(groupBox.Controls("ComboBoxLeadTimeSignificance"), ComboBox), AddressOf NoLeadTimeSelected},
+        {DirectCast(groupBox.Controls("ComboBoxLeadTime "), ComboBox), AddressOf NoLeadTimeSelected},
         {DirectCast(groupBox.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
         {DirectCast(groupBox.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected}
     }

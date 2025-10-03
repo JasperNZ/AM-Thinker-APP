@@ -15,6 +15,7 @@ Namespace Pt4ProjectAddin
         Private WithEvents m_uiEvents As UserInterfaceEvents
         Private WithEvents m_sampleButton As ButtonDefinition
 
+
 #Region "ApplicationAddInServer Members"
 
         ' This method is called by Inventor when it loads the AddIn. The AddInSiteObject provides access  
@@ -118,6 +119,14 @@ Namespace Pt4ProjectAddin
             'MsgBox("Button was clicked.")
             Dim mainUserForm1 As New mainUserForm()
             mainUserForm1.Show(New WindowWrapper(CType(g_inventorApplication.MainFrameHWND, IntPtr)))
+
+            ' Reposition relative to Inventor’s main window
+            Dim invBounds As Rectangle = Screen.FromHandle(CType(g_inventorApplication.MainFrameHWND, IntPtr)).Bounds
+
+            ' Example: below ribbon + near design history
+            ' Adjust offsets based on your UI preferences
+            mainUserForm1.Top = invBounds.Top + 150  ' offset down from ribbon
+            mainUserForm1.Left = invBounds.Left + 200 ' offset right from history tree
         End Sub
 #End Region
 

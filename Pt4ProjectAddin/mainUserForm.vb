@@ -101,7 +101,7 @@ Public Class mainUserForm
         'preparing to pass in user inputs to each classes' CalculateScore function
         Dim categoricalInputs As New Dictionary(Of String, String) From {
             {"Precision", ComboBoxPrecisionOfPart.Text},
-            {"LeadTime", ComboBoxLeadTimeSignificance.Text},
+            {"LeadTime", ComboBoxLeadTime.Text},
             {"PostProcessing", ComboBoxPostProcessingEffort.Text},
             {"Volume", ComboBoxVolumeOfProduction.Text}
         }

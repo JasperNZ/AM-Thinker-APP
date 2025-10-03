@@ -40,7 +40,7 @@ Partial Class mainUserForm
         Me.Label6 = New System.Windows.Forms.Label()
         Me.ButtonCompute = New System.Windows.Forms.Button()
         Me.ComboBoxPrecisionOfPart = New System.Windows.Forms.ComboBox()
-        Me.ComboBoxLeadTimeSignificance = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxLeadTime = New System.Windows.Forms.ComboBox()
         Me.ComboBoxVolumeOfProduction = New System.Windows.Forms.ComboBox()
         Me.ComboBoxPostProcessingEffort = New System.Windows.Forms.ComboBox()
         Me.ComboBoxIntendedUseOfPart = New System.Windows.Forms.ComboBox()
@@ -77,7 +77,7 @@ Partial Class mainUserForm
         Me.Label1.Size = New System.Drawing.Size(84, 13)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Precision of Part"
-        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part (High = tight tolerances).")
+        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part. \n Low: ~1mm \n Medium: ~0.5mm \n High: ~0.1mm")
         '
         'Label2
         '
@@ -87,8 +87,8 @@ Partial Class mainUserForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(118, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Lead Time Significance"
-        Me.toolTip1.SetToolTip(Me.Label2, "Indicate how important delivery speed is for this part.")
+        Me.Label2.Text = "Lead Time"
+        Me.toolTip1.SetToolTip(Me.Label2, "Select required delivery speed of the part. \n Low: 1-3 days \n Medium: 4-7 days \n High: >7 days")
         '
         'Label3
         '
@@ -99,7 +99,7 @@ Partial Class mainUserForm
         Me.Label3.Size = New System.Drawing.Size(108, 13)
         Me.Label3.TabIndex = 7
         Me.Label3.Text = "Volume of Production"
-        Me.toolTip1.SetToolTip(Me.Label3, "Specify expected production quantity.")
+        Me.toolTip1.SetToolTip(Me.Label3, "Select expected production quantity. \n Low: <5 \n Medium: >100 \n High: >1000")
         '
         'Label4
         '
@@ -110,7 +110,7 @@ Partial Class mainUserForm
         Me.Label4.Size = New System.Drawing.Size(111, 13)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Post Processing Effort"
-        Me.toolTip1.SetToolTip(Me.Label4, "Choose how much post-processing effort is acceptable.")
+        Me.toolTip1.SetToolTip(Me.Label4, "Select level of post-processing effort required. \n Low: <1 hour \n Medium: <1 day \n High: >1 week")
         '
         'Label5
         '
@@ -121,7 +121,7 @@ Partial Class mainUserForm
         Me.Label5.Size = New System.Drawing.Size(105, 13)
         Me.Label5.TabIndex = 9
         Me.Label5.Text = "Intended Use of Part"
-        Me.toolTip1.SetToolTip(Me.Label5, "Select the purpose of the part (prototype, spare, etc.).")
+        Me.toolTip1.SetToolTip(Me.Label5, "Select the purpose of the part.")
         '
         'Label6
         '
@@ -156,17 +156,17 @@ Partial Class mainUserForm
         Me.ComboBoxPrecisionOfPart.Size = New System.Drawing.Size(122, 21)
         Me.ComboBoxPrecisionOfPart.TabIndex = 2
         '
-        'ComboBoxLeadTimeSignificance
+        'ComboBoxLeadTime 
         '
-        Me.ComboBoxLeadTimeSignificance.AllowDrop = True
-        Me.ComboBoxLeadTimeSignificance.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxLeadTimeSignificance.FormattingEnabled = True
-        Me.ComboBoxLeadTimeSignificance.Items.AddRange(New Object() {"High", "Medium", "Low"})
-        Me.ComboBoxLeadTimeSignificance.Location = New System.Drawing.Point(133, 49)
-        Me.ComboBoxLeadTimeSignificance.Margin = New System.Windows.Forms.Padding(2)
-        Me.ComboBoxLeadTimeSignificance.Name = "ComboBoxLeadTimeSignificance"
-        Me.ComboBoxLeadTimeSignificance.Size = New System.Drawing.Size(122, 21)
-        Me.ComboBoxLeadTimeSignificance.TabIndex = 4
+        Me.ComboBoxLeadTime.AllowDrop = True
+        Me.ComboBoxLeadTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxLeadTime.FormattingEnabled = True
+        Me.ComboBoxLeadTime.Items.AddRange(New Object() {"High", "Medium", "Low"})
+        Me.ComboBoxLeadTime.Location = New System.Drawing.Point(133, 49)
+        Me.ComboBoxLeadTime.Margin = New System.Windows.Forms.Padding(2)
+        Me.ComboBoxLeadTime.Name = "ComboBoxLeadTime "
+        Me.ComboBoxLeadTime.Size = New System.Drawing.Size(122, 21)
+        Me.ComboBoxLeadTime.TabIndex = 4
         '
         'ComboBoxVolumeOfProduction
         '
@@ -321,7 +321,7 @@ Partial Class mainUserForm
         Me.groupRequirements.Controls.Add(Me.Label3)
         Me.groupRequirements.Controls.Add(Me.ComboBoxPostProcessingEffort)
         Me.groupRequirements.Controls.Add(Me.Label4)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxLeadTimeSignificance)
+        Me.groupRequirements.Controls.Add(Me.ComboBoxLeadTime)
         Me.groupRequirements.Controls.Add(Me.Label2)
         Me.groupRequirements.Controls.Add(Me.ComboBoxPrecisionOfPart)
         Me.groupRequirements.Controls.Add(Me.Label1)
@@ -385,7 +385,7 @@ Partial Class mainUserForm
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents BindingSource1 As Windows.Forms.BindingSource
     Friend WithEvents ComboBoxPrecisionOfPart As Windows.Forms.ComboBox
-    Friend WithEvents ComboBoxLeadTimeSignificance As Windows.Forms.ComboBox
+    Friend WithEvents ComboBoxLeadTime As Windows.Forms.ComboBox
     Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents ComboBoxVolumeOfProduction As Windows.Forms.ComboBox
     Friend WithEvents Label3 As Windows.Forms.Label
