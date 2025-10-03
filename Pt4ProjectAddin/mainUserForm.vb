@@ -130,5 +130,9 @@ Public Class mainUserForm
         MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        MsgBox("The Post Processing Calculator is still in the works - stay tuned!")
+    End Sub
+
 
 End Class
