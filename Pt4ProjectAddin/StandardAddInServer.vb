@@ -125,8 +125,8 @@ Namespace Pt4ProjectAddin
 
             ' Example: below ribbon + near design history
             ' Adjust offsets based on your UI preferences
-            mainUserForm1.Top = invBounds.Top + 150  ' offset down from ribbon
-            mainUserForm1.Left = invBounds.Left + 200 ' offset right from history tree
+            mainUserForm1.Top = invBounds.Top + 145  ' offset down from ribbon
+            mainUserForm1.Left = invBounds.Left + 145 ' offset right from history tree
         End Sub
 #End Region
 

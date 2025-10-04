@@ -2,6 +2,8 @@
 ' Stylistic decision to use dropdownlists to avoid user input errors.
 ' Material selection as dropdown list to avoid AM analysis conflicts.
 Imports System.Drawing
+Imports System.Windows.Forms
+
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class mainUserForm
@@ -77,7 +79,7 @@ Partial Class mainUserForm
         Me.Label1.Size = New System.Drawing.Size(84, 13)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Precision of Part"
-        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part. \n Low: ~1mm \n Medium: ~0.5mm \n High: ~0.1mm")
+        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part." & vbCrLf & "Low: ~1mm" & vbCrLf & "Medium: ~0.5mm" & vbCrLf & "High: ~0.1mm")
         '
         'Label2
         '
@@ -88,7 +90,7 @@ Partial Class mainUserForm
         Me.Label2.Size = New System.Drawing.Size(118, 13)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Lead Time"
-        Me.toolTip1.SetToolTip(Me.Label2, "Select required delivery speed of the part. \n Low: 1-3 days \n Medium: 4-7 days \n High: >7 days")
+        Me.toolTip1.SetToolTip(Me.Label2, "Select required delivery speed of the part." & vbCrLf & "Low: 1-3 days" & vbCrLf & "Medium: 4-7 days" & vbCrLf & "High: >7 days")
         '
         'Label3
         '
@@ -99,7 +101,7 @@ Partial Class mainUserForm
         Me.Label3.Size = New System.Drawing.Size(108, 13)
         Me.Label3.TabIndex = 7
         Me.Label3.Text = "Volume of Production"
-        Me.toolTip1.SetToolTip(Me.Label3, "Select expected production quantity. \n Low: <5 \n Medium: >100 \n High: >1000")
+        Me.toolTip1.SetToolTip(Me.Label3, "Select expected production quantity." & vbCrLf & "Low: <5" & vbCrLf & "Medium: >100" & vbCrLf & "High: >1000")
         '
         'Label4
         '
@@ -110,7 +112,7 @@ Partial Class mainUserForm
         Me.Label4.Size = New System.Drawing.Size(111, 13)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Post Processing Effort"
-        Me.toolTip1.SetToolTip(Me.Label4, "Select level of post-processing effort required. \n Low: <1 hour \n Medium: <1 day \n High: >1 week")
+        Me.toolTip1.SetToolTip(Me.Label4, "Select level of post-processing effort required." & vbCrLf & "Low: <1 hour" & vbCrLf & "Medium: <1 day" & vbCrLf & "High: >1 week")
         '
         'Label5
         '
@@ -164,7 +166,7 @@ Partial Class mainUserForm
         Me.ComboBoxLeadTime.Items.AddRange(New Object() {"High", "Medium", "Low"})
         Me.ComboBoxLeadTime.Location = New System.Drawing.Point(133, 49)
         Me.ComboBoxLeadTime.Margin = New System.Windows.Forms.Padding(2)
-        Me.ComboBoxLeadTime.Name = "ComboBoxLeadTime "
+        Me.ComboBoxLeadTime.Name = "ComboBoxLeadTime"
         Me.ComboBoxLeadTime.Size = New System.Drawing.Size(122, 21)
         Me.ComboBoxLeadTime.TabIndex = 4
         '

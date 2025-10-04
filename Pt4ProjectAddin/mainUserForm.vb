@@ -127,7 +127,21 @@ Public Class mainUserForm
         Next
 
         'for testing purposes - needs finality and cases for multiple solutions suggested TODO
-        MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
+        'MsgBox("Best option: " & bestProfile.Technology & " (" & bestProfile.Material & ") with score: " & bestScore)
+        Dim scoredProfiles As New List(Of ScoredProfile)
+
+        For Each profile In selectedProfiles
+            Dim score = profile.CalculateScore(criteria)
+            scoredProfiles.Add(New ScoredProfile With {
+                .Technology = profile.Technology,
+                .Material = profile.Material,
+                .Score = score
+            })
+        Next
+
+        ' Show custom results form
+        Dim resultsForm As New SummaryForm(scoredProfiles)
+        resultsForm.ShowDialog()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

@@ -542,10 +542,10 @@ Public Class PlasticDED
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 0}, {"Medium", 0}, {"High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 0}, {"Medium", 0}, {"High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 0}, {"Medium", 0}, {"High", 0}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 0}, {"Low Volume Production", 0}, {"High Volume Production", 0}}}
             }
         End Get
     End Property

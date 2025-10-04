@@ -19,7 +19,7 @@ Public Class ErrorHandler
     'User does not select AM technology
     Public Shared Sub NoTechnologySelected()
         'MessageBox.Show("Please select an AM technology.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        MessageBox.Show("No compatible AM technologies selected or available for the chosen material.", "No Technologies", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        MessageBox.Show("Please select an AM technology.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     'user does not select part purpose
@@ -55,7 +55,7 @@ Public Class ErrorHandler
         {DirectCast(groupBox.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected},
         {DirectCast(groupBox.Controls("ComboBoxIntendedUseOfPart"), ComboBox), AddressOf NoPartPurposeSelected},
         {DirectCast(groupBox.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
-        {DirectCast(groupBox.Controls("ComboBoxLeadTime "), ComboBox), AddressOf NoLeadTimeSelected},
+        {DirectCast(groupBox.Controls("ComboBoxLeadTime"), ComboBox), AddressOf NoLeadTimeSelected},
         {DirectCast(groupBox.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
         {DirectCast(groupBox.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected}
     }
@@ -66,6 +66,25 @@ Public Class ErrorHandler
                 Return False ' Validation failed
             End If
         Next
+
+        Dim techGroupBox As GroupBox = DirectCast(form.Controls("GroupBox1"), GroupBox)
+        Dim anyTechSelected As Boolean = False
+
+        For Each control In techGroupBox.Controls
+            If TypeOf control Is CheckBox Then
+                Dim checkbox As CheckBox = DirectCast(control, CheckBox)
+                If checkbox.Checked Then
+                    anyTechSelected = True
+                    Exit For
+                End If
+            End If
+        Next
+
+        If Not anyTechSelected Then
+            NoTechnologySelected()
+            Return False
+        End If
+
         Return True ' All inputs are valid
     End Function
 End Class

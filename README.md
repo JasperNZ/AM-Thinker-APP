@@ -22,21 +22,24 @@ URGENT:
 - report about future-proofing and considerations for advancements
 - improve coding comments and consistent coding conventions to unionize the code
 - Final message box and interpretation
-- fix the select profile loop (trying to use tuples, but it's not working???????)
 - score, traffic color, and feedback/comment file (helper message handler file)
 - Fix looping dictionary for errors to be in proper order of visual selection.
 - Fix dictionary to look through valid machine selection.
-- R&D scores remain non-deadend. (consult olaf)
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
 - Fix messages on tooltips to be more useful and not in the way of user selection options.
-- Temporary messagebox to inform user of selecting base face to print. (need to test Felix function)
+
 - Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
 - Double check geometry features output correct numbers and units
 - partition important message strings into a list and loop to output in messagebox? more reesearch
 - Consider if we can do this for multiple parts, and assemblies.
-- testing testing
 
-- 
+
+UNLIKELY TO COMPLETE:
+- testing testing (missing data)
+- Temporary messagebox to inform user of selecting base face to print. (need to test Felix function - unusually buggy, might replace with own function)
+- icon as tooltips - not feasible because lack of 16x16 question mark professional icons, might need to use SystemIcons
+- shifting tooltip comments away from interfering drop down - currently can only be done manually using Show.
+
 NICE TO HAVE:
 - other nice design features for user 
 - Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
@@ -48,3 +51,4 @@ COMPLETED:
 - Considering adding a little icon next to the AM thinker? DONE
 - Apply tooltips to all relevant sections DONE
 - Preferably apply group boxes in the mainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
+- fix the select profile loop (trying to use tuples, but it's not working???????)
