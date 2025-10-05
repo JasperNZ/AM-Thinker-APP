@@ -31,6 +31,7 @@ Partial Class SummaryForm
         Me.LabelImprovements = New System.Windows.Forms.Label()
         Me.LabelGeometry = New System.Windows.Forms.Label()
         Me.LabelLimitations = New System.Windows.Forms.Label()
+        Me.LabelBestOptionsHeader = New System.Windows.Forms.Label()
         Me.PanelDetails.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -45,10 +46,9 @@ Partial Class SummaryForm
         '
         'LabelBestOptions
         '
-        Me.LabelBestOptions.AutoSize = True
-        Me.LabelBestOptions.Location = New System.Drawing.Point(12, 137)
+        Me.LabelBestOptions.Location = New System.Drawing.Point(80, 95)
         Me.LabelBestOptions.Name = "LabelBestOptions"
-        Me.LabelBestOptions.Size = New System.Drawing.Size(46, 13)
+        Me.LabelBestOptions.Size = New System.Drawing.Size(384, 32)
         Me.LabelBestOptions.TabIndex = 1
         Me.LabelBestOptions.Text = "Options:"
         '
@@ -61,12 +61,12 @@ Partial Class SummaryForm
         Me.ListBoxResults.ItemHeight = 20
         Me.ListBoxResults.Location = New System.Drawing.Point(12, 28)
         Me.ListBoxResults.Name = "ListBoxResults"
-        Me.ListBoxResults.Size = New System.Drawing.Size(460, 84)
+        Me.ListBoxResults.Size = New System.Drawing.Size(460, 64)
         Me.ListBoxResults.TabIndex = 3
         '
         'ButtonDetails
         '
-        Me.ButtonDetails.Location = New System.Drawing.Point(12, 187)
+        Me.ButtonDetails.Location = New System.Drawing.Point(12, 159)
         Me.ButtonDetails.Name = "ButtonDetails"
         Me.ButtonDetails.Size = New System.Drawing.Size(108, 23)
         Me.ButtonDetails.TabIndex = 4
@@ -78,7 +78,7 @@ Partial Class SummaryForm
         Me.PanelDetails.Controls.Add(Me.LabelImprovements)
         Me.PanelDetails.Controls.Add(Me.LabelGeometry)
         Me.PanelDetails.Controls.Add(Me.LabelLimitations)
-        Me.PanelDetails.Location = New System.Drawing.Point(15, 216)
+        Me.PanelDetails.Location = New System.Drawing.Point(15, 188)
         Me.PanelDetails.Name = "PanelDetails"
         Me.PanelDetails.Size = New System.Drawing.Size(457, 100)
         Me.PanelDetails.TabIndex = 5
@@ -111,11 +111,21 @@ Partial Class SummaryForm
         Me.LabelLimitations.TabIndex = 7
         Me.LabelLimitations.Text = "Technology Limitations:"
         '
+        'LabelBestOptionsHeader
+        '
+        Me.LabelBestOptionsHeader.AutoSize = True
+        Me.LabelBestOptionsHeader.Location = New System.Drawing.Point(12, 95)
+        Me.LabelBestOptionsHeader.Name = "LabelBestOptionsHeader"
+        Me.LabelBestOptionsHeader.Size = New System.Drawing.Size(70, 13)
+        Me.LabelBestOptionsHeader.TabIndex = 6
+        Me.LabelBestOptionsHeader.Text = "Best Options:"
+        '
         'SummaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(484, 322)
+        Me.ClientSize = New System.Drawing.Size(484, 196)
+        Me.Controls.Add(Me.LabelBestOptionsHeader)
         Me.Controls.Add(Me.PanelDetails)
         Me.Controls.Add(Me.ButtonDetails)
         Me.Controls.Add(Me.ListBoxResults)
@@ -143,4 +153,5 @@ Partial Class SummaryForm
     Friend WithEvents LabelImprovements As Windows.Forms.Label
     Friend WithEvents LabelGeometry As Windows.Forms.Label
     Friend WithEvents LabelLimitations As Windows.Forms.Label
+    Friend WithEvents LabelBestOptionsHeader As Windows.Forms.Label
 End Class

@@ -6,12 +6,26 @@ Imports System.Linq
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
     Private isDetailsExpanded As Boolean = False
+    Private Const MIN_COLLAPSE_GAP As Integer = 10   ' gap left between panel and button when collapsed
+    Private Const BASE_FORM_HEIGHT As Integer = 235  ' use your existing base height
 
     ' Constructor to receive scored profiles
     Public Sub New(profiles As List(Of ScoredProfile))
         InitializeComponent()
+
         Me.scoredProfiles = profiles
+        EnableDoubleBuffer(PanelDetails)
+        EnableDoubleBuffer(ListBoxResults)
+        ' Start collapsed and invisible
+        PanelDetails.Height = 0
+        PanelDetails.Visible = False
         PopulateResults()
+    End Sub
+
+    Private Sub EnableDoubleBuffer(ctrl As Control)
+        Dim prop = GetType(Control).GetProperty("DoubleBuffered",
+        Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
+        prop.SetValue(ctrl, True, Nothing)
     End Sub
 
     Private Sub PopulateResults()
@@ -40,10 +54,10 @@ Public Class SummaryForm
         Next
 
         ' Show best options
-        Dim greenProfiles = sortedProfiles.Where(Function(p) p.Score >= 70).Take(6).ToList()
+        Dim greenProfiles = sortedProfiles.Where(Function(p) p.Score >= 70).ToList()
         If greenProfiles.Any() Then
             Dim bestTechs = String.Join(", ", greenProfiles.Select(Function(p) p.Technology))
-            LabelBestOptions.Text = "Best Options: " & bestTechs
+            LabelBestOptions.Text = bestTechs
         Else
             LabelBestOptions.Text = "No highly suitable options found"
         End If
@@ -108,22 +122,39 @@ Public Class SummaryForm
     End Sub
 
     Private Sub ExpandDetails()
-        ' Populate placeholder data
         PopulateDetailsPanel()
 
-        ' Expand panel smoothly
-        PanelDetails.Visible = True
-        Dim targetHeight As Integer = 280
-        Dim timer As New Timer()
-        timer.Interval = 10
+        ' measure content height
+        Dim contentBottom As Integer = 0
+        For Each ctrl As Control In PanelDetails.Controls
+            contentBottom = Math.Max(contentBottom, ctrl.Bottom)
+        Next
 
-        AddHandler timer.Tick, Sub(s, args)
-                                   If PanelDetails.Height >= targetHeight Then
+        Dim padBottom As Integer = 10 ' extra padding you asked for
+        Dim panelTargetHeight As Integer = Math.Max(100, contentBottom + padBottom)
+
+        ' put panel under the button
+        PanelDetails.Location = New Point(ButtonDetails.Left, ButtonDetails.Bottom + 5)
+        PanelDetails.Height = 0
+        PanelDetails.Visible = True
+
+        ' animate both panel and form height
+        Dim timer As New Timer() With {.Interval = 10}
+        ButtonDetails.Enabled = False
+        Me.SuspendLayout()
+
+        AddHandler timer.Tick, Sub()
+                                   Dim stepSize As Integer = 12
+                                   If PanelDetails.Height >= panelTargetHeight Then
                                        timer.Stop()
                                        timer.Dispose()
+                                       PanelDetails.Height = panelTargetHeight
+                                       Me.Height = BASE_FORM_HEIGHT + PanelDetails.Height + 25
+                                       ButtonDetails.Enabled = True
+                                       Me.ResumeLayout()
                                    Else
-                                       PanelDetails.Height += 15
-                                       Me.Height += 15
+                                       PanelDetails.Height = Math.Min(PanelDetails.Height + stepSize, panelTargetHeight)
+                                       Me.Height = BASE_FORM_HEIGHT + PanelDetails.Height + 10
                                    End If
                                End Sub
 
@@ -134,18 +165,23 @@ Public Class SummaryForm
     End Sub
 
     Private Sub CollapseDetails()
-        ' Collapse panel smoothly
-        Dim timer As New Timer()
-        timer.Interval = 10
+        Dim timer As New Timer() With {.Interval = 10}
+        ButtonDetails.Enabled = False
+        Me.SuspendLayout()
 
-        AddHandler timer.Tick, Sub(s, args)
-                                   If PanelDetails.Height <= 0 Then
+        AddHandler timer.Tick, Sub()
+                                   Dim stepSize As Integer = 12
+                                   If PanelDetails.Height <= MIN_COLLAPSE_GAP Then
                                        timer.Stop()
                                        timer.Dispose()
-                                       PanelDetails.Visible = False
+                                       PanelDetails.Height = MIN_COLLAPSE_GAP
+                                       ' keep the small visible strip so the button isn't covered
+                                       Me.Height = BASE_FORM_HEIGHT + PanelDetails.Height + 20
+                                       ButtonDetails.Enabled = True
+                                       Me.ResumeLayout()
                                    Else
-                                       PanelDetails.Height -= 15
-                                       Me.Height -= 15
+                                       PanelDetails.Height = Math.Max(PanelDetails.Height - stepSize, MIN_COLLAPSE_GAP)
+                                       Me.Height = BASE_FORM_HEIGHT + PanelDetails.Height + 10
                                    End If
                                End Sub
 
@@ -215,6 +251,13 @@ Public Class SummaryForm
         lblImproveData.Size = New Size(420, 50)
         PanelDetails.Controls.Add(lblImproveData)
     End Sub
+    Protected Overrides ReadOnly Property CreateParams() As CreateParams
+        Get
+            Dim cp As CreateParams = MyBase.CreateParams
+            cp.ExStyle = cp.ExStyle Or &H2000000 ' WS_EX_COMPOSITED
+            Return cp
+        End Get
+    End Property
 
 End Class
 
