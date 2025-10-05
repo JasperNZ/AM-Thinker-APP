@@ -1,4 +1,8 @@
+'Imports stdole
+Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports Inventor
 Imports Microsoft.Win32
 
@@ -11,30 +15,47 @@ Namespace Pt4ProjectAddin
         Private WithEvents m_uiEvents As UserInterfaceEvents
         Private WithEvents m_sampleButton As ButtonDefinition
 
+
 #Region "ApplicationAddInServer Members"
 
         ' This method is called by Inventor when it loads the AddIn. The AddInSiteObject provides access  
         ' to the Inventor Application object. The FirstTime flag indicates if the AddIn is loaded for
         ' the first time. However, with the introduction of the ribbon this argument is always true.
         Public Sub Activate(ByVal addInSiteObject As Inventor.ApplicationAddInSite, ByVal firstTime As Boolean) Implements Inventor.ApplicationAddInServer.Activate
-            ' Initialize AddIn members.
-            g_inventorApplication = addInSiteObject.Application
+            Try
+                ' Initialize AddIn members FIRST
+                g_inventorApplication = addInSiteObject.Application
 
-            ' Connect to the user-interface events to handle a ribbon reset.
-            m_uiEvents = g_inventorApplication.UserInterfaceManager.UserInterfaceEvents
+                ' Connect to the user-interface events to handle a ribbon reset
+                m_uiEvents = g_inventorApplication.UserInterfaceManager.UserInterfaceEvents
 
-            ' TODO: Add button definitions.
+                ' Create icon using TestIcon helper
+                Dim iconHelper As New TestIcon()
+                Dim bmp As Bitmap = iconHelper.LoadBitmapFromResources()
 
-            ' Sample to illustrate creating a button definition.
-            'Dim largeIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourBigImage)
-            'Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.YourSmallImage)
-            Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
-            m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker", "AM Thinker ID", CommandTypesEnum.kShapeEditCmdType, AddInClientID)
+                ' Convert to IPictureDisp for Inventor
+                Dim iconDisp As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(bmp)
 
-            ' Add to the user interface, if it's the first time.
-            If firstTime Then
-                AddToUserInterface()
-            End If
+                ' Now you can safely get ControlDefinitions
+                Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
+
+                ' Create the button with the icon
+                m_sampleButton = controlDefs.AddButtonDefinition("AM Thinker",
+                    "AM Thinker ID",
+                    CommandTypesEnum.kShapeEditCmdType,
+                    AddInClientID,
+                    "Launch AM Thinker Tool",
+                    "Open the AM Thinker Add-in for analysis",
+                    iconDisp, iconDisp)
+                If firstTime Then
+                    AddToUserInterface()
+                    'MsgBox("Button Created: " & m_sampleButton.DisplayName)
+                    'MessageBox.Show(System.Runtime.InteropServices.Marshal.GetType().Assembly.FullName)
+                    'MessageBox.Show(Environment.Version.ToString())
+                End If
+            Catch ex As Exception
+                MsgBox("Activate Error: " & ex.Message)
+            End Try
         End Sub
 
         ' This method is called by Inventor when the AddIn is unloaded. The AddIn will be
@@ -82,10 +103,10 @@ Namespace Pt4ProjectAddin
             Dim toolsTab As RibbonTab = partRibbon.RibbonTabs.Item("id_TabTools")
 
             '' Create a new panel.
-            Dim customPanel As RibbonPanel = toolsTab.RibbonPanels.Add("AM Thinker", "AM Thinker ID", AddInClientID)
+            Dim customPanel As RibbonPanel = toolsTab.RibbonPanels.Add("AM Thinker", "AM Thinker ID", AddInClientID())
 
             '' Add a button.
-            customPanel.CommandControls.AddButton(m_sampleButton)
+            customPanel.CommandControls.AddButton(m_sampleButton, True)
         End Sub
 
         Private Sub m_uiEvents_OnResetRibbonInterface(Context As NameValueMap) Handles m_uiEvents.OnResetRibbonInterface
@@ -98,6 +119,14 @@ Namespace Pt4ProjectAddin
             'MsgBox("Button was clicked.")
             Dim mainUserForm1 As New mainUserForm()
             mainUserForm1.Show(New WindowWrapper(CType(g_inventorApplication.MainFrameHWND, IntPtr)))
+
+            ' Reposition relative to Inventor’s main window
+            Dim invBounds As Rectangle = Screen.FromHandle(CType(g_inventorApplication.MainFrameHWND, IntPtr)).Bounds
+
+            ' Example: below ribbon + near design history
+            ' Adjust offsets based on your UI preferences
+            mainUserForm1.Top = invBounds.Top + 145  ' offset down from ribbon
+            mainUserForm1.Left = invBounds.Left + 145 ' offset right from history tree
         End Sub
 #End Region
 
@@ -154,6 +183,8 @@ Public Module Globals
 #End Region
 
 #Region "get user to select face to touch build plate"
+
+    'base face funciton works fine, but Getsurface is trying to use a variable not accessible.
     Public Function GetBaseFace() As Object
         Dim invDoc As Document
         invDoc = g_inventorApplication.ActiveDocument
@@ -161,6 +192,54 @@ Public Module Globals
         BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
         Return BaseFace
     End Function
+
+    'Public Function GetSurface() As Double
+    '    Dim oPartDoc As PartDocument
+    '    oPartDoc = g_inventorApplication.ActiveDocument
+
+    '    Dim oPartDef As PartComponentDefinition
+    '    oPartDef = oPartDoc.ComponentDefinition
+
+    '    Dim oSurfaceBody As SurfaceBody
+    '    Dim oFace As Face
+    '    Dim faceCount As Long
+    '    faceCount = 0
+    '    Dim eval As SurfaceEvaluator
+    '    Dim Baseeval As SurfaceEvaluator
+    '    Baseeval = BaseFace.Evaluator
+    '    Dim basecenter(1) As Double
+    '    basecenter(0) = (Baseeval.ParamRangeRect.MinPoint.X + Baseeval.ParamRangeRect.MaxPoint.X) / 2
+    '    basecenter(1) = (Baseeval.ParamRangeRect.MinPoint.Y + Baseeval.ParamRangeRect.MaxPoint.Y) / 2
+    '    Dim Normal(2) As Double
+    '    Call Baseeval.GetNormal(basecenter, Normal)
+    '    Dim Basevector As UnitVector
+    '    Basevector = g_inventorApplication.TransientGeometry.CreateUnitVector(Normal(0), Normal(1), Normal(2))
+    '    Dim TotalArea As Double = 0
+    '    Dim area As Double
+    '    For Each oSurfaceBody In oPartDef.SurfaceBodies
+    '        For Each oFace In oSurfaceBody.Faces
+    '            eval = oFace.Evaluator
+    '            Dim center(1) As Double
+    '            center(0) = (eval.ParamRangeRect.MinPoint.X + eval.ParamRangeRect.MaxPoint.X) / 2
+    '            center(1) = (eval.ParamRangeRect.MinPoint.Y + eval.ParamRangeRect.MaxPoint.Y) / 2
+    '            Dim NormalTest(2) As Double
+    '            Call eval.GetNormal(center, NormalTest)
+    '            Dim Testvector As UnitVector
+    '            Testvector = g_inventorApplication.TransientGeometry.CreateUnitVector(NormalTest(0), NormalTest(1), NormalTest(2))
+    '            Dim angle As Double
+    '            angle = Basevector.AngleTo(Testvector)
+    '            If angle < 0.785 Then
+    '                area = eval.Area
+    '                TotalArea = TotalArea + area
+    '            End If
+    '            area = 0
+    '        Next
+    '    Next
+    '    Dim basearea As Double
+    '    basearea = Baseeval.Area
+    '    TotalArea = TotalArea - basearea
+    '    Return TotalArea
+    'End Function
 
 #End Region
 
@@ -195,16 +274,19 @@ Public Module Globals
     ' as a resource of the project.
     '
     ' Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.MyIcon)
+    <ComImport(), Guid("00020400-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
+    Public Interface IPictureDisp
+    End Interface
 
     Public NotInheritable Class PictureDispConverter
-        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)> _
-        Private Shared Function OleCreatePictureIndirect( _
-            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object, _
-            ByRef iid As Guid, _
-            <MarshalAs(UnmanagedType.Bool)> ByVal fOwn As Boolean) As stdole.IPictureDisp
+        <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)>
+        Private Shared Function OleCreatePictureIndirect(
+            <MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object,
+            ByRef iid As Guid,
+            <MarshalAs(UnmanagedType.Bool)> ByVal fOwn As Boolean) As IPictureDisp
         End Function
 
-        Shared iPictureDispGuid As Guid = GetType(stdole.IPictureDisp).GUID
+        Shared iPictureDispGuid As Guid = GetType(IPictureDisp).GUID
 
         Private NotInheritable Class PICTDESC
             Private Sub New()
@@ -214,7 +296,7 @@ Public Module Globals
             Public Const PICTYPE_BITMAP As Short = 1
             Public Const PICTYPE_ICON As Short = 3
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Icon
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Icon))
                 Friend picType As Integer = PICTDESC.PICTYPE_ICON
@@ -227,7 +309,7 @@ Public Module Globals
                 End Sub
             End Class
 
-            <StructLayout(LayoutKind.Sequential)> _
+            <StructLayout(LayoutKind.Sequential)>
             Public Class Bitmap
                 Friend cbSizeOfStruct As Integer = Marshal.SizeOf(GetType(PICTDESC.Bitmap))
                 Friend picType As Integer = PICTDESC.PICTYPE_BITMAP
@@ -241,16 +323,17 @@ Public Module Globals
             End Class
         End Class
 
-        Public Shared Function ToIPictureDisp(ByVal icon As System.Drawing.Icon) As stdole.IPictureDisp
+        Public Shared Function ToIPictureDisp(ByVal icon As System.Drawing.Icon) As IPictureDisp
             Dim pictIcon As New PICTDESC.Icon(icon)
             Return OleCreatePictureIndirect(pictIcon, iPictureDispGuid, True)
         End Function
 
-        Public Shared Function ToIPictureDisp(ByVal bmp As System.Drawing.Bitmap) As stdole.IPictureDisp
+        Public Shared Function ToIPictureDisp(ByVal bmp As System.Drawing.Bitmap) As IPictureDisp
             Dim pictBmp As New PICTDESC.Bitmap(bmp)
             Return OleCreatePictureIndirect(pictBmp, iPictureDispGuid, True)
         End Function
     End Class
+
 #End Region
 
 End Module
