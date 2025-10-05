@@ -8,6 +8,7 @@ Public Class SummaryForm
     Private isDetailsExpanded As Boolean = False
     Private Const MIN_COLLAPSE_GAP As Integer = 10   ' gap left between panel and button when collapsed
     Private Const BASE_FORM_HEIGHT As Integer = 235  ' use your existing base height
+    Private DeveloperMode As Boolean = False
 
     ' Constructor to receive scored profiles
     Public Sub New(profiles As List(Of ScoredProfile))
@@ -58,8 +59,14 @@ Public Class SummaryForm
         If greenProfiles.Any() Then
             Dim bestTechs = String.Join(", ", greenProfiles.Select(Function(p) p.Technology))
             LabelBestOptions.Text = bestTechs
+            If greenProfiles.Count = 1 Then
+                LabelBestOptionsHeader.Text = "Best Option:"
+            Else
+                LabelBestOptionsHeader.Text = "Best Options:"
+            End If
         Else
-            LabelBestOptions.Text = "No highly suitable options found"
+            LabelBestOptions.Text = ""
+            LabelBestOptionsHeader.Text = "No highly suitable options found"
         End If
     End Sub
 
@@ -206,14 +213,29 @@ Public Class SummaryForm
         PanelDetails.Controls.Add(lblGeoTitle)
         yPosition += 25
 
-        Dim lblGeoData As New Label()
-        lblGeoData.Text = "Surface Area: [Placeholder] cm²" & vbCrLf &
-                         "Volume: [Placeholder] cm³" & vbCrLf &
-                         "Complexity Ratio: [Placeholder]" & vbCrLf &
-                         "Bounding Box: [Placeholder]"
-        lblGeoData.Location = New Point(20, yPosition)
-        lblGeoData.Size = New Size(420, 70)
-        PanelDetails.Controls.Add(lblGeoData)
+        If DeveloperMode Then
+            Dim txtGeoData As New TextBox()
+            txtGeoData.Multiline = True
+            txtGeoData.ReadOnly = True
+            txtGeoData.BorderStyle = BorderStyle.None
+            txtGeoData.BackColor = Me.BackColor
+            txtGeoData.Location = New Point(20, yPosition)
+            txtGeoData.Size = New Size(420, 70)
+            txtGeoData.Text = "Surface Area: [Placeholder] cm²" & vbCrLf &
+                      "Volume: [Placeholder] cm³" & vbCrLf &
+                      "Complexity Ratio: [Placeholder]" & vbCrLf &
+                      "Bounding Box: [Placeholder]"
+            PanelDetails.Controls.Add(txtGeoData)
+        Else
+            Dim lblGeoData As New Label()
+            lblGeoData.Text = "Surface Area: [Placeholder] cm²" & vbCrLf &
+                      "Volume: [Placeholder] cm³" & vbCrLf &
+                      "Complexity Ratio: [Placeholder]" & vbCrLf &
+                      "Bounding Box: [Placeholder]"
+            lblGeoData.Location = New Point(20, yPosition)
+            lblGeoData.Size = New Size(420, 70)
+            PanelDetails.Controls.Add(lblGeoData)
+        End If
         yPosition += 80
 
         ' Section 2: Technology Limitations
@@ -258,6 +280,7 @@ Public Class SummaryForm
             Return cp
         End Get
     End Property
+
 
 End Class
 

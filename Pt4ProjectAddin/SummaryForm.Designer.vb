@@ -48,7 +48,7 @@ Partial Class SummaryForm
         '
         Me.LabelBestOptions.Location = New System.Drawing.Point(80, 95)
         Me.LabelBestOptions.Name = "LabelBestOptions"
-        Me.LabelBestOptions.Size = New System.Drawing.Size(384, 32)
+        Me.LabelBestOptions.Size = New System.Drawing.Size(392, 32)
         Me.LabelBestOptions.TabIndex = 1
         Me.LabelBestOptions.Text = "Options:"
         '

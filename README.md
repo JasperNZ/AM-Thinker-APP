@@ -18,20 +18,17 @@ Instructions to use Github:<br>
 TODO list:
 URGENT:
 - create helper functions in a separate file/class (geometry stuff like part complexity and overhang)
-- pure functionalities, putting the right numbers for all combinations
+- pure functionalities, putting the right numbers for all combinations. Scores and weighting modifications
+- Might replace simple WSM --> WA --> TOPSIS.
 - report about future-proofing and considerations for advancements
 - improve coding comments and consistent coding conventions to unionize the code
-- Final message box and interpretation
-- score, traffic color, and feedback/comment file (helper message handler file)
-- Fix looping dictionary for errors to be in proper order of visual selection.
-- Fix dictionary to look through valid machine selection.
+- fix scores for lead time - instead of lead time significance.
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
-- Fix messages on tooltips to be more useful and not in the way of user selection options.
 
-- Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
+
 - Double check geometry features output correct numbers and units
-- partition important message strings into a list and loop to output in messagebox? more reesearch
-- Consider if we can do this for multiple parts, and assemblies.
+- Consider if we can do this for multiple parts, STL files and assemblies.
+
 
 
 UNLIKELY TO COMPLETE:
@@ -42,8 +39,7 @@ UNLIKELY TO COMPLETE:
 
 NICE TO HAVE:
 - other nice design features for user 
-- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it.
-
+- The user form feels suffocating because of how close the dropdown menus are, low priority to space them out.
 
 COMPLETED:
 - make bug fixing and error handler (ErrorHandler.vb) DONE
@@ -52,3 +48,21 @@ COMPLETED:
 - Apply tooltips to all relevant sections DONE
 - Preferably apply group boxes in the mainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
 - fix the select profile loop (trying to use tuples, but it's not working???????)
+- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it. constrained dropdown menu already mitigates this issue anyways DONE
+- Fix messages on tooltips to be more useful and not in the way of user selection options. Manually shifted below the mouse. DONE
+- Final message box and interpretation. Layout is done, just needs everything else to come together DONE.
+- score, traffic color, and feedback/comment file (helper message handler file). Layout finished, needs finalisation. DONE
+- Fix dictionary to look through valid machine selection. goes through second groupings. DONE
+- Developer mode for copying pasting data. DONE
+- Fix looping dictionary for errors to be in proper order of visual selection. DONE
+
+
+
+
+Backup notes on code:
+- Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
+Surprisingly the form follows the broswer and is not stationary relative to the window, compared to other built in feature windows like fillet or measure
+should the result form be as wide as the input form
+double check the up and down arrows (unicode) on details button don't crash the system
+ask about visiblity and readability of the colours.
+Preference of UI text?

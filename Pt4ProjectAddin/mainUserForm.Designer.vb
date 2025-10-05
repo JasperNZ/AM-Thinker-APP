@@ -365,7 +365,7 @@ Partial Class mainUserForm
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MaximizeBox = False
         Me.Name = "mainUserForm"
-        Me.Text = "AM Thinker - Analyzing your parts and needs!"
+        Me.Text = "AM Thinker - Analysing your parts and needs!"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.groupRequirements.ResumeLayout(False)

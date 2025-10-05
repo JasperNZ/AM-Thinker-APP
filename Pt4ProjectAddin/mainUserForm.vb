@@ -69,13 +69,12 @@ Public Class mainUserForm
 
         'attempting my code - essentially a way of getting ready for if-else statements using a loop.
         Dim techMap As New Dictionary(Of String, CheckBox) From {
-            {"PBF", CheckBoxPowederBedFusion},
             {"MEX", CheckBoxMaterialExtrusion},
-            {"VPP", CheckBoxVatPhotopolymerisation},
-            {"DED", CheckBoxDirectedEnergyDeposition},
-            {"IMFP", CheckBoxIMFP}, 'why did i put this here??? need to test removing it won't break code
             {"MJT", CheckBoxMaterialJetting},
-            {"BJT", CheckBoxBinderJetting}
+            {"BJT", CheckBoxBinderJetting},
+            {"VPP", CheckBoxVatPhotopolymerisation},
+            {"PBF", CheckBoxPowederBedFusion},
+            {"DED", CheckBoxDirectedEnergyDeposition}
         }
 
         ' Build selected profiles list
