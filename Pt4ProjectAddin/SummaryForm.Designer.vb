@@ -65,6 +65,7 @@ Partial Class SummaryForm
         Me.ButtonDetails.TabIndex = 4
         Me.ButtonDetails.Text = "▼ Show Details"
         Me.ButtonDetails.UseVisualStyleBackColor = True
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         '
         'PanelDetails
         '

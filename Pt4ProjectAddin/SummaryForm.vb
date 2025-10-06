@@ -8,13 +8,15 @@ Public Class SummaryForm
     Private isDetailsExpanded As Boolean = False
     Private DeveloperMode As Boolean = False
 
-    ' Store the COLLAPSED form height (measured once at form load)
-    Private collapsedFormHeight As Integer
-
     ' Constants for spacing (relative units work better than absolute)
     Private Const BUTTON_BOTTOM_MARGIN As Integer = 15  ' Distance from button to form bottom when collapsed
     Private Const PANEL_BUTTON_GAP As Integer = 5       ' Gap between button and panel
     Private isAnimating As Boolean = False
+    Private collapsedFormHeight As Integer = 0
+
+    ' Tweak these as you like
+    Private Const SAFETY_SCREEN_MARGIN As Integer = 8
+    Private Const ANIM_STEPS As Integer = 20   ' how many steps the animation tries to use
     Public Sub New(profiles As List(Of ScoredProfile))
         InitializeComponent()
 
@@ -143,90 +145,107 @@ Public Class SummaryForm
     End Sub
 
     Private Sub ExpandDetails()
-        ' Ensure panel width is correct before creating content
-        PanelDetails.Width = Me.ClientSize.Width - 2 * PanelDetails.Left
+        ' Ensure panel width is correct before measuring
+        PanelDetails.Width = Math.Max(120, Me.ClientSize.Width - PanelDetails.Left - 12)
 
-        PopulateDetailsPanel()
+        ' Measure & populate and get the full content height (unclamped)
+        Dim contentHeight As Integer = 0
+        contentHeight = MeasureAndPopulateDetails(contentHeight)
 
-        ' Compute actual content bottom (we set AutoScrollMinSize, but still compute)
-        Dim contentBottom As Integer = 0
-        For Each ctrl As Control In PanelDetails.Controls
-            If ctrl.Visible Then
-                contentBottom = Math.Max(contentBottom, ctrl.Bottom)
-            End If
-        Next
+        ' Determine how much vertical space we can use below the form
+        Dim scrWorking As Rectangle = Screen.FromControl(Me).WorkingArea
+        Dim availableBelow As Integer = Math.Max(0, scrWorking.Bottom - Me.Bottom - SAFETY_SCREEN_MARGIN)
 
-        Dim paddingBottom As Integer = 15
-        Dim targetPanelHeight As Integer = Math.Max(100, contentBottom + paddingBottom)
+        ' target panel height = min(content, available below). If content > available, panel will scroll.
+        Dim targetPanelHeight As Integer = If(availableBelow > 0, Math.Min(contentHeight, Math.Max(80, availableBelow)), Math.Min(contentHeight, contentHeight))
 
         ' Prepare for animation
         PanelDetails.Height = 0
+        PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
         PanelDetails.Visible = True
 
-        Dim timer As New Timer() With {.Interval = 10}
         ButtonDetails.Enabled = False
         isAnimating = True
 
-        Dim targetFormHeight As Integer = collapsedFormHeight + targetPanelHeight
+        ' DPI-aware step size
+        Dim dpiScale As Single = 1.0F
+        Try
+            dpiScale = If(Me.DeviceDpi > 0, Me.DeviceDpi / 96.0F, Me.CreateGraphics().DpiY / 96.0F)
+        Catch
+            dpiScale = 1.0F
+        End Try
+        Dim approxSteps = Math.Max(6, ANIM_STEPS)
+        Dim stepSize As Integer = Math.Max(6, CInt(Math.Round(targetPanelHeight / approxSteps / dpiScale)))
 
+        Dim timer As New Timer() With {.Interval = 12}
         AddHandler timer.Tick, Sub()
-                                   Dim stepSize As Integer = Math.Max(12, targetPanelHeight \ 25)
+                                   Dim newH = Math.Min(PanelDetails.Height + stepSize, targetPanelHeight)
+                                   Dim delta = newH - PanelDetails.Height
+                                   If delta > 0 Then
+                                       PanelDetails.Height = newH
+                                       Me.Height = Me.Height + delta   ' extend form downward
+                                   End If
 
                                    If PanelDetails.Height >= targetPanelHeight Then
                                        timer.Stop()
                                        timer.Dispose()
+                                       ' final set
                                        PanelDetails.Height = targetPanelHeight
-                                       Me.Height = targetFormHeight
+                                       Me.Height = collapsedFormHeight + targetPanelHeight
                                        ButtonDetails.Enabled = True
                                        isAnimating = False
-                                       isDetailsExpanded = True  ' flip only after animation finishes
-                                   Else
-                                       Dim newPanelHeight = Math.Min(PanelDetails.Height + stepSize, targetPanelHeight)
-                                       Dim heightIncrease = newPanelHeight - PanelDetails.Height
-
-                                       PanelDetails.Height = newPanelHeight
-                                       Me.Height = Me.Height + heightIncrease
+                                       isDetailsExpanded = True
+                                       ButtonDetails.Text = "▲ Hide Details"
                                    End If
                                End Sub
 
         timer.Start()
-
-        ButtonDetails.Text = "▲ Hide Details"
     End Sub
 
 
+
     Private Sub CollapseDetails()
-        Dim timer As New Timer() With {.Interval = 10}
+        If Not isDetailsExpanded OrElse isAnimating Then
+            Return
+        End If
+
+        Dim startingPanelHeight = PanelDetails.Height
+        Dim dpiScale As Single = 1.0F
+        Try
+            dpiScale = If(Me.DeviceDpi > 0, Me.DeviceDpi / 96.0F, Me.CreateGraphics().DpiY / 96.0F)
+        Catch
+            dpiScale = 1.0F
+        End Try
+        Dim approxSteps = Math.Max(6, ANIM_STEPS)
+        Dim stepSize As Integer = Math.Max(6, CInt(Math.Round(Math.Max(10, startingPanelHeight) / approxSteps / dpiScale)))
+
+        Dim timer As New Timer() With {.Interval = 12}
         ButtonDetails.Enabled = False
         isAnimating = True
 
-        Dim startingPanelHeight = PanelDetails.Height
-
         AddHandler timer.Tick, Sub()
-                                   Dim stepSize As Integer = Math.Max(12, Math.Max(1, startingPanelHeight \ 25))
+                                   Dim newH = Math.Max(0, PanelDetails.Height - stepSize)
+                                   Dim delta = PanelDetails.Height - newH
+                                   If delta > 0 Then
+                                       PanelDetails.Height = newH
+                                       Me.Height = Math.Max(collapsedFormHeight, Me.Height - delta)
+                                   End If
 
                                    If PanelDetails.Height <= 0 Then
                                        timer.Stop()
                                        timer.Dispose()
                                        PanelDetails.Height = 0
                                        PanelDetails.Visible = False
-                                       Me.Height = collapsedFormHeight
                                        ButtonDetails.Enabled = True
                                        isAnimating = False
-                                       isDetailsExpanded = False  ' flip only after animation completes
-                                   Else
-                                       Dim newPanelHeight = Math.Max(PanelDetails.Height - stepSize, 0)
-                                       Dim heightDecrease = PanelDetails.Height - newPanelHeight
-
-                                       PanelDetails.Height = newPanelHeight
-                                       Me.Height = Me.Height - heightDecrease
+                                       isDetailsExpanded = False
+                                       ButtonDetails.Text = "▼ Show Details"
                                    End If
                                End Sub
 
         timer.Start()
-
-        ButtonDetails.Text = "▼ Show Details"
     End Sub
+
 
     Private Sub PopulateDetailsPanel()
         PanelDetails.SuspendLayout()
@@ -318,6 +337,119 @@ Public Class SummaryForm
 
         PanelDetails.ResumeLayout()
     End Sub
+
+    Private Function MeasureAndPopulateDetails(ByRef contentTotalHeight As Integer) As Integer
+        ' Populates PanelDetails and returns the total content height (unclamped).
+        ' Also sets PanelDetails.AutoScrollMinSize so scrolling works when content > available height.
+        PanelDetails.SuspendLayout()
+        PanelDetails.Controls.Clear()
+
+        Dim leftPad As Integer = 10
+        Dim rightPad As Integer = 10
+        Dim innerWidth As Integer = Math.Max(50, PanelDetails.ClientSize.Width - leftPad - rightPad)
+
+        ' Prepare content blocks (text + font + isTitle)
+        Dim blocks As New List(Of Tuple(Of String, Font, Boolean))
+        blocks.Add(Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create("Surface Area: [placeholder]" & vbCrLf & "Volume: [placeholder]" & vbCrLf & "Bounding Box: [placeholder]", SystemFonts.DefaultFont, False))
+        blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
+        blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create("• Optimize orientation" & vbCrLf & "• Reduce overhangs" & vbCrLf & "[Other items...]", SystemFonts.DefaultFont, False))
+
+        ' helper to measure wrapped text height using TextRenderer (WordBreak)
+        Dim MeasureWrappedHeight = Function(txt As String, fnt As Font, width As Integer) As Integer
+                                       Dim flags As TextFormatFlags = TextFormatFlags.WordBreak Or TextFormatFlags.TextBoxControl
+                                       ' high height limit; measure in pixels
+                                       Dim measured = TextRenderer.MeasureText(txt, fnt, New Size(width, 10000), flags)
+                                       Return measured.Height
+                                   End Function
+
+        ' First pass: measure using innerWidth
+        Dim yPos As Integer = 10
+        For Each b In blocks
+            Dim isTitle = b.Item3
+            Dim f = b.Item2
+            Dim txt = b.Item1
+
+            Dim h As Integer
+            If isTitle Then
+                ' Titles usually single-line; measure single-line height
+                h = TextRenderer.MeasureText(txt, f).Height
+            Else
+                h = MeasureWrappedHeight(txt, f, innerWidth)
+            End If
+
+            yPos += h + 6 ' spacing after each block
+        Next
+
+        Dim firstPassHeight As Integer = yPos
+
+        ' Determine maximum panel height available on screen (so we can decide if scrollbar will appear)
+        Dim scrWorking As Rectangle = Screen.FromControl(Me).WorkingArea
+        ' available below the form (we'll expand downward)
+        Dim availableBelow As Integer = Math.Max(0, scrWorking.Bottom - Me.Bottom - SAFETY_SCREEN_MARGIN)
+
+        ' If content won't fit below, account for scrollbar width and re-measure with less width
+        Dim finalMeasureWidth As Integer = innerWidth
+        If firstPassHeight > availableBelow AndAlso availableBelow > 0 Then
+            finalMeasureWidth = Math.Max(40, innerWidth - SystemInformation.VerticalScrollBarWidth - 4)
+            ' Recompute total height using narrower width
+            yPos = 10
+            For Each b In blocks
+                Dim isTitle = b.Item3
+                Dim f = b.Item2
+                Dim txt = b.Item1
+
+                Dim h As Integer
+                If isTitle Then
+                    h = TextRenderer.MeasureText(txt, f).Height
+                Else
+                    h = MeasureWrappedHeight(txt, f, finalMeasureWidth)
+                End If
+
+                yPos += h + 6
+            Next
+        End If
+
+        contentTotalHeight = yPos
+        ' Create actual Label controls now using finalMeasureWidth and heights
+        Dim curY As Integer = 10
+        For Each b In blocks
+            Dim isTitle = b.Item3
+            Dim f = b.Item2
+            Dim txt = b.Item1
+
+            Dim h As Integer
+            Dim w As Integer = finalMeasureWidth
+            If isTitle Then
+                h = TextRenderer.MeasureText(txt, f).Height
+            Else
+                h = MeasureWrappedHeight(txt, f, w)
+            End If
+
+            Dim lbl As New Label() With {
+            .Text = txt,
+            .Font = f,
+            .Location = New Point(leftPad, curY),
+            .Size = New Size(w, h),
+            .AutoSize = False
+        }
+            ' use word-wrap style
+            lbl.BorderStyle = BorderStyle.None
+
+            PanelDetails.Controls.Add(lbl)
+            curY += h + 6
+        Next
+
+        Dim paddingBottom As Integer = 12
+        PanelDetails.AutoScrollMinSize = New Size(0, Math.Max(0, contentTotalHeight + paddingBottom))
+
+        PanelDetails.ResumeLayout()
+
+        Return contentTotalHeight
+    End Function
+
 
     Protected Overrides ReadOnly Property CreateParams() As CreateParams
         Get
