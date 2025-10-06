@@ -2,6 +2,7 @@
 Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Linq
+Imports System.Reflection
 
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
@@ -201,8 +202,6 @@ Public Class SummaryForm
 
         timer.Start()
     End Sub
-
-
 
     Private Sub CollapseDetails()
         If Not isDetailsExpanded OrElse isAnimating Then
@@ -474,6 +473,7 @@ Public Class SummaryForm
             PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
         End If
     End Sub
+
 End Class
 
 Public Class ScoredProfile
