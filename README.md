@@ -24,10 +24,9 @@ URGENT:
 - improve coding comments and consistent coding conventions to unionize the code
 - fix scores for lead time - instead of lead time significance.
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
-
-
 - Double check geometry features output correct numbers and units
 - Consider if we can do this for multiple parts, STL files and assemblies.
+- Post Processing Effort Calculator
 
 
 

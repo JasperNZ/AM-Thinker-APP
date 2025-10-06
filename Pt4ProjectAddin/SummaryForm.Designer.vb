@@ -1,9 +1,8 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class SummaryForm
     Inherits System.Windows.Forms.Form
 
-    'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -14,13 +13,9 @@ Partial Class SummaryForm
         End Try
     End Sub
 
-    'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
 
-    'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
-    'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SummaryForm))
         Me.LabelAssessment = New System.Windows.Forms.Label()
@@ -28,11 +23,7 @@ Partial Class SummaryForm
         Me.ListBoxResults = New System.Windows.Forms.ListBox()
         Me.ButtonDetails = New System.Windows.Forms.Button()
         Me.PanelDetails = New System.Windows.Forms.Panel()
-        Me.LabelImprovements = New System.Windows.Forms.Label()
-        Me.LabelGeometry = New System.Windows.Forms.Label()
-        Me.LabelLimitations = New System.Windows.Forms.Label()
         Me.LabelBestOptionsHeader = New System.Windows.Forms.Label()
-        Me.PanelDetails.SuspendLayout()
         Me.SuspendLayout()
         '
         'LabelAssessment
@@ -46,6 +37,8 @@ Partial Class SummaryForm
         '
         'LabelBestOptions
         '
+        Me.LabelBestOptions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LabelBestOptions.Location = New System.Drawing.Point(80, 95)
         Me.LabelBestOptions.Name = "LabelBestOptions"
         Me.LabelBestOptions.Size = New System.Drawing.Size(392, 32)
@@ -75,41 +68,14 @@ Partial Class SummaryForm
         '
         'PanelDetails
         '
-        Me.PanelDetails.Controls.Add(Me.LabelImprovements)
-        Me.PanelDetails.Controls.Add(Me.LabelGeometry)
-        Me.PanelDetails.Controls.Add(Me.LabelLimitations)
+        Me.PanelDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelDetails.AutoScroll = True
         Me.PanelDetails.Location = New System.Drawing.Point(15, 188)
         Me.PanelDetails.Name = "PanelDetails"
-        Me.PanelDetails.Size = New System.Drawing.Size(457, 100)
+        Me.PanelDetails.Size = New System.Drawing.Size(457, 0)
         Me.PanelDetails.TabIndex = 5
         Me.PanelDetails.Visible = False
-        '
-        'LabelImprovements
-        '
-        Me.LabelImprovements.AutoSize = True
-        Me.LabelImprovements.Location = New System.Drawing.Point(4, 75)
-        Me.LabelImprovements.Name = "LabelImprovements"
-        Me.LabelImprovements.Size = New System.Drawing.Size(130, 13)
-        Me.LabelImprovements.TabIndex = 8
-        Me.LabelImprovements.Text = "Suggested Improvements:"
-        '
-        'LabelGeometry
-        '
-        Me.LabelGeometry.AutoSize = True
-        Me.LabelGeometry.Location = New System.Drawing.Point(3, 13)
-        Me.LabelGeometry.Name = "LabelGeometry"
-        Me.LabelGeometry.Size = New System.Drawing.Size(102, 13)
-        Me.LabelGeometry.TabIndex = 6
-        Me.LabelGeometry.Text = "Geometric Analysis: "
-        '
-        'LabelLimitations
-        '
-        Me.LabelLimitations.AutoSize = True
-        Me.LabelLimitations.Location = New System.Drawing.Point(3, 44)
-        Me.LabelLimitations.Name = "LabelLimitations"
-        Me.LabelLimitations.Size = New System.Drawing.Size(118, 13)
-        Me.LabelLimitations.TabIndex = 7
-        Me.LabelLimitations.Text = "Technology Limitations:"
         '
         'LabelBestOptionsHeader
         '
@@ -133,13 +99,10 @@ Partial Class SummaryForm
         Me.Controls.Add(Me.LabelAssessment)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(500, 235)
         Me.Name = "SummaryForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "AM Thinker - Analysis Results"
-        Me.PanelDetails.ResumeLayout(False)
-        Me.PanelDetails.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -150,8 +113,5 @@ Partial Class SummaryForm
     Friend WithEvents ListBoxResults As Windows.Forms.ListBox
     Friend WithEvents ButtonDetails As Windows.Forms.Button
     Friend WithEvents PanelDetails As Windows.Forms.Panel
-    Friend WithEvents LabelImprovements As Windows.Forms.Label
-    Friend WithEvents LabelGeometry As Windows.Forms.Label
-    Friend WithEvents LabelLimitations As Windows.Forms.Label
     Friend WithEvents LabelBestOptionsHeader As Windows.Forms.Label
 End Class

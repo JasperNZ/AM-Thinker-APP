@@ -15,7 +15,7 @@ Public Class PlasticMEX
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
                 {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
                 {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
             }
