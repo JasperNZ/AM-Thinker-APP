@@ -145,6 +145,7 @@ Public Class mainUserForm
         End If
         Dim overhangFaces As List(Of Face) = Nothing
         Dim overhangArea = GeoChecker.CalculateOverhangArea(referenceFace, 45.0, overhangFaces)
+        'Dim overhangArea = GeoChecker.CalculateOverhangAreaSimple(45.0, overhangFaces)
         HighlightFaces(overhangFaces)
         MessageBox.Show($"Estimated overhang area (deg > 45): {overhangArea:F3} (cm²)")
 
