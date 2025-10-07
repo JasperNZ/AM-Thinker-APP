@@ -3,6 +3,7 @@ Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Linq
 Imports System.Reflection
+Imports System.Diagnostics
 
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
@@ -20,10 +21,25 @@ Public Class SummaryForm
     Private Const ANIM_STEPS As Integer = 20   ' how many steps the animation tries to use
     Public Sub New(profiles As List(Of ScoredProfile))
         InitializeComponent()
+        ' Create panel if not already done in Designer
+        Dim ListBoxContainerPanel As New Panel()
+        ListBoxContainerPanel.Name = "ListBoxContainerPanel"
+        ListBoxContainerPanel.Location = ListBoxResults.Location
+        ListBoxContainerPanel.Size = ListBoxResults.Size
+        ListBoxContainerPanel.Anchor = ListBoxResults.Anchor
+        ListBoxContainerPanel.BorderStyle = BorderStyle.None
+
+        ' Reparent the ListBox
+        ListBoxResults.Parent = ListBoxContainerPanel
+        ListBoxResults.Dock = DockStyle.Fill
+
+        ' Replace old ListBox position with panel
+        Me.Controls.Add(ListBoxContainerPanel)
 
         Me.scoredProfiles = profiles
         EnableDoubleBuffer(PanelDetails)
         EnableDoubleBuffer(ListBoxResults)
+        EnableDoubleBuffer(ListBoxContainerPanel)
 
         ' Initial setup - panel invisible and collapsed
         PanelDetails.Height = 0
@@ -178,29 +194,35 @@ Public Class SummaryForm
         Dim approxSteps = Math.Max(6, ANIM_STEPS)
         Dim stepSize As Integer = Math.Max(6, CInt(Math.Round(targetPanelHeight / approxSteps / dpiScale)))
 
-        Dim timer As New Timer() With {.Interval = 12}
-        AddHandler timer.Tick, Sub()
-                                   Dim newH = Math.Min(PanelDetails.Height + stepSize, targetPanelHeight)
-                                   Dim delta = newH - PanelDetails.Height
-                                   If delta > 0 Then
+        Dim sw As New Stopwatch()
+        sw.Start()
+        Dim durationMs As Integer = 700  ' total animation time
+        Dim startH As Integer = PanelDetails.Height
+        Dim endH As Integer = targetPanelHeight
+
+        Dim animTimer As New Timer() With {.Interval = 15}
+        AddHandler animTimer.Tick, Sub()
+                                       Dim t = Math.Min(1.0, sw.Elapsed.TotalMilliseconds / durationMs)
+                                       ' Use ease-out curve for smoother feel
+                                       Dim easedT = 1 - Math.Pow(1 - t, 3)
+                                       Dim newH = CInt(startH + (endH - startH) * easedT)
+
+                                       Dim delta = newH - PanelDetails.Height
                                        PanelDetails.Height = newH
-                                       Me.Height = Me.Height + delta   ' extend form downward
-                                   End If
+                                       Me.Height += delta
 
-                                   If PanelDetails.Height >= targetPanelHeight Then
-                                       timer.Stop()
-                                       timer.Dispose()
-                                       ' final set
-                                       PanelDetails.Height = targetPanelHeight
-                                       Me.Height = collapsedFormHeight + targetPanelHeight
-                                       ButtonDetails.Enabled = True
-                                       isAnimating = False
-                                       isDetailsExpanded = True
-                                       ButtonDetails.Text = "▲ Hide Details"
-                                   End If
-                               End Sub
-
-        timer.Start()
+                                       If t >= 1.0 Then
+                                           animTimer.Stop()
+                                           animTimer.Dispose()
+                                           PanelDetails.Height = endH
+                                           Me.Height = collapsedFormHeight + endH
+                                           ButtonDetails.Enabled = True
+                                           isAnimating = False
+                                           isDetailsExpanded = True
+                                           ButtonDetails.Text = "▲ Hide Details"
+                                       End If
+                                   End Sub
+        animTimer.Start()
     End Sub
 
     Private Sub CollapseDetails()
@@ -218,31 +240,41 @@ Public Class SummaryForm
         Dim approxSteps = Math.Max(6, ANIM_STEPS)
         Dim stepSize As Integer = Math.Max(6, CInt(Math.Round(Math.Max(10, startingPanelHeight) / approxSteps / dpiScale)))
 
-        Dim timer As New Timer() With {.Interval = 12}
+
+
+        Dim sw As New Stopwatch()
+        sw.Start()
+        Dim durationMs As Integer = 700
+        Dim startH As Integer = PanelDetails.Height
+        Dim endH As Integer = 0
+
+        Dim animTimer As New Timer() With {.Interval = 15}
         ButtonDetails.Enabled = False
         isAnimating = True
 
-        AddHandler timer.Tick, Sub()
-                                   Dim newH = Math.Max(0, PanelDetails.Height - stepSize)
-                                   Dim delta = PanelDetails.Height - newH
-                                   If delta > 0 Then
+        AddHandler animTimer.Tick, Sub()
+                                       Dim t = Math.Min(1.0, sw.Elapsed.TotalMilliseconds / durationMs)
+                                       Dim easedT = 1 - Math.Pow(1 - t, 3)  ' same ease-out curve
+
+                                       Dim newH = CInt(startH + (endH - startH) * easedT)
+                                       Dim delta = newH - PanelDetails.Height
                                        PanelDetails.Height = newH
-                                       Me.Height = Math.Max(collapsedFormHeight, Me.Height - delta)
-                                   End If
+                                       Me.Height += delta
 
-                                   If PanelDetails.Height <= 0 Then
-                                       timer.Stop()
-                                       timer.Dispose()
-                                       PanelDetails.Height = 0
-                                       PanelDetails.Visible = False
-                                       ButtonDetails.Enabled = True
-                                       isAnimating = False
-                                       isDetailsExpanded = False
-                                       ButtonDetails.Text = "▼ Show Details"
-                                   End If
-                               End Sub
+                                       If t >= 1.0 Then
+                                           animTimer.Stop()
+                                           animTimer.Dispose()
+                                           PanelDetails.Height = 0
+                                           Me.Height = collapsedFormHeight
+                                           PanelDetails.Visible = False
+                                           ButtonDetails.Enabled = True
+                                           isAnimating = False
+                                           isDetailsExpanded = False
+                                           ButtonDetails.Text = "▼ Show Details"
+                                       End If
+                                   End Sub
 
-        timer.Start()
+        animTimer.Start()
     End Sub
 
 
@@ -473,6 +505,7 @@ Public Class SummaryForm
             PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
         End If
     End Sub
+
 
 End Class
 
