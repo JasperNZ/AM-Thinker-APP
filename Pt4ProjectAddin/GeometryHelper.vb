@@ -1,3 +1,4 @@
+Imports System.Collections.Generic
 Imports System.Runtime.InteropServices
 Imports Inventor
 
@@ -102,27 +103,34 @@ Public Class GeometricalHelper
     '    Next
     '    Return totalOverhangArea
     'End Function
-    Public Function CalculateOverhangArea(referenceFace As Face, overhangAngleDeg As Double) As Double
+
+    'function considers internal overhangs, not sure how to mitigate this.
+    Public Function CalculateOverhangArea(referenceFace As Face,
+                                      overhangAngleDeg As Double,
+                                      ByRef overhangFaces As List(Of Face)) As Double
         If referenceFace Is Nothing Then Throw New ArgumentNullException(NameOf(referenceFace))
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No active PartDocument.")
         Dim compDef = doc.ComponentDefinition
 
-        ' Determine build direction (normal of reference face)
-        Dim buildDir As Inventor.Vector = Nothing
+        ' Ensure list exists
+        overhangFaces = New List(Of Face)()
+
+        ' Ensure planar reference
+        If referenceFace.SurfaceType <> SurfaceTypeEnum.kPlaneSurface Then
+            Throw New InvalidOperationException("Reference face must be planar.")
+        End If
+
+        ' Determine build direction
+        Dim buildDir As Inventor.Vector
         Try
             Dim refPoint = referenceFace.PointOnFace
-
-            ' Convert point to array
             Dim pointArr() As Double = {refPoint.X, refPoint.Y, refPoint.Z}
             Dim guessParams() As Double = {0, 0}
             Dim maxDeviations() As Double = {0}
             Dim paramsOut() As Double = {0, 0}
             Dim solnNatures() As SolutionNatureEnum = {}
-
             referenceFace.Evaluator.GetParamAtPoint(pointArr, guessParams, maxDeviations, paramsOut, solnNatures)
-
-            ' Get normal using array output
             Dim normalArr() As Double = {0, 0, 0}
             referenceFace.Evaluator.GetNormal(paramsOut, normalArr)
             buildDir = _app.TransientGeometry.CreateVector(normalArr(0), normalArr(1), normalArr(2))
@@ -130,16 +138,18 @@ Public Class GeometricalHelper
             buildDir = _app.TransientGeometry.CreateVector(0, 0, 1)
         End Try
 
-        If buildDir Is Nothing Then buildDir = _app.TransientGeometry.CreateVector(0, 0, 1)
         buildDir.Normalize()
 
         Dim totalOverhangArea As Double = 0.0
         Dim thresholdRad As Double = overhangAngleDeg * Math.PI / 180.0
 
-        ' Loop through all faces and compute overhangs
+        ' Loop through faces
         For Each sBody As SurfaceBody In compDef.SurfaceBodies
+            If Not sBody.IsSolid Then Continue For
             For Each f As Face In sBody.Faces
                 Try
+                    'If f.Internal OrElse Not f.SurfaceBody.IsSolid Then Continue For ' skip internal cavities
+
                     Dim facePoint = f.PointOnFace
                     Dim ptArr() As Double = {facePoint.X, facePoint.Y, facePoint.Z}
                     Dim guessParams() As Double = {0, 0}
@@ -149,30 +159,33 @@ Public Class GeometricalHelper
 
                     f.Evaluator.GetParamAtPoint(ptArr, guessParams, maxDeviations, paramsOut, solnNatures)
 
-                    ' Get normal as array then convert to vector
                     Dim normalArr() As Double = {0, 0, 0}
                     f.Evaluator.GetNormal(paramsOut, normalArr)
                     Dim faceNormal = _app.TransientGeometry.CreateVector(normalArr(0), normalArr(1), normalArr(2))
                     faceNormal.Normalize()
 
-                    ' Compute angle between normals
                     Dim dot = faceNormal.DotProduct(buildDir)
+                    ' Flip the normal if it’s pointing the wrong way (inward)
+                    If dot < 0 Then
+                        faceNormal.ScaleBy(-1)
+                        dot = faceNormal.DotProduct(buildDir)
+                    End If
                     dot = Math.Max(-1.0, Math.Min(1.0, dot))
                     Dim angle = Math.Acos(dot)
-
-                    If angle > thresholdRad Then
+                    ' Only count faces facing downward (angle > 90° - threshold)
+                    If angle > (Math.PI / 2 + thresholdRad) Then
                         Dim faceArea As Double = 0
                         Try
                             faceArea = f.Evaluator.Area
                         Catch
-                            ' fallback if Evaluator.Area unavailable
                             Dim rb = f.RangeBox
                             faceArea = Math.Abs((rb.MaxPoint.X - rb.MinPoint.X) * (rb.MaxPoint.Y - rb.MinPoint.Y))
                         End Try
                         totalOverhangArea += faceArea
+                        overhangFaces.Add(f) ' record face for highlight
                     End If
+
                 Catch
-                    ' ignore failed faces
                 End Try
             Next
         Next

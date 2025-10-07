@@ -6,6 +6,33 @@ Imports Inventor
 Public Class mainUserForm
     'later used for looping and creating AM profiles
     Private ProfileFactory As New Dictionary(Of String, Func(Of AMProfile))
+    Private _highlightSet As HighlightSet
+
+    Private Sub ClearHighlights()
+        Try
+            If _highlightSet IsNot Nothing Then
+                _highlightSet.Clear()
+                _highlightSet = Nothing
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub HighlightFaces(faces As List(Of Face))
+        If faces Is Nothing OrElse faces.Count = 0 Then Exit Sub
+
+        ClearHighlights() ' remove old ones first
+
+        _highlightSet = g_inventorApplication.ActiveDocument.HighlightSets.Add()
+        _highlightSet.Color = g_inventorApplication.TransientObjects.CreateColor(255, 0, 0) ' red
+
+        For Each f As Face In faces
+            Try
+                _highlightSet.AddItem(f)
+            Catch
+            End Try
+        Next
+    End Sub
 
     Public Sub New()
         InitializeComponent()
@@ -103,13 +130,22 @@ Public Class mainUserForm
             Return
         End If
 
-        Dim sel As Object = doc.SelectSet(1)
-        If Not TypeOf sel Is Inventor.Face Then
-            MessageBox.Show("Selected object is not a face. Please select exactly one face.")
-            Return
+        Dim selSet = doc.SelectSet
+        If selSet.Count <> 1 OrElse Not TypeOf selSet.Item(1) Is Face Then
+            MessageBox.Show("Please select exactly one planar face as the reference surface before measuring overhang.")
+            Exit Sub
         End If
-        Dim face = CType(sel, Inventor.Face)
-        Dim overhangArea = GeoChecker.CalculateOverhangArea(face, 45.0)
+
+
+        Dim referenceFace As Face = CType(selSet.Item(1), Face)
+
+        If referenceFace.SurfaceType <> SurfaceTypeEnum.kPlaneSurface Then
+            MessageBox.Show("Please select a flat planar face — curved surfaces cannot be used as the build reference.")
+            Exit Sub
+        End If
+        Dim overhangFaces As List(Of Face) = Nothing
+        Dim overhangArea = GeoChecker.CalculateOverhangArea(referenceFace, 45.0, overhangFaces)
+        HighlightFaces(overhangFaces)
         MessageBox.Show($"Estimated overhang area (deg > 45): {overhangArea:F3} (cm²)")
 
         'testing summary class
@@ -172,5 +208,7 @@ Public Class mainUserForm
         MsgBox("The Post Processing Calculator is still in the works - stay tuned!")
     End Sub
 
-
+    Private Sub MainUserForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        ClearHighlights()
+    End Sub
 End Class
