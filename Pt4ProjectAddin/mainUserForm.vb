@@ -96,6 +96,31 @@ Public Class mainUserForm
         'getting the geometrical helper
         Dim GeoChecker As New GeometricalHelper(g_inventorApplication)
 
+        'testing out overhang face selection
+        Dim doc = TryCast(g_inventorApplication.ActiveDocument, PartDocument)
+        If doc.SelectSet.Count = 0 Then
+            MessageBox.Show("Please select a single face in Inventor and try again.")
+            Return
+        End If
+
+        Dim sel As Object = doc.SelectSet(1)
+        If Not TypeOf sel Is Inventor.Face Then
+            MessageBox.Show("Selected object is not a face. Please select exactly one face.")
+            Return
+        End If
+        Dim face = CType(sel, Inventor.Face)
+        Dim overhangArea = GeoChecker.CalculateOverhangArea(face, 45.0)
+        MessageBox.Show($"Estimated overhang area (deg > 45): {overhangArea:F3} (cm²)")
+
+        'testing summary class
+        Dim geo As New GeometrySummary()
+        geo.Volume = GeoChecker.GetVolume()
+        geo.SurfaceArea = GeoChecker.GetSurfaceArea()
+        geo.BoundingBoxVolume = GeoChecker.GetBoundingBoxVolume()
+        geo.ComplexityRatio = GeoChecker.CalculatePartComplexity()
+        geo.OverhangArea = overhangArea
+
+
 
         'preparing to pass in user inputs to each classes' CalculateScore function
         Dim categoricalInputs As New Dictionary(Of String, String) From {
@@ -139,7 +164,7 @@ Public Class mainUserForm
         Next
 
         ' Show custom results form
-        Dim resultsForm As New SummaryForm(scoredProfiles)
+        Dim resultsForm As New SummaryForm(scoredProfiles, geo)
         resultsForm.ShowDialog()
     End Sub
 

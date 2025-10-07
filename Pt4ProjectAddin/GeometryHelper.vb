@@ -1,5 +1,4 @@
 Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
 Imports Inventor
 
 'Helper class used for any geometrical related calculations and analysis required. 
@@ -14,7 +13,8 @@ Public Class GeometricalHelper
         _app = app
     End Sub
 
-    'basic function to obtain the volume of the part (in cm)
+    'basic function to obtain the volume of the part (in cm3)
+    'needs testing with other units like inches to ensure consistency
     Public Function GetVolume() As Double
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.") 'plan to replace with Error handler 
@@ -22,29 +22,64 @@ Public Class GeometricalHelper
         Return compDef.MassProperties.Volume
     End Function
 
-    'basic function to obtain the bounding box dimensions of the part (in cm)
-    Public Function GetBoundingBox() As (Double, Double, Double)
-        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
-        If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.")
-        Dim rangeBox = doc.ComponentDefinition.RangeBox
-        Dim length = Math.Abs(rangeBox.MaxPoint.X - rangeBox.MinPoint.X)
-        Dim width = Math.Abs(rangeBox.MaxPoint.Y - rangeBox.MinPoint.Y)
-        Dim height = Math.Abs(rangeBox.MaxPoint.Z - rangeBox.MinPoint.Z)
-        Return (length, width, height)
-    End Function
-
-    'function to obtain the bounding box volume of the part (in cm^3)
-    'Public Function GetBoundingBoxVolume() As Double
-    '    Dim (length, width, height) = GetBoundingBox()
-    '    Return length * width * height
-    'End Function
-
     'function to calculate the surface area of the part (in cm^2)
+    ' it's off by a scale of 100??? scaling up to match iproperties
     Public Function GetSurfaceArea() As Double
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.")
         Dim compDef = doc.ComponentDefinition
         Return compDef.MassProperties.Area
+    End Function
+
+    'basic function to obtain the bounding box dimensions of the part (in cm)
+    'tuples are a thing in vb,net???
+    ' ensures immutable parameters, avoiding accidental overwrite.
+    Public Function GetBoundingBox() As Tuple(Of Double, Double, Double)
+        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
+        If doc Is Nothing Then Throw New InvalidOperationException("No active PartDocument.")
+        Dim compDef = doc.ComponentDefinition
+        Dim box = compDef.RangeBox
+        Dim length = Math.Abs(box.MaxPoint.X - box.MinPoint.X)
+        Dim width = Math.Abs(box.MaxPoint.Y - box.MinPoint.Y)
+        Dim height = Math.Abs(box.MaxPoint.Z - box.MinPoint.Z)
+        Return New Tuple(Of Double, Double, Double)(length, width, height)
+    End Function
+
+    'function to obtain the bounding box volume of the part (in cm^3)
+    Public Function GetBoundingBoxVolume() As Double
+        Dim box = GetBoundingBox()
+        Return box.Item1 * box.Item2 * box.Item3
+    End Function
+
+    'Archived functions
+    'maybe aspect ratio might be considered?
+    'spies ratio by extending bounding box with other primitive shapes
+    Public Function GetNumberOfFaces() As Integer
+        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
+        If doc Is Nothing Then Return 0
+        Dim compDef = doc.ComponentDefinition
+        Dim total As Integer = 0
+        For Each sb As SurfaceBody In compDef.SurfaceBodies
+            total += sb.Faces.Count
+        Next
+        Return total
+    End Function
+
+    Public Function GetNumberOfEdges() As Integer
+        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
+        If doc Is Nothing Then Return 0
+        Dim compDef = doc.ComponentDefinition
+        Dim total As Integer = 0
+        For Each sb As SurfaceBody In compDef.SurfaceBodies
+            total += sb.Edges.Count
+        Next
+        Return total
+    End Function
+
+    Public Function GetNumberOfSolidBodies() As Integer
+        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
+        If doc Is Nothing Then Return 0
+        Return doc.ComponentDefinition.SurfaceBodies.Count
     End Function
 
     'function to calculate the overhang area of the part (in cm^2)
@@ -67,6 +102,132 @@ Public Class GeometricalHelper
     '    Next
     '    Return totalOverhangArea
     'End Function
+    Public Function CalculateOverhangArea(referenceFace As Face, overhangAngleDeg As Double) As Double
+        If referenceFace Is Nothing Then Throw New ArgumentNullException(NameOf(referenceFace))
+        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
+        If doc Is Nothing Then Throw New InvalidOperationException("No active PartDocument.")
+        Dim compDef = doc.ComponentDefinition
+
+        ' Determine build direction (normal of reference face)
+        Dim buildDir As Inventor.Vector = Nothing
+        Try
+            Dim refPoint = referenceFace.PointOnFace
+
+            ' Convert point to array
+            Dim pointArr() As Double = {refPoint.X, refPoint.Y, refPoint.Z}
+            Dim guessParams() As Double = {0, 0}
+            Dim maxDeviations() As Double = {0}
+            Dim paramsOut() As Double = {0, 0}
+            Dim solnNatures() As SolutionNatureEnum = {}
+
+            referenceFace.Evaluator.GetParamAtPoint(pointArr, guessParams, maxDeviations, paramsOut, solnNatures)
+
+            ' Get normal using array output
+            Dim normalArr() As Double = {0, 0, 0}
+            referenceFace.Evaluator.GetNormal(paramsOut, normalArr)
+            buildDir = _app.TransientGeometry.CreateVector(normalArr(0), normalArr(1), normalArr(2))
+        Catch
+            buildDir = _app.TransientGeometry.CreateVector(0, 0, 1)
+        End Try
+
+        If buildDir Is Nothing Then buildDir = _app.TransientGeometry.CreateVector(0, 0, 1)
+        buildDir.Normalize()
+
+        Dim totalOverhangArea As Double = 0.0
+        Dim thresholdRad As Double = overhangAngleDeg * Math.PI / 180.0
+
+        ' Loop through all faces and compute overhangs
+        For Each sBody As SurfaceBody In compDef.SurfaceBodies
+            For Each f As Face In sBody.Faces
+                Try
+                    Dim facePoint = f.PointOnFace
+                    Dim ptArr() As Double = {facePoint.X, facePoint.Y, facePoint.Z}
+                    Dim guessParams() As Double = {0, 0}
+                    Dim maxDeviations() As Double = {0}
+                    Dim paramsOut() As Double = {0, 0}
+                    Dim solnNatures() As SolutionNatureEnum = {}
+
+                    f.Evaluator.GetParamAtPoint(ptArr, guessParams, maxDeviations, paramsOut, solnNatures)
+
+                    ' Get normal as array then convert to vector
+                    Dim normalArr() As Double = {0, 0, 0}
+                    f.Evaluator.GetNormal(paramsOut, normalArr)
+                    Dim faceNormal = _app.TransientGeometry.CreateVector(normalArr(0), normalArr(1), normalArr(2))
+                    faceNormal.Normalize()
+
+                    ' Compute angle between normals
+                    Dim dot = faceNormal.DotProduct(buildDir)
+                    dot = Math.Max(-1.0, Math.Min(1.0, dot))
+                    Dim angle = Math.Acos(dot)
+
+                    If angle > thresholdRad Then
+                        Dim faceArea As Double = 0
+                        Try
+                            faceArea = f.Evaluator.Area
+                        Catch
+                            ' fallback if Evaluator.Area unavailable
+                            Dim rb = f.RangeBox
+                            faceArea = Math.Abs((rb.MaxPoint.X - rb.MinPoint.X) * (rb.MaxPoint.Y - rb.MinPoint.Y))
+                        End Try
+                        totalOverhangArea += faceArea
+                    End If
+                Catch
+                    ' ignore failed faces
+                End Try
+            Next
+        Next
+
+        Return totalOverhangArea
+    End Function
+
+    'Public Function GetSurface() As Double
+    '    Dim oPartDoc As PartDocument
+    '    oPartDoc = g_inventorApplication.ActiveDocument
+
+    '    Dim oPartDef As PartComponentDefinition
+    '    oPartDef = oPartDoc.ComponentDefinition
+
+    '    Dim oSurfaceBody As SurfaceBody
+    '    Dim oFace As Face
+    '    Dim faceCount As Long
+    '    faceCount = 0
+    '    Dim eval As SurfaceEvaluator
+    '    Dim Baseeval As SurfaceEvaluator
+    '    Baseeval = BaseFace.Evaluator
+    '    Dim basecenter(1) As Double
+    '    basecenter(0) = (Baseeval.ParamRangeRect.MinPoint.X + Baseeval.ParamRangeRect.MaxPoint.X) / 2
+    '    basecenter(1) = (Baseeval.ParamRangeRect.MinPoint.Y + Baseeval.ParamRangeRect.MaxPoint.Y) / 2
+    '    Dim Normal(2) As Double
+    '    Call Baseeval.GetNormal(basecenter, Normal)
+    '    Dim Basevector As UnitVector
+    '    Basevector = g_inventorApplication.TransientGeometry.CreateUnitVector(Normal(0), Normal(1), Normal(2))
+    '    Dim TotalArea As Double = 0
+    '    Dim area As Double
+    '    For Each oSurfaceBody In oPartDef.SurfaceBodies
+    '        For Each oFace In oSurfaceBody.Faces
+    '            eval = oFace.Evaluator
+    '            Dim center(1) As Double
+    '            center(0) = (eval.ParamRangeRect.MinPoint.X + eval.ParamRangeRect.MaxPoint.X) / 2
+    '            center(1) = (eval.ParamRangeRect.MinPoint.Y + eval.ParamRangeRect.MaxPoint.Y) / 2
+    '            Dim NormalTest(2) As Double
+    '            Call eval.GetNormal(center, NormalTest)
+    '            Dim Testvector As UnitVector
+    '            Testvector = g_inventorApplication.TransientGeometry.CreateUnitVector(NormalTest(0), NormalTest(1), NormalTest(2))
+    '            Dim angle As Double
+    '            angle = Basevector.AngleTo(Testvector)
+    '            If angle < 0.785 Then
+    '                area = eval.Area
+    '                TotalArea = TotalArea + area
+    '            End If
+    '            area = 0
+    '        Next
+    '    Next
+    '    Dim basearea As Double
+    '    basearea = Baseeval.Area
+    '    TotalArea = TotalArea - basearea
+    '    Return TotalArea
+
+    'End Function
 
     'function to calculate part complexity (based on surface area to volume ratio)
     Public Function CalculatePartComplexity() As Double
@@ -75,4 +236,13 @@ Public Class GeometricalHelper
         If volume = 0 Then Return 0 ' edge case to somehow avoid crashing by dividing by 0
         Return (surfaceArea / volume) ' Higher ratio indicates higher complexity
     End Function
+End Class
+
+Public Class GeometrySummary
+    Public Property Volume As Double
+    Public Property SurfaceArea As Double
+    Public Property BoundingBoxVolume As Double
+    Public Property ComplexityRatio As Double
+    Public Property OverhangArea As Double
+
 End Class

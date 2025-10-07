@@ -7,6 +7,7 @@ Imports System.Diagnostics
 
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
+    Private geometry As GeometrySummary
     Private isDetailsExpanded As Boolean = False
     Private DeveloperMode As Boolean = False
 
@@ -19,7 +20,7 @@ Public Class SummaryForm
     ' Tweak these as you like
     Private Const SAFETY_SCREEN_MARGIN As Integer = 8
     Private Const ANIM_STEPS As Integer = 20   ' how many steps the animation tries to use
-    Public Sub New(profiles As List(Of ScoredProfile))
+    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary)
         InitializeComponent()
         ' Create panel if not already done in Designer
         Dim ListBoxContainerPanel As New Panel()
@@ -37,6 +38,7 @@ Public Class SummaryForm
         Me.Controls.Add(ListBoxContainerPanel)
 
         Me.scoredProfiles = profiles
+        Me.geometry = geo
         EnableDoubleBuffer(PanelDetails)
         EnableDoubleBuffer(ListBoxResults)
         EnableDoubleBuffer(ListBoxContainerPanel)
@@ -278,102 +280,132 @@ Public Class SummaryForm
     End Sub
 
 
-    Private Sub PopulateDetailsPanel()
-        PanelDetails.SuspendLayout()
-        PanelDetails.Controls.Clear()
+    'Private Sub PopulateDetailsPanel()
+    '    PanelDetails.SuspendLayout()
+    '    PanelDetails.Controls.Clear()
 
-        Dim yPosition As Integer = 10
-        Dim leftMargin As Integer = 10
-        Dim controlWidth As Integer = Math.Max(100, PanelDetails.Width - 2 * leftMargin)
+    '    Dim yPosition As Integer = 10
+    '    Dim leftMargin As Integer = 10
+    '    Dim controlWidth As Integer = Math.Max(100, PanelDetails.Width - 2 * leftMargin)
 
-        ' Helper: measure word-wrapped text height
-        Dim MeasureTextHeight = Function(text As String, fnt As Font, width As Integer) As Integer
-                                    Dim sz = TextRenderer.MeasureText(text, fnt, New Size(width, Integer.MaxValue), TextFormatFlags.WordBreak)
-                                    Return sz.Height
-                                End Function
+    '    ' Helper: measure word-wrapped text height
+    '    Dim MeasureTextHeight = Function(text As String, fnt As Font, width As Integer) As Integer
+    '                                Dim sz = TextRenderer.MeasureText(text, fnt, New Size(width, Integer.MaxValue), TextFormatFlags.WordBreak)
+    '                                Return sz.Height
+    '                            End Function
 
-        ' Section 1: Geometric Analysis (title)
-        Dim lblGeoTitle As New Label() With {
-        .Text = "Geometric Analysis:",
-        .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-        .Location = New Point(leftMargin, yPosition),
-        .AutoSize = True
-    }
-        PanelDetails.Controls.Add(lblGeoTitle)
-        yPosition += lblGeoTitle.Height + 8
+    '    ' Section 1: Geometric Analysis (title)
+    '    Dim lblGeoTitle As New Label() With {
+    '    .Text = "Geometric Analysis:",
+    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
+    '    .Location = New Point(leftMargin, yPosition),
+    '    .AutoSize = True
+    '}
+    '    PanelDetails.Controls.Add(lblGeoTitle)
+    '    yPosition += lblGeoTitle.Height + 8
 
-        ' Section 1 data (measured for wrap)
-        Dim geoText = "Surface Area: [Placeholder] cm²" & vbCrLf &
-                  "Volume: [Placeholder] cm³" & vbCrLf &
-                  "Complexity Ratio: [Placeholder]" & vbCrLf &
-                  "Bounding Box: [Placeholder]"
+    '    ' Section 1 data (measured for wrap)
+    '    Dim geoText = "Surface Area: [Placeholder] cm²" & vbCrLf &
+    '              "Volume: [Placeholder] cm³" & vbCrLf &
+    '              "Complexity Ratio: [Placeholder]" & vbCrLf &
+    '              "Bounding Box: [Placeholder]"
 
-        Dim geoHeight = MeasureTextHeight(geoText, SystemFonts.DefaultFont, controlWidth - 10)
-        Dim lblGeoData As New Label() With {
-        .Text = geoText,
-        .Location = New Point(leftMargin + 10, yPosition),
-        .Size = New Size(controlWidth - 10, geoHeight)
-    }
-        PanelDetails.Controls.Add(lblGeoData)
-        yPosition += lblGeoData.Height + 15
+    '    Dim geoHeight = MeasureTextHeight(geoText, SystemFonts.DefaultFont, controlWidth - 10)
+    '    Dim lblGeoData As New Label() With {
+    '    .Text = geoText,
+    '    .Location = New Point(leftMargin + 10, yPosition),
+    '    .Size = New Size(controlWidth - 10, geoHeight)
+    '}
+    '    PanelDetails.Controls.Add(lblGeoData)
+    '    yPosition += lblGeoData.Height + 15
 
-        ' Section 2: Technology Limitations
-        Dim lblLimitTitle As New Label() With {
-        .Text = "Why Other Technologies Scored Lower:",
-        .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-        .Location = New Point(leftMargin, yPosition),
-        .AutoSize = True
-    }
-        PanelDetails.Controls.Add(lblLimitTitle)
-        yPosition += lblLimitTitle.Height + 8
+    '    ' Section 2: Technology Limitations
+    '    Dim lblLimitTitle As New Label() With {
+    '    .Text = "Why Other Technologies Scored Lower:",
+    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
+    '    .Location = New Point(leftMargin, yPosition),
+    '    .AutoSize = True
+    '}
+    '    PanelDetails.Controls.Add(lblLimitTitle)
+    '    yPosition += lblLimitTitle.Height + 8
 
-        Dim limitText = "[Placeholder: Analysis of low-scoring technologies]" & vbCrLf &
-                    "• Material Jetting: Score penalty due to [reason]" & vbCrLf &
-                    "• Binder Jetting: Unsuitable because [reason]"
+    '    Dim limitText = "[Placeholder: Analysis of low-scoring technologies]" & vbCrLf &
+    '                "• Material Jetting: Score penalty due to [reason]" & vbCrLf &
+    '                "• Binder Jetting: Unsuitable because [reason]"
 
-        Dim limitHeight = MeasureTextHeight(limitText, SystemFonts.DefaultFont, controlWidth - 10)
-        Dim lblLimitData As New Label() With {
-        .Text = limitText,
-        .Location = New Point(leftMargin + 10, yPosition),
-        .Size = New Size(controlWidth - 10, limitHeight)
-    }
-        PanelDetails.Controls.Add(lblLimitData)
-        yPosition += lblLimitData.Height + 15
+    '    Dim limitHeight = MeasureTextHeight(limitText, SystemFonts.DefaultFont, controlWidth - 10)
+    '    Dim lblLimitData As New Label() With {
+    '    .Text = limitText,
+    '    .Location = New Point(leftMargin + 10, yPosition),
+    '    .Size = New Size(controlWidth - 10, limitHeight)
+    '}
+    '    PanelDetails.Controls.Add(lblLimitData)
+    '    yPosition += lblLimitData.Height + 15
 
-        ' Section 3: Improvements
-        Dim lblImproveTitle As New Label() With {
-        .Text = "Potential Design Improvements:",
-        .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-        .Location = New Point(leftMargin, yPosition),
-        .AutoSize = True
-    }
-        PanelDetails.Controls.Add(lblImproveTitle)
-        yPosition += lblImproveTitle.Height + 8
+    '    ' Section 3: Improvements
+    '    Dim lblImproveTitle As New Label() With {
+    '    .Text = "Potential Design Improvements:",
+    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
+    '    .Location = New Point(leftMargin, yPosition),
+    '    .AutoSize = True
+    '}
+    '    PanelDetails.Controls.Add(lblImproveTitle)
+    '    yPosition += lblImproveTitle.Height + 8
 
-        Dim improveText = "[Placeholder: Suggestions for design optimization]" & vbCrLf &
-                      "• Consider reducing precision requirements" & vbCrLf &
-                      "• Optimize part orientation to minimize overhangs"
+    '    Dim improveText = "[Placeholder: Suggestions for design optimization]" & vbCrLf &
+    '                  "• Consider reducing precision requirements" & vbCrLf &
+    '                  "• Optimize part orientation to minimize overhangs"
 
-        Dim improveHeight = MeasureTextHeight(improveText, SystemFonts.DefaultFont, controlWidth - 10)
-        Dim lblImproveData As New Label() With {
-        .Text = improveText,
-        .Location = New Point(leftMargin + 10, yPosition),
-        .Size = New Size(controlWidth - 10, improveHeight)
-    }
-        PanelDetails.Controls.Add(lblImproveData)
-        yPosition += lblImproveData.Height + 5
+    '    Dim improveHeight = MeasureTextHeight(improveText, SystemFonts.DefaultFont, controlWidth - 10)
+    '    Dim lblImproveData As New Label() With {
+    '    .Text = improveText,
+    '    .Location = New Point(leftMargin + 10, yPosition),
+    '    .Size = New Size(controlWidth - 10, improveHeight)
+    '}
+    '    PanelDetails.Controls.Add(lblImproveData)
+    '    yPosition += lblImproveData.Height + 5
 
-        ' Set minimum scrollable area equal to content height so AutoScroll works
-        PanelDetails.AutoScrollMinSize = New Size(0, yPosition + 10)
+    '    ' Set minimum scrollable area equal to content height so AutoScroll works
+    '    PanelDetails.AutoScrollMinSize = New Size(0, yPosition + 10)
 
-        PanelDetails.ResumeLayout()
-    End Sub
+    '    PanelDetails.ResumeLayout()
+    'End Sub
 
+
+    'future work would allow adaption of preferred units,currently automatically work in cm, 2, 3.
     Private Function MeasureAndPopulateDetails(ByRef contentTotalHeight As Integer) As Integer
         ' Populates PanelDetails and returns the total content height (unclamped).
         ' Also sets PanelDetails.AutoScrollMinSize so scrolling works when content > available height.
         PanelDetails.SuspendLayout()
         PanelDetails.Controls.Clear()
+
+
+        'testing testing
+        Dim surfaceArea As Double = 0
+        Dim volume As Double = 0
+        Dim bbox As Double = 0
+        Dim complexityRatio As Double = 0
+        Dim overhangArea As Double = 0
+
+        Try
+            surfaceArea = geometry.SurfaceArea()
+            volume = geometry.Volume()
+            bbox = geometry.BoundingBoxVolume()
+            complexityRatio = geometry.ComplexityRatio()
+
+            ' Optionally, calculate overhang area if user previously selected a reference face
+            ' Dim selectedFace As Face = selectedRefFace
+            overhangArea = geometry.OverhangArea()
+        Catch ex As Exception
+            ' gracefully degrade to zero if part unavailable
+        End Try
+
+        Dim geomSummary As String =
+    $"Surface Area: {surfaceArea:0.00} cm²" & vbCrLf &
+    $"Volume: {volume:0.00} cm³" & vbCrLf &
+    $"Bounding Box: {bbox:0.00} cm³" & vbCrLf &
+    $"Complexity Ratio: {complexityRatio:0.000}" & vbCrLf &
+    $"Overhang Area (>45°): {overhangArea:0.00} cm²"
 
         Dim leftPad As Integer = 10
         Dim rightPad As Integer = 10
@@ -382,7 +414,8 @@ Public Class SummaryForm
         ' Prepare content blocks (text + font + isTitle)
         Dim blocks As New List(Of Tuple(Of String, Font, Boolean))
         blocks.Add(Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True))
-        blocks.Add(Tuple.Create("Surface Area: [placeholder]" & vbCrLf & "Volume: [placeholder]" & vbCrLf & "Bounding Box: [placeholder]", SystemFonts.DefaultFont, False))
+        blocks.Add(Tuple.Create(geomSummary, SystemFonts.DefaultFont, False))
+        'blocks.Add(Tuple.Create("Surface Area: [placeholder]" & vbCrLf & "Volume: [placeholder]" & vbCrLf & "Bounding Box: [placeholder]", SystemFonts.DefaultFont, False))
         blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
         blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
