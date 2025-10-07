@@ -14,10 +14,10 @@ Public Class CeramicMEX
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -119,10 +119,10 @@ Public Class CeramicMJT
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -224,10 +224,10 @@ Public Class CeramicBJT
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -329,10 +329,10 @@ Public Class CeramicVPP
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -434,10 +434,10 @@ Public Class CeramicPBF
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -539,10 +539,10 @@ Public Class CeramicDED
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Low", 1}, {"Medium", 5}, {"High", 10}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Low", 10}, {"Medium", 5}, {"High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"One Off Part", 10}, {"Low Volume Production", 5}, {"High Volume Production", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property

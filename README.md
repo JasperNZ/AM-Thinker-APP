@@ -65,3 +65,5 @@ should the result form be as wide as the input form
 double check the up and down arrows (unicode) on details button don't crash the system
 ask about visiblity and readability of the colours.
 Preference of UI text?
+Are the tooltip descriptions too verbose
+Mathematic  signs too distracting, or can we assume users are intuitive? (e.g <=3 days vs 1-3 days)
