@@ -106,10 +106,7 @@ Public Class GeometricalHelper
     'End Function
 
     'function considers internal overhangs, not sure how to mitigate this.
-    ''' <summary>
-    ''' CORRECTED: Calculates overhang area based on reference face and angle threshold.
-    ''' Key fix: Proper angle interpretation for horizontal downward-facing surfaces
-    ''' </summary>
+
     ''' <summary>
     ''' TRULY CORRECTED: Calculates overhang area with proper angle interpretation.
     ''' The key insight: We need angle from HORIZONTAL, not vertical!

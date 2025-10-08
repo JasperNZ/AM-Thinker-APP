@@ -62,7 +62,7 @@ Partial Class SummaryForm
         '
         'ButtonDetails
         '
-        Me.ButtonDetails.Location = New System.Drawing.Point(18, 245)
+        Me.ButtonDetails.Location = New System.Drawing.Point(18, 200)
         Me.ButtonDetails.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.ButtonDetails.Name = "ButtonDetails"
         Me.ButtonDetails.Size = New System.Drawing.Size(162, 35)
@@ -96,7 +96,7 @@ Partial Class SummaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(726, 302)
+        Me.ClientSize = New System.Drawing.Size(726, 252)
         Me.Controls.Add(Me.LabelBestOptionsHeader)
         Me.Controls.Add(Me.PanelDetails)
         Me.Controls.Add(Me.ButtonDetails)
@@ -108,7 +108,6 @@ Partial Class SummaryForm
         Me.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(739, 331)
         Me.Name = "SummaryForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "AM Thinker - Analysis Results"

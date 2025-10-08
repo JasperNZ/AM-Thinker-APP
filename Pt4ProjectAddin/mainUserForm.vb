@@ -68,27 +68,6 @@ Public Class mainUserForm
     'When Compute Button is pressed
     'Function computes the various parameters of the object and applies the AM analysis given the users input, once the Compute Button is pressed. 
     Private Sub ButtonCompute_Click(sender As Object, e As EventArgs) Handles ButtonCompute.Click
-        'extracting inventor and part (NO ASSEMBLIES!) information for analysis
-        ' I have also realized that calling with no parts will crash the code... might need an error handler class
-        'I am also now upset that the code after megining with the main branch now got deleted :(
-        'Dim inventorApp As Inventor.Application = Marshal.GetActiveObject("Inventor.Application")
-        'Dim partDoc As PartDocument = CType(inventorApp.ActiveDocument, PartDocument)
-        'Dim CMAnalyser As New ConventionalMachiningUtility(inventorApp, partDoc)
-        'Dim CMResults = CMAnalyser.CheckAllFeatures()
-
-        'writingnotes on how this code works
-        'checks the tick boxes of machines, and the material text (replace with dictionary and list looping using booleans)
-        'declaring variables for the AM technology's respective categorical value
-        'using the checkstate to create boolean variables (think booleans are 1 or 0 anyways, will research)
-        'If else statements then further applying material and technology combinations
-        'converting the inputted text into the categorical numerical value
-        'suddenly calls complexity function to calculate the numerical value
-        'calculates baseline score
-        'calculates every score for each combination
-        'aggregate score (we could replace with a loop)
-        'calculates final score
-        'then start making comments with traffic light
-
         'preliminary checks forcing user to input all necessary information before computing
         If Not ErrorHandler.ValidateSelections(Me) Then
             Return ' Stop if validation fails
