@@ -29,10 +29,9 @@ Partial Class SummaryForm
         'LabelAssessment
         '
         Me.LabelAssessment.AutoSize = True
-        Me.LabelAssessment.Location = New System.Drawing.Point(18, 14)
-        Me.LabelAssessment.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelAssessment.Location = New System.Drawing.Point(12, 9)
         Me.LabelAssessment.Name = "LabelAssessment"
-        Me.LabelAssessment.Size = New System.Drawing.Size(192, 20)
+        Me.LabelAssessment.Size = New System.Drawing.Size(128, 13)
         Me.LabelAssessment.TabIndex = 0
         Me.LabelAssessment.Text = "Overall Assessment Label"
         '
@@ -40,10 +39,9 @@ Partial Class SummaryForm
         '
         Me.LabelBestOptions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LabelBestOptions.Location = New System.Drawing.Point(120, 146)
-        Me.LabelBestOptions.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelBestOptions.Location = New System.Drawing.Point(80, 95)
         Me.LabelBestOptions.Name = "LabelBestOptions"
-        Me.LabelBestOptions.Size = New System.Drawing.Size(588, 49)
+        Me.LabelBestOptions.Size = New System.Drawing.Size(392, 32)
         Me.LabelBestOptions.TabIndex = 1
         Me.LabelBestOptions.Text = "Options:"
         '
@@ -54,18 +52,16 @@ Partial Class SummaryForm
         Me.ListBoxResults.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.ListBoxResults.FormattingEnabled = True
         Me.ListBoxResults.ItemHeight = 20
-        Me.ListBoxResults.Location = New System.Drawing.Point(18, 43)
-        Me.ListBoxResults.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.ListBoxResults.Location = New System.Drawing.Point(12, 28)
         Me.ListBoxResults.Name = "ListBoxResults"
-        Me.ListBoxResults.Size = New System.Drawing.Size(688, 84)
+        Me.ListBoxResults.Size = New System.Drawing.Size(460, 44)
         Me.ListBoxResults.TabIndex = 3
         '
         'ButtonDetails
         '
-        Me.ButtonDetails.Location = New System.Drawing.Point(18, 200)
-        Me.ButtonDetails.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.ButtonDetails.Location = New System.Drawing.Point(12, 130)
         Me.ButtonDetails.Name = "ButtonDetails"
-        Me.ButtonDetails.Size = New System.Drawing.Size(162, 35)
+        Me.ButtonDetails.Size = New System.Drawing.Size(108, 23)
         Me.ButtonDetails.TabIndex = 4
         Me.ButtonDetails.Text = "▼ Show Details"
         Me.ButtonDetails.UseVisualStyleBackColor = True
@@ -75,28 +71,27 @@ Partial Class SummaryForm
         Me.PanelDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelDetails.AutoScroll = True
-        Me.PanelDetails.Location = New System.Drawing.Point(22, 289)
-        Me.PanelDetails.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.PanelDetails.Location = New System.Drawing.Point(15, 188)
         Me.PanelDetails.Name = "PanelDetails"
-        Me.PanelDetails.Size = New System.Drawing.Size(686, 0)
+        Me.PanelDetails.Size = New System.Drawing.Size(457, 0)
         Me.PanelDetails.TabIndex = 5
         Me.PanelDetails.Visible = False
         '
         'LabelBestOptionsHeader
         '
         Me.LabelBestOptionsHeader.AutoSize = True
-        Me.LabelBestOptionsHeader.Location = New System.Drawing.Point(18, 146)
-        Me.LabelBestOptionsHeader.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelBestOptionsHeader.Location = New System.Drawing.Point(12, 95)
         Me.LabelBestOptionsHeader.Name = "LabelBestOptionsHeader"
-        Me.LabelBestOptionsHeader.Size = New System.Drawing.Size(105, 20)
+        Me.LabelBestOptionsHeader.Size = New System.Drawing.Size(70, 13)
         Me.LabelBestOptionsHeader.TabIndex = 6
         Me.LabelBestOptionsHeader.Text = "Best Options:"
         '
         'SummaryForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(726, 252)
+        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
+        Me.ClientSize = New System.Drawing.Size(484, 164)
         Me.Controls.Add(Me.LabelBestOptionsHeader)
         Me.Controls.Add(Me.PanelDetails)
         Me.Controls.Add(Me.ButtonDetails)
@@ -105,7 +100,6 @@ Partial Class SummaryForm
         Me.Controls.Add(Me.LabelAssessment)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SummaryForm"

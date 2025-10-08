@@ -125,8 +125,9 @@ Public Class mainUserForm
         Dim overhangFaces As List(Of Face) = Nothing
         Dim overhangArea = GeoChecker.CalculateOverhangArea(referenceFace, 45.0, overhangFaces)
         'Dim overhangArea = GeoChecker.CalculateOverhangAreaSimple(45.0, overhangFaces)
-        HighlightFaces(overhangFaces)
-        MessageBox.Show($"Estimated overhang area (deg > 45): {overhangArea:F3} (cm²)")
+
+        If HighlightCheckBox.Checked Then HighlightFaces(overhangFaces)
+
 
         'testing summary class
         Dim geo As New GeometrySummary()
@@ -190,5 +191,10 @@ Public Class mainUserForm
 
     Private Sub MainUserForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         ClearHighlights()
+    End Sub
+
+    Private Sub CheckBoxOverhangHighlight_CheckedChanged(sender As Object, e As EventArgs) _
+    Handles HighlightCheckBox.CheckedChanged
+        LabelInstructions.Visible = Not HighlightCheckBox.Checked
     End Sub
 End Class
