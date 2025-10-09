@@ -485,6 +485,11 @@ Public Class GeometricalHelper
         If volume = 0 Then Return 0
         Return (volume / bbvolume)
     End Function
+
+    Public Function CalculateOverhangPercentage(totalSurfaceArea As Double, totalOverhangArea As Double) As Double
+        If totalSurfaceArea <= 0 Then Return 0
+        Return (totalOverhangArea / totalSurfaceArea) * 100.0
+    End Function
 End Class
 
 Public Class GeometrySummary
@@ -494,5 +499,6 @@ Public Class GeometrySummary
     Public Property ComplexityRatio As Double
     Public Property OverhangArea As Double
     Public Property VolumeRatio As Double
+    Public Property OverhangPercentage As Double
 
 End Class

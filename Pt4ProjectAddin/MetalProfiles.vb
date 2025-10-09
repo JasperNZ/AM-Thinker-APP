@@ -24,23 +24,31 @@ Public Class MetalMEX
 
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.35 Then
+        If rawComplexity < 0.2 Then
             Return 2
-        ElseIf rawComplexity < 0.45 Then
+        ElseIf rawComplexity < 0.6 Then
+            Return 4
+        ElseIf rawComplexity < 1.5 Then
             Return 6
+        ElseIf rawComplexity < 4.0 Then
+            Return 8
         Else
             Return 10
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
-    Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
-        If rawOverhang < 20 Then
+    Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
+        If rawOverhangPercent < 5 Then
             Return 10
-        ElseIf rawOverhang < 45 Then
-            Return 5
+        ElseIf rawOverhangPercent < 15 Then
+            Return 8
+        ElseIf rawOverhangPercent < 30 Then
+            Return 6
+        ElseIf rawOverhangPercent < 50 Then
+            Return 4
         Else
-            Return 1
+            Return 2
         End If
     End Function
 
@@ -187,23 +195,31 @@ Public Class MetalBJT
 
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.35 Then
+        If rawComplexity < 0.2 Then
             Return 2
-        ElseIf rawComplexity < 0.45 Then
+        ElseIf rawComplexity < 0.6 Then
+            Return 4
+        ElseIf rawComplexity < 1.5 Then
             Return 6
+        ElseIf rawComplexity < 4.0 Then
+            Return 8
         Else
             Return 10
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
-    Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
-        If rawOverhang < 20 Then
+    Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
+        If rawOverhangPercent < 5 Then
             Return 10
-        ElseIf rawOverhang < 45 Then
-            Return 5
+        ElseIf rawOverhangPercent < 15 Then
+            Return 8
+        ElseIf rawOverhangPercent < 30 Then
+            Return 6
+        ElseIf rawOverhangPercent < 50 Then
+            Return 4
         Else
-            Return 1
+            Return 2
         End If
     End Function
 
@@ -350,23 +366,31 @@ Public Class MetalPBF
 
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.35 Then
+        If rawComplexity < 0.2 Then
             Return 2
-        ElseIf rawComplexity < 0.45 Then
+        ElseIf rawComplexity < 0.6 Then
+            Return 4
+        ElseIf rawComplexity < 1.5 Then
             Return 6
+        ElseIf rawComplexity < 4.0 Then
+            Return 8
         Else
             Return 10
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
-    Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
-        If rawOverhang < 20 Then
+    Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
+        If rawOverhangPercent < 5 Then
             Return 10
-        ElseIf rawOverhang < 45 Then
-            Return 5
+        ElseIf rawOverhangPercent < 15 Then
+            Return 8
+        ElseIf rawOverhangPercent < 30 Then
+            Return 6
+        ElseIf rawOverhangPercent < 50 Then
+            Return 4
         Else
-            Return 1
+            Return 2
         End If
     End Function
 
@@ -455,23 +479,31 @@ Public Class MetalDED
 
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.35 Then
+        If rawComplexity < 0.2 Then
             Return 2
-        ElseIf rawComplexity < 0.45 Then
+        ElseIf rawComplexity < 0.6 Then
+            Return 4
+        ElseIf rawComplexity < 1.5 Then
             Return 6
+        ElseIf rawComplexity < 4.0 Then
+            Return 8
         Else
             Return 10
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
-    Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
-        If rawOverhang < 20 Then
+    Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
+        If rawOverhangPercent < 5 Then
             Return 10
-        ElseIf rawOverhang < 45 Then
-            Return 5
+        ElseIf rawOverhangPercent < 15 Then
+            Return 8
+        ElseIf rawOverhangPercent < 30 Then
+            Return 6
+        ElseIf rawOverhangPercent < 50 Then
+            Return 4
         Else
-            Return 1
+            Return 2
         End If
     End Function
 

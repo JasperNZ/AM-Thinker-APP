@@ -388,6 +388,7 @@ Public Class SummaryForm
         Dim bbox As Double = 0
         Dim complexityRatio As Double = 0
         Dim overhangArea As Double = 0
+        Dim overhangPercentage As Double = 0
 
         Try
             surfaceArea = geometry.SurfaceArea()
@@ -398,6 +399,7 @@ Public Class SummaryForm
             ' Optionally, calculate overhang area if user previously selected a reference face
             ' Dim selectedFace As Face = selectedRefFace
             overhangArea = geometry.OverhangArea()
+            overhangPercentage = geometry.OverhangPercentage()
         Catch ex As Exception
             ' gracefully degrade to zero if part unavailable
         End Try
@@ -407,7 +409,8 @@ Public Class SummaryForm
     $"Volume: {volume:0.00} cm³" & vbCrLf &
     $"Bounding Box: {bbox:0.00} cm³" & vbCrLf &
     $"Complexity Ratio: {complexityRatio:0.000}" & vbCrLf &
-    $"Overhang Area (>45°): {overhangArea:0.00} cm²"
+    $"Overhang Area (>45°): {overhangArea:0.00} cm²" & vbCrLf &
+    $"Overhang Area ratio): {overhangArea:0.00}"
 
         Dim machiningSummary As String =
     $"Rotational Symmetry: {convResults.HasRotationalSymmetry}" & vbCrLf &

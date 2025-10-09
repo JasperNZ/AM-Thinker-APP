@@ -136,6 +136,7 @@ Public Class mainUserForm
         geo.BoundingBoxVolume = GeoChecker.GetBoundingBoxVolume()
         geo.ComplexityRatio = GeoChecker.CalculatePartComplexity()
         geo.OverhangArea = overhangArea
+        geo.OverhangPercentage = GeoChecker.CalculateOverhangPercentage(geo.SurfaceArea, geo.OverhangArea)
 
         Dim machiningAssessment As New TraditionalMachiningAssessmentImports(g_inventorApplication, doc)
         Dim convChecks As ConventionalChecks = machiningAssessment.CheckAllFeatures()
@@ -150,8 +151,8 @@ Public Class mainUserForm
             {"Volume", ComboBoxVolumeOfProduction.Text}
         }
         Dim numericInputs As New Dictionary(Of String, Double) From {
-            {"Complexity", GeoChecker.CalculatePartComplexity()},     ' i think this is the function??
-            {"Overhang", 0}   'idk we can have a function called GetOverhangComplexity()
+            {"Complexity", geo.ComplexityRatio},     ' i think this is the function??
+            {"Overhang", geo.OverhangPercentage}   'idk we can have a function called GetOverhangComplexity()
         }
         Dim hasImpossibleFeatures As Boolean = CheckBoxIMFP.Checked
 
