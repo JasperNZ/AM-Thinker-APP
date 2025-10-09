@@ -1,8 +1,10 @@
-﻿Imports Inventor
+﻿Imports System.Collections.Generic
+Imports System.Linq
+Imports Inventor
 
 Public Class TraditionalMachiningAssessmentImports
-    Private _inventorApp As Inventor.Application
-    Private _partDoc As PartDocument
+    Private ReadOnly _inventorApp As Inventor.Application
+    Private ReadOnly _partDoc As PartDocument
 
     ''' <summary>
     ''' Constructor - pass in Inventor application and the STEP file document
@@ -94,6 +96,7 @@ Public Class TraditionalMachiningAssessmentImports
             Next
 
             ' TRUE if at least 70% of surfaces are simple
+            'not sure if this is a fair assumption
             If totalFaces > 0 Then
                 Return (simpleFaces / totalFaces) >= 0.7
             Else
@@ -110,27 +113,53 @@ Public Class TraditionalMachiningAssessmentImports
     ''' </summary>
     Public Function CheckExternalAccessibility(partDef As PartComponentDefinition) As Boolean
         Try
-            ' Single surface body = likely externally accessible
-            If partDef.SurfaceBodies.Count > 1 Then
-                Return False ' Multiple bodies suggest internal complexity
-            End If
+            Dim tg As TransientGeometry = partDef.Document.Application.TransientGeometry
 
-            ' Count very small faces (might indicate internal features)
-            Dim smallFaces As Integer = 0
+            ' Candidate tool directions
+            Dim toolDirs As New List(Of Vector)
+            Dim dirs As Double(,) = {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}
+            For i = 0 To dirs.GetLength(0) - 1
+                Dim v = tg.CreateVector(dirs(i, 0), dirs(i, 1), dirs(i, 2))
+                v.Normalize()
+                toolDirs.Add(v)
+            Next
+
             Dim totalFaces As Integer = 0
+            Dim inaccessibleFaces As Integer = 0
 
             For Each body As SurfaceBody In partDef.SurfaceBodies
                 For Each face As Face In body.Faces
                     totalFaces += 1
-                    If face.Area < 0.01 Then ' Very small faces
-                        smallFaces += 1
-                    End If
+                    Try
+                        ' Get a point on the face
+                        Dim pt As Point = face.PointOnFace
+
+                        ' Convert to array
+                        Dim ptArr As Double() = {pt.X, pt.Y, pt.Z}
+
+                        ' Get the normal at that point
+                        Dim normalArr(2) As Double
+                        face.Evaluator.GetNormalAtPoint(ptArr, normalArr)
+
+                        ' Convert back to vector
+                        Dim faceNormal As Vector = tg.CreateVector(normalArr(0), normalArr(1), normalArr(2))
+                        faceNormal.Normalize()
+
+                        ' Check if within 30° of any tool direction
+                        Dim accessible As Boolean = toolDirs.Any(Function(d) _
+                        Math.Acos(Math.Min(1, Math.Max(-1, Math.Abs(faceNormal.DotProduct(d))))) < (30 * Math.PI / 180))
+
+                        If Not accessible Then
+                            inaccessibleFaces += 1
+                        End If
+                    Catch
+                        inaccessibleFaces += 1
+                    End Try
                 Next
             Next
 
-            ' TRUE if less than 20% of faces are very small
             If totalFaces > 0 Then
-                Return (smallFaces / totalFaces) < 0.2
+                Return (inaccessibleFaces / totalFaces) < 0.1
             Else
                 Return True
             End If
@@ -139,6 +168,9 @@ Public Class TraditionalMachiningAssessmentImports
             Return False
         End Try
     End Function
+
+
+
 
     ''' <summary>
     ''' TRUE if part has simple geometric features (straight lines, circular arcs)
@@ -154,8 +186,8 @@ Public Class TraditionalMachiningAssessmentImports
                         totalEdges += 1
 
                         ' Count simple edge types
-                        If edge.GeometryType = CurveTypeEnum.kLineSegment Or
-                           edge.GeometryType = CurveTypeEnum.kCircularArc Then
+                        If edge.GeometryType = CurveTypeEnum.kLineSegmentCurve Or
+                           edge.GeometryType = CurveTypeEnum.kCircularArcCurve Then
                             simpleEdges += 1
                         End If
                     Next
@@ -182,30 +214,17 @@ Public Class TraditionalMachiningAssessmentImports
             ' Get bounding box volume
             Dim bbox As Box = partDef.RangeBox
             Dim boundingVolume As Double = (bbox.MaxPoint.X - bbox.MinPoint.X) *
-                                          (bbox.MaxPoint.Y - bbox.MinPoint.Y) *
-                                          (bbox.MaxPoint.Z - bbox.MinPoint.Z)
+                                       (bbox.MaxPoint.Y - bbox.MinPoint.Y) *
+                                       (bbox.MaxPoint.Z - bbox.MinPoint.Z)
 
-            ' Count faces that suggest material removal (small inset faces)
-            Dim materialRemovalFaces As Integer = 0
-            Dim totalFaces As Integer = 0
+            ' Get actual solid volume (always in cm³ from MassProperties)
+            Dim solidVolume As Double = partDef.MassProperties.Volume
 
-            For Each body As SurfaceBody In partDef.SurfaceBodies
-                For Each face As Face In body.Faces
-                    totalFaces += 1
+            ' Compute ratio of removed material
+            Dim removalRatio As Double = 1 - (solidVolume / boundingVolume)
 
-                    ' Small faces relative to bounding volume suggest cuts
-                    If face.Area < boundingVolume * 0.01 Then
-                        materialRemovalFaces += 1
-                    End If
-                Next
-            Next
-
-            ' TRUE if less than 30% of faces suggest material removal
-            If totalFaces > 0 Then
-                Return (materialRemovalFaces / totalFaces) < 0.3
-            Else
-                Return True
-            End If
+            ' TRUE if less than 30% of the bounding box is removed
+            Return removalRatio < 0.3
 
         Catch
             Return False
@@ -266,29 +285,4 @@ Public Class ConventionalChecks
     Public Property HasNoUndercuts As Boolean = False
     Public Property IsValid As Boolean = False
     Public Property ErrorMessage As String = ""
-
-    ''' <summary>
-    ''' Count how many checks passed (0-6)
-    ''' </summary>
-    Public ReadOnly Property PassedCount As Integer
-        Get
-            Dim count As Integer = 0
-            If HasRotationalSymmetry Then count += 1
-            If HasSimpleSurfaces Then count += 1
-            If HasExternalAccessibility Then count += 1
-            If HasSimpleGeometry Then count += 1
-            If HasMinimalMaterialRemoval Then count += 1
-            If HasNoUndercuts Then count += 1
-            Return count
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Get percentage of checks that passed (0-100)
-    ''' </summary>
-    Public ReadOnly Property PassedPercentage As Double
-        Get
-            Return (PassedCount / 6.0) * 100
-        End Get
-    End Property
 End Class

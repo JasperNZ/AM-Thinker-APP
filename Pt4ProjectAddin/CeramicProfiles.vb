@@ -14,8 +14,8 @@ Public Class CeramicMEX
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 8}, {"Medium", 1}, {"High", 1}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 3}, {"High", 3}, {"Very High", 1}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
                 {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
@@ -119,10 +119,10 @@ Public Class CeramicMJT
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
             }
         End Get
     End Property
@@ -130,8 +130,6 @@ Public Class CeramicMJT
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
         If rawComplexity < 0.35 Then
-            Return 0
-        ElseIf rawComplexity < 0.45 Then
             Return 0
         Else
             Return 0
@@ -141,8 +139,6 @@ Public Class CeramicMJT
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
         If rawOverhang < 20 Then
-            Return 0
-        ElseIf rawOverhang < 45 Then
             Return 0
         Else
             Return 0
@@ -162,50 +158,6 @@ Public Class CeramicMJT
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
     Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
         Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
-        Select Case partPurpose
-            Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case Else
-                ' Default case: no changes
-        End Select
         Return adjustedWeights
     End Function
 End Class
@@ -224,8 +176,8 @@ Public Class CeramicBJT
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 5}, {"High", 1}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
                 {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
@@ -329,8 +281,8 @@ Public Class CeramicVPP
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 6}, {"Very High", 3}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 3}, {"High", 3}, {"Very High", 1}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
                 {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
@@ -434,8 +386,8 @@ Public Class CeramicPBF
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 6}, {"High", 1}, {"Very High", 1}}},
                 {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
                 {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
@@ -539,10 +491,10 @@ Public Class CeramicDED
     Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
         Get
             Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
             }
         End Get
     End Property
@@ -550,8 +502,6 @@ Public Class CeramicDED
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
         If rawComplexity < 0.35 Then
-            Return 0
-        ElseIf rawComplexity < 0.45 Then
             Return 0
         Else
             Return 0
@@ -561,8 +511,6 @@ Public Class CeramicDED
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
         If rawOverhang < 20 Then
-            Return 0
-        ElseIf rawOverhang < 45 Then
             Return 0
         Else
             Return 0
@@ -582,50 +530,6 @@ Public Class CeramicDED
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
     Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
         Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
-        Select Case partPurpose
-            Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
-            Case Else
-                ' Default case: no changes
-        End Select
         Return adjustedWeights
     End Function
 End Class

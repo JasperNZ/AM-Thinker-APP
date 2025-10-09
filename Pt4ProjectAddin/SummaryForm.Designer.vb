@@ -54,7 +54,7 @@ Partial Class SummaryForm
         Me.ListBoxResults.ItemHeight = 20
         Me.ListBoxResults.Location = New System.Drawing.Point(12, 28)
         Me.ListBoxResults.Name = "ListBoxResults"
-        Me.ListBoxResults.Size = New System.Drawing.Size(460, 44)
+        Me.ListBoxResults.Size = New System.Drawing.Size(460, 64)
         Me.ListBoxResults.TabIndex = 3
         '
         'ButtonDetails
@@ -90,7 +90,6 @@ Partial Class SummaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
         Me.ClientSize = New System.Drawing.Size(484, 164)
         Me.Controls.Add(Me.LabelBestOptionsHeader)
         Me.Controls.Add(Me.PanelDetails)

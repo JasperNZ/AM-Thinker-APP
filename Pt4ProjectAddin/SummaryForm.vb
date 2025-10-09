@@ -8,6 +8,7 @@ Imports System.Diagnostics
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
     Private geometry As GeometrySummary
+    Private convResults As ConventionalChecks
     Private isDetailsExpanded As Boolean = False
     Private DeveloperMode As Boolean = False
 
@@ -20,7 +21,7 @@ Public Class SummaryForm
     ' Tweak these as you like
     Private Const SAFETY_SCREEN_MARGIN As Integer = 8
     Private Const ANIM_STEPS As Integer = 20   ' how many steps the animation tries to use
-    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary)
+    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary, conv As ConventionalChecks)
         InitializeComponent()
         ' Create panel if not already done in Designer
         Dim ListBoxContainerPanel As New Panel()
@@ -39,6 +40,7 @@ Public Class SummaryForm
 
         Me.scoredProfiles = profiles
         Me.geometry = geo
+        Me.convResults = conv
         EnableDoubleBuffer(PanelDetails)
         EnableDoubleBuffer(ListBoxResults)
         EnableDoubleBuffer(ListBoxContainerPanel)
@@ -407,6 +409,14 @@ Public Class SummaryForm
     $"Complexity Ratio: {complexityRatio:0.000}" & vbCrLf &
     $"Overhang Area (>45°): {overhangArea:0.00} cm²"
 
+        Dim machiningSummary As String =
+    $"Rotational Symmetry: {convResults.HasRotationalSymmetry}" & vbCrLf &
+    $"Simple Surfaces: {convResults.HasSimpleSurfaces}" & vbCrLf &
+    $"External Accessibility: {convResults.HasExternalAccessibility}" & vbCrLf &
+    $"Simple Geometry: {convResults.HasSimpleGeometry}" & vbCrLf &
+    $"Minimal Material Removal: {convResults.HasMinimalMaterialRemoval}" & vbCrLf &
+    $"No Undercuts: {convResults.HasNoUndercuts}"
+
         Dim leftPad As Integer = 10
         Dim rightPad As Integer = 10
         Dim innerWidth As Integer = Math.Max(50, PanelDetails.ClientSize.Width - leftPad - rightPad)
@@ -415,11 +425,12 @@ Public Class SummaryForm
         Dim blocks As New List(Of Tuple(Of String, Font, Boolean))
         blocks.Add(Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         blocks.Add(Tuple.Create(geomSummary, SystemFonts.DefaultFont, False))
-        'blocks.Add(Tuple.Create("Surface Area: [placeholder]" & vbCrLf & "Volume: [placeholder]" & vbCrLf & "Bounding Box: [placeholder]", SystemFonts.DefaultFont, False))
-        blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
-        blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
-        blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
-        blocks.Add(Tuple.Create("• Optimize orientation" & vbCrLf & "• Reduce overhangs" & vbCrLf & "[Other items...]", SystemFonts.DefaultFont, False))
+        blocks.Add(Tuple.Create("Conventional Machining Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create(machiningSummary, SystemFonts.DefaultFont, False))
+        'blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        'blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
+        'blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        'blocks.Add(Tuple.Create("• Optimize orientation" & vbCrLf & "• Reduce overhangs" & vbCrLf & "[Other items...]", SystemFonts.DefaultFont, False))
 
         ' helper to measure wrapped text height using TextRenderer (WordBreak)
         Dim MeasureWrappedHeight = Function(txt As String, fnt As Font, width As Integer) As Integer

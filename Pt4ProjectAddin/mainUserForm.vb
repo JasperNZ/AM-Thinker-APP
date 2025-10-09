@@ -137,6 +137,9 @@ Public Class mainUserForm
         geo.ComplexityRatio = GeoChecker.CalculatePartComplexity()
         geo.OverhangArea = overhangArea
 
+        Dim machiningAssessment As New TraditionalMachiningAssessmentImports(g_inventorApplication, doc)
+        Dim convChecks As ConventionalChecks = machiningAssessment.CheckAllFeatures()
+
 
 
         'preparing to pass in user inputs to each classes' CalculateScore function
@@ -181,7 +184,7 @@ Public Class mainUserForm
         Next
 
         ' Show custom results form
-        Dim resultsForm As New SummaryForm(scoredProfiles, geo)
+        Dim resultsForm As New SummaryForm(scoredProfiles, geo, convChecks)
         resultsForm.ShowDialog()
     End Sub
 
@@ -197,4 +200,6 @@ Public Class mainUserForm
     Handles HighlightCheckBox.CheckedChanged
         LabelInstructions.Visible = Not HighlightCheckBox.Checked
     End Sub
+
+
 End Class

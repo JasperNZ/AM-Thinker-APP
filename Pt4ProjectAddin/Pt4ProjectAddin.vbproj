@@ -121,6 +121,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TestIcon.vb" />
+    <Compile Include="TraditionalMachiningAssessment.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pt4ProjectAddin.X.manifest" />

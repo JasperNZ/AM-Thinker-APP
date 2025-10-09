@@ -116,7 +116,7 @@ Partial Class mainUserForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(111, 13)
         Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Post Processing Effort"
+        Me.Label4.Text = "Post-Processing Effort"
         Me.toolTip1.SetToolTip(Me.Label4, "Select level of post-processing required." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 1 hour" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 6 hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium" &
         ": 1 day" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "High: 3 days" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very High: +1 week")
         '
@@ -126,9 +126,9 @@ Partial Class mainUserForm
         Me.Label5.Location = New System.Drawing.Point(14, 118)
         Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(105, 13)
+        Me.Label5.Size = New System.Drawing.Size(104, 13)
         Me.Label5.TabIndex = 9
-        Me.Label5.Text = "Intended Use of Part"
+        Me.Label5.Text = "Intended Application"
         Me.toolTip1.SetToolTip(Me.Label5, "Select the purpose of the part.")
         '
         'Label6
