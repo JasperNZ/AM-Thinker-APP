@@ -425,7 +425,6 @@ Public Class SummaryForm
 
         Dim zeroProfiles = scoredProfiles.Where(Function(p) p.Score = 0).ToList()
         If zeroProfiles.Any() Then
-            unavailableSummary &= "Unavailable Technologies:" & vbCrLf
             For Each zp In zeroProfiles
                 unavailableSummary &= $"• {zp.Material} - {zp.Technology} is currently not an available technology" & vbCrLf
             Next
