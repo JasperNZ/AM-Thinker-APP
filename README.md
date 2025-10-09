@@ -58,12 +58,6 @@ COMPLETED:
 
 
 
-Backup notes on code:
-- Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
-Surprisingly the form follows the broswer and is not stationary relative to the window, compared to other built in feature windows like fillet or measure
-should the result form be as wide as the input form
-double check the up and down arrows (unicode) on details button don't crash the system
-ask about visiblity and readability of the colours.
-Preference of UI text?
-Are the tooltip descriptions too verbose
-Mathematic  signs too distracting, or can we assume users are intuitive? (e.g <=3 days vs 1-3 days)
+AppData\Roaming\Autodesk\ApplicationPlugins\Pt4ProjectAddin
+Downloads\AMTECH\AM-Technology-APP\Pt4ProjectAddin\obj\Debug
+Pt4ProjectAddin.dll
