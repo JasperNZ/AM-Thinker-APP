@@ -24,10 +24,9 @@ URGENT:
 - improve coding comments and consistent coding conventions to unionize the code
 - fix scores for lead time - instead of lead time significance.
 - Might add a special comment property for each AM profile. Incompatible profiles can then be noted
-
-
 - Double check geometry features output correct numbers and units
 - Consider if we can do this for multiple parts, STL files and assemblies.
+- Post Processing Effort Calculator
 
 
 
@@ -66,3 +65,5 @@ should the result form be as wide as the input form
 double check the up and down arrows (unicode) on details button don't crash the system
 ask about visiblity and readability of the colours.
 Preference of UI text?
+Are the tooltip descriptions too verbose
+Mathematic  signs too distracting, or can we assume users are intuitive? (e.g <=3 days vs 1-3 days)

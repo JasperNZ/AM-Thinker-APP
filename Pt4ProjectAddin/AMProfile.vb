@@ -1,12 +1,14 @@
 'Base class intended to be used to contain information respective of every AM technology and material combination.
 'Acting as a template, designated as an abstract class with child classes for each combination.
 Imports System.Collections.Generic
+Imports System.Linq
 
 Public MustInherit Class AMProfile
 	'properties include the materials and AM technology as strings
 	Public Property Material As String
 	Public Property Technology As String
 	Protected Weights As Dictionary(Of String, Double)
+	Private ReadOnly BaseWeights As Dictionary(Of String, Double)
 
 	'common property with differing values for each AM technology
 	'Mapping categorical inputs into numerical values of the criteria using dictionaries
@@ -18,27 +20,43 @@ Public MustInherit Class AMProfile
 	Protected MustOverride Function InterpretPartComplexity(rawComplexity As Double) As Double
 	Protected MustOverride Function InterpretOverhangComplexity(rawOverhang As Double) As Double
 	Protected MustOverride Function InterpretImpossibleFeatures(rawImpossibleFeatures As Boolean) As Double
+	Protected MustOverride Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+
 
 	'construct default weightings for each AM profile (as each profile depending on part purpose may shift their respective weights)
 	'each child class will initialise the weights in their constructor
 	Public Sub New()
-		Weights = New Dictionary(Of String, Double) From {
-			{"Precision", 0.069}, {"LeadTime", 0.129}, {"PostProcessing", 0.152}, {"Volume", 0.15},
-			{"Complexity", 0.241}, {"ImpossibleFeatures", 0.236}, {"Overhang", 0.024}
-		}
+		BaseWeights = New Dictionary(Of String, Double) From {
+{"Precision", 0.069}, {"LeadTime", 0.129}, {"PostProcessing", 0.152}, {"Volume", 0.15},
+{"Complexity", 0.241}, {"ImpossibleFeatures", 0.236}, {"Overhang", 0.024}
+}
+		Weights = New Dictionary(Of String, Double)(BaseWeights)
 	End Sub
 
 	'Function to shift weightings according to the selected part purpose.
-	Protected MustOverride Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
+	'Protected MustOverride Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
 
 	'A public sub to adjust the weights, as the protected function should only be called from the child class.
 	Public Sub AdjustWeightsForPurpose(partPurpose As String)
-		' Get the adjusted weights from the child class implementation
-		Dim adjustedWeights = IntendedPartPurpose(partPurpose)
-		' Overwrite the profile's internal Weights dictionary
-		For Each key In adjustedWeights.Keys
-			Weights(key) = adjustedWeights(key)
+		Dim multipliers = GetPurposeMultipliers(partPurpose)
+
+		'Apply multipliers
+		For Each key In BaseWeights.Keys
+			If multipliers.ContainsKey(key) Then
+				Weights(key) = BaseWeights(key) * multipliers(key)
+			Else
+				Weights(key) = BaseWeights(key)
+			End If
 		Next
+
+		'NORMALIZE:
+		Dim sum As Double = Weights.Values.Sum()
+		If sum > 0 Then
+			Dim keys = Weights.Keys.ToList()
+			For Each key In keys
+				Weights(key) = Weights(key) / sum
+			Next
+		End If
 	End Sub
 
 
@@ -53,7 +71,6 @@ Public MustInherit Class AMProfile
 		Dim interpretedComplexity As Double = InterpretPartComplexity(criteria.NumericInputs("Complexity"))
 		Dim interpretedOverhang As Double = InterpretOverhangComplexity(criteria.NumericInputs("Overhang"))
 		Dim impossibleFeatureValue As Double = InterpretImpossibleFeatures(criteria.HasImpossibleFeatures)
-
 		Dim score As Double = 0
 		score += precisionValue * Weights("Precision")
 		score += leadTimeValue * Weights("LeadTime")
@@ -75,10 +92,9 @@ Public Class ManufacturingCriteria
 	Public Property CategoricalInputs As Dictionary(Of String, String)
 	Public Property NumericInputs As Dictionary(Of String, Double)
 	Public Property HasImpossibleFeatures As Boolean
-
 	Public Sub New(categorical As Dictionary(Of String, String),
 				   numeric As Dictionary(Of String, Double),
-				   impossibleFeatures As Boolean)
+impossibleFeatures As Boolean)
 		Me.CategoricalInputs = categorical
 		Me.NumericInputs = numeric
 		Me.HasImpossibleFeatures = impossibleFeatures
