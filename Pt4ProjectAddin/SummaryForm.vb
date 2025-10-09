@@ -420,6 +420,18 @@ Public Class SummaryForm
     $"Minimal Material Removal: {convResults.HasMinimalMaterialRemoval}" & vbCrLf &
     $"No Undercuts: {convResults.HasNoUndercuts}"
 
+        Dim sortedProfiles = scoredProfiles.OrderByDescending(Function(p) p.Score).Take(6).ToList()
+        Dim unavailableSummary As String = ""
+
+        Dim zeroProfiles = scoredProfiles.Where(Function(p) p.Score = 0).ToList()
+        If zeroProfiles.Any() Then
+            unavailableSummary &= "Unavailable Technologies:" & vbCrLf
+            For Each zp In zeroProfiles
+                unavailableSummary &= $"• {zp.Material} - {zp.Technology} is currently not an available technology" & vbCrLf
+            Next
+        End If
+
+
         Dim leftPad As Integer = 10
         Dim rightPad As Integer = 10
         Dim innerWidth As Integer = Math.Max(50, PanelDetails.ClientSize.Width - leftPad - rightPad)
@@ -430,6 +442,10 @@ Public Class SummaryForm
         blocks.Add(Tuple.Create(geomSummary, SystemFonts.DefaultFont, False))
         blocks.Add(Tuple.Create("Conventional Machining Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         blocks.Add(Tuple.Create(machiningSummary, SystemFonts.DefaultFont, False))
+        If Not String.IsNullOrEmpty(unavailableSummary) Then
+            blocks.Add(Tuple.Create("Technology Availability:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+            blocks.Add(Tuple.Create(unavailableSummary, SystemFonts.DefaultFont, False))
+        End If
         'blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         'blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
         'blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
