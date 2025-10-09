@@ -410,7 +410,7 @@ Public Class SummaryForm
     $"Bounding Box: {bbox:0.00} cm³" & vbCrLf &
     $"Complexity Ratio: {complexityRatio:0.000}" & vbCrLf &
     $"Overhang Area (>45°): {overhangArea:0.00} cm²" & vbCrLf &
-    $"Overhang Area ratio): {overhangArea:0.00}"
+    $"Overhang Area ratio): {overhangPercentage:0.00}"
 
         Dim machiningSummary As String =
     $"Rotational Symmetry: {convResults.HasRotationalSymmetry}" & vbCrLf &

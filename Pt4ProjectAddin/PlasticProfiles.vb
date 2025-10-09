@@ -1,4 +1,5 @@
 Imports System.Collections.Generic
+Imports System.Diagnostics.Eventing.Reader
 
 'Plastic MEX class
 Public Class PlasticMEX
@@ -63,53 +64,62 @@ Public Class PlasticMEX
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
         Select Case partPurpose
             Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
             Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
             Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
             Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
             Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
             Case Else
-                ' Default case: no changes
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
         End Select
-        Return adjustedWeights
+
+        Return m
     End Function
 End Class
 
@@ -176,53 +186,62 @@ Public Class PlasticMJT
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
         Select Case partPurpose
             Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
             Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
             Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
             Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
             Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
             Case Else
-                ' Default case: no changes
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
         End Select
-        Return adjustedWeights
+
+        Return m
     End Function
 End Class
 
@@ -290,53 +309,62 @@ Public Class PlasticBJT
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
         Select Case partPurpose
             Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
             Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
             Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
             Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
             Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
             Case Else
-                ' Default case: no changes
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
         End Select
-        Return adjustedWeights
+
+        Return m
     End Function
 End Class
 
@@ -403,53 +431,62 @@ Public Class PlasticVPP
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
         Select Case partPurpose
             Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
             Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
             Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
             Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
             Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
             Case Else
-                ' Default case: no changes
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
         End Select
-        Return adjustedWeights
+
+        Return m
     End Function
 End Class
 
@@ -517,53 +554,62 @@ Public Class PlasticPBF
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
         Select Case partPurpose
             Case "Unique Custom Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
             Case "Critical Spare Part"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
             Case "Mass Production"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
             Case "Functional Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
             Case "Aesthetic Prototype"
-                adjustedWeights("Precision") += 0
-                adjustedWeights("LeadTime") += 0
-                adjustedWeights("PostProcessing") += 0
-                adjustedWeights("Volume") += 0
-                adjustedWeights("Complexity") += 0
-                adjustedWeights("Overhang") += 0
-                adjustedWeights("ImpossibleFeatures") += 0
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
             Case Else
-                ' Default case: no changes
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
         End Select
-        Return adjustedWeights
+
+        Return m
     End Function
 End Class
 
@@ -619,8 +665,61 @@ Public Class PlasticDED
 
     'Function receives the purpose of the part to adjust the weightings.
     'TODO: experiment to adjust suitable criterias with logic and then test with spreadsheet of parts
-    Protected Overrides Function IntendedPartPurpose(partPurpose As String) As Dictionary(Of String, Double)
-        Dim adjustedWeights As New Dictionary(Of String, Double)(Weights)
-        Return adjustedWeights
+    Protected Overrides Function GetPurposeMultipliers(partPurpose As String) As Dictionary(Of String, Double)
+        Dim m As New Dictionary(Of String, Double)
+
+        Select Case partPurpose
+            Case "Unique Custom Part"
+                m("Precision") = 0.8
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.2
+                m("Complexity") = 1.5
+                m("Overhang") = 1.3
+                m("ImpossibleFeatures") = 1.6
+
+            Case "Critical Spare Part"
+                m("Precision") = 1.2
+                m("LeadTime") = 1.7
+                m("PostProcessing") = 1.0
+                m("Volume") = 0.3
+                m("Complexity") = 0.8
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.7
+
+            Case "Mass Production"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.1
+                m("PostProcessing") = 1.3
+                m("Volume") = 2.2
+                m("Complexity") = 0.6
+                m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.2
+
+            Case "Functional Prototype"
+                m("Precision") = 0.7
+                m("LeadTime") = 1.6
+                m("PostProcessing") = 0.6
+                m("Volume") = 0.3
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Aesthetic Prototype"
+                m("Precision") = 1.4
+                m("LeadTime") = 0.8
+                m("PostProcessing") = 1.6
+                m("Volume") = 0.4
+                m("Complexity") = 0.9
+                m("Overhang") = 0.8
+                m("ImpossibleFeatures") = 0.3
+
+            Case Else
+                For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
+                    m(key) = 1.0
+                Next
+        End Select
+
+        Return m
     End Function
 End Class
