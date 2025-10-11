@@ -57,9 +57,27 @@ AppData\Roaming\Autodesk\ApplicationPlugins\Pt4ProjectAddin
 Downloads\AMTECH\AM-Technology-APP\Pt4ProjectAddin\obj\Debug
 Pt4ProjectAddin.dll .addin
 
+https://learn.microsoft.com/en-us/dotnet/visual-basic/programming-guide/program-structure/coding-conventions
+https://learn.microsoft.com/en-us/dotnet/visual-basic/programming-guide/program-structure/comments-in-code
+https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/may/documenting-your-code-with-xml-comments
 coding conventions:
-Variable names -
-Function names - 
-Class names - 
+Variable names - camelCase e.g variableName 
+Function names - PascalCase e.g GetMyFunction
+Class names - PascalCase
+Constant names - PascalCase
+XML ''' - for pbulic methods, classes and properties
 
 General comments:
+- Starts on a new line or as in-line code.
+- Uppercase start letter, end with period.
+- Space between delimiter and text
+I love my metasyntatic variable names for code examples: gquux, freddd, etc.
+
+Template:
+'------------------------------------------------------------------------------
+' <summary>
+'     what the code doing
+' </summary>
+' <author>Jasper Koid</author>
+' <created>day-Month-Year</created>
+'------------------------------------------------------------------------------
