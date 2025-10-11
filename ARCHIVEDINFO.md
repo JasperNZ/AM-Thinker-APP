@@ -11,7 +11,7 @@ Instructions to use Github:<br>
 9.) Branches - This creates copies of the main code that allows divergence for when multiple users are editing the main code. Each individual can save their progress and later merge it together to keep their changes intact.
 
 
-TODO list:
+TODO list:<br>
 URGENT:
 - create helper functions in a separate file/class (geometry stuff like part complexity and overhang)
 - pure functionalities, putting the right numbers for all combinations. Scores and weighting modifications
@@ -50,3 +50,16 @@ COMPLETED:
 - Fix dictionary to look through valid machine selection. goes through second groupings. DONE
 - Developer mode for copying pasting data. DONE
 - Fix looping dictionary for errors to be in proper order of visual selection. DONE
+
+
+file locations:
+AppData\Roaming\Autodesk\ApplicationPlugins\Pt4ProjectAddin
+Downloads\AMTECH\AM-Technology-APP\Pt4ProjectAddin\obj\Debug
+Pt4ProjectAddin.dll .addin
+
+coding conventions:
+Variable names -
+Function names - 
+Class names - 
+
+General comments:
