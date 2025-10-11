@@ -41,7 +41,7 @@ COMPLETED:
 - improve the UI/UX DONE
 - Considering adding a little icon next to the AM thinker? DONE
 - Apply tooltips to all relevant sections DONE
-- Preferably apply group boxes in the mainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
+- Preferably apply group boxes in the MainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
 - fix the select profile loop (trying to use tuples, but it's not working???????)
 - Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it. constrained dropdown menu already mitigates this issue anyways DONE
 - Fix messages on tooltips to be more useful and not in the way of user selection options. Manually shifted below the mouse. DONE
@@ -65,7 +65,7 @@ Variable names - camelCase e.g variableName
 Function names - PascalCase e.g GetMyFunction
 Class names - PascalCase
 Constant names - PascalCase
-XML ''' - for pbulic methods, classes and properties
+XML ''' - for public methods, classes and properties
 
 General comments:
 - Starts on a new line or as in-line code.

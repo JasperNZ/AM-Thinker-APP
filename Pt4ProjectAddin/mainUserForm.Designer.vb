@@ -6,7 +6,7 @@ Imports System.Windows.Forms
 
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class mainUserForm
+Partial Class MainUserForm
     Inherits System.Windows.Forms.Form
 
     Private toolTip1 As System.Windows.Forms.ToolTip
@@ -32,7 +32,7 @@ Partial Class mainUserForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(mainUserForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainUserForm))
         Me.toolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -57,7 +57,7 @@ Partial Class mainUserForm
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.CheckBoxIMFP = New System.Windows.Forms.CheckBox()
         Me.groupRequirements = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ButtonPostProcess = New System.Windows.Forms.Button()
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.LabelInstructions = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
@@ -357,17 +357,17 @@ Partial Class mainUserForm
         Me.groupRequirements.TabStop = False
         Me.groupRequirements.Text = "Input Part Requirements"
         '
-        'Button1
+        'ButtonPostProcess
         '
-        Me.Button1.BackColor = System.Drawing.SystemColors.InactiveBorder
-        Me.Button1.ForeColor = System.Drawing.SystemColors.InactiveCaption
-        Me.Button1.Location = New System.Drawing.Point(337, 210)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(2)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(142, 34)
-        Me.Button1.TabIndex = 24
-        Me.Button1.Text = "Post-Processing Calculator"
-        Me.Button1.UseVisualStyleBackColor = False
+        Me.ButtonPostProcess.BackColor = System.Drawing.SystemColors.InactiveBorder
+        Me.ButtonPostProcess.ForeColor = System.Drawing.SystemColors.InactiveCaption
+        Me.ButtonPostProcess.Location = New System.Drawing.Point(337, 210)
+        Me.ButtonPostProcess.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonPostProcess.Name = "ButtonPostProcess"
+        Me.ButtonPostProcess.Size = New System.Drawing.Size(142, 34)
+        Me.ButtonPostProcess.TabIndex = 24
+        Me.ButtonPostProcess.Text = "Post-Processing Calculator"
+        Me.ButtonPostProcess.UseVisualStyleBackColor = False
         '
         'LabelInstructions
         '
@@ -381,14 +381,14 @@ Partial Class mainUserForm
         Me.LabelInstructions.TabIndex = 13
         Me.LabelInstructions.Text = "Tip: Select a face before clicking Compute to detect overhangs."
         '
-        'mainUserForm
+        'MainUserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(503, 279)
         Me.Controls.Add(Me.LabelInstructions)
         Me.Controls.Add(Me.HighlightCheckBox)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.ButtonPostProcess)
         Me.Controls.Add(Me.CheckBoxIMFP)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.ButtonCompute)
@@ -396,7 +396,7 @@ Partial Class mainUserForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MaximizeBox = False
-        Me.Name = "mainUserForm"
+        Me.Name = "MainUserForm"
         Me.Text = "AM Thinker - Analysing your parts and needs!"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
@@ -442,7 +442,7 @@ Partial Class mainUserForm
     Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
     Friend WithEvents CheckBoxIMFP As Windows.Forms.CheckBox
     Friend WithEvents groupRequirements As Windows.Forms.GroupBox
-    Friend WithEvents Button1 As Windows.Forms.Button
+    Friend WithEvents ButtonPostProcess As Windows.Forms.Button
     Friend WithEvents HighlightCheckBox As CheckBox
     Friend WithEvents LabelInstructions As Label
 End Class
