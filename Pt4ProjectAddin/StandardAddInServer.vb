@@ -30,7 +30,7 @@ Namespace Pt4ProjectAddin
                 m_uiEvents = g_inventorApplication.UserInterfaceManager.UserInterfaceEvents
 
                 ' Create icon using TestIcon helper
-                Dim iconHelper As New TestIcon()
+                Dim iconHelper As New IconHelper()
                 Dim bmp As Bitmap = iconHelper.LoadBitmapFromResources()
 
                 ' Convert to IPictureDisp for Inventor
