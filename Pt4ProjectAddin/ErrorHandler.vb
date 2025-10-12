@@ -1,64 +1,69 @@
+'------------------------------------------------------------------------------
+' <summary>
+'	Helper Class dealing with user input errors and displaying appropriate messages.
+' <author>Jasper Koid</author>
+' <created>24-AUG-2025</created>
+'------------------------------------------------------------------------------
+
 Imports System.Collections.Generic
 Imports System.IO
 Imports System.Windows.Forms
 Imports System.Diagnostics
 
-'File to call error messages, useful for debugging and deal with users causing errors
-'needs to use System.Windows.Forms for message boxes, so I'm praying it doesn't crash everything
+' File to call error messages, useful for debugging and deal with users causing errors.
 Public Class ErrorHandler
-    'function if Profile factory has issue.
+    'Function if Profile factory has issue.
     Public Shared Sub ProfileGenerationError(message As String, ex As Exception)
         MessageBox.Show($"Error initializing profile factory: {ex.Message}", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
 
-    'function if user does not select material
+    'Function if user does not select material.
     Public Shared Sub NoMaterialSelected()
         MessageBox.Show("Please select a material.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'User does not select AM technology
+    ' User does not select AM technology.
     Public Shared Sub NoTechnologySelected()
-        'MessageBox.Show("Please select an AM technology.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        MessageBox.Show("Please select an AM technology.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        MessageBox.Show("Please select an AM technology.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'user does not select part purpose
+    ' User does not select part purpose.
     Public Shared Sub NoPartPurposeSelected()
-        MessageBox.Show("Please select a part purpose.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        MessageBox.Show("Please select the part's intended application.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'user does not select precision
+    ' User does not select precision.
     Public Shared Sub NoPrecisionSelected()
         MessageBox.Show("Please select a precision requirement.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'user does not select lead time
+    ' User does not select lead time.
     Public Shared Sub NoLeadTimeSelected()
         MessageBox.Show("Please select a lead time requirement.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'user does not select post processing
+    ' User does not select post processing effort.
     Public Shared Sub NoPostProcessingSelected()
         MessageBox.Show("Please select a post-processing requirement.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    'user does not select volume
+    ' User does not select volume.
     Public Shared Sub NoVolumeSelected()
         MessageBox.Show("Please select a volume requirement.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
     End Sub
 
-    ' Centralized validation method
+    ' Centralised validation method, does not need to check NMFPand Overhang checkboxes as they are optional.
     Public Shared Function ValidateSelections(form As Form) As Boolean
-        Dim groupBox As GroupBox = DirectCast(form.Controls("groupRequirements"), GroupBox)
-
+        ' Check if all required ComboBoxes have a selection.
+        Dim groupRequirements As GroupBox = DirectCast(form.Controls("GroupRequirements"), GroupBox)
         Dim validations As New Dictionary(Of ComboBox, Action) From {
-        {DirectCast(groupBox.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected},
-        {DirectCast(groupBox.Controls("ComboBoxIntendedUseOfPart"), ComboBox), AddressOf NoPartPurposeSelected},
-        {DirectCast(groupBox.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
-        {DirectCast(groupBox.Controls("ComboBoxLeadTime"), ComboBox), AddressOf NoLeadTimeSelected},
-        {DirectCast(groupBox.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
-        {DirectCast(groupBox.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected}
-    }
+        {DirectCast(groupRequirements.Controls("ComboBoxPrecisionOfPart"), ComboBox), AddressOf NoPrecisionSelected},
+        {DirectCast(groupRequirements.Controls("ComboBoxLeadTime"), ComboBox), AddressOf NoLeadTimeSelected},
+        {DirectCast(groupRequirements.Controls("ComboBoxPostProcessingEffort"), ComboBox), AddressOf NoPostProcessingSelected},
+        {DirectCast(groupRequirements.Controls("ComboBoxVolumeOfProduction"), ComboBox), AddressOf NoVolumeSelected},
+        {DirectCast(groupRequirements.Controls("ComboBoxIntendedApplication"), ComboBox), AddressOf NoPartPurposeSelected},
+        {DirectCast(groupRequirements.Controls("ComboBoxMaterial"), ComboBox), AddressOf NoMaterialSelected}
+        }
 
         For Each item In validations
             If String.IsNullOrWhiteSpace(item.Key.Text) Then
@@ -67,10 +72,11 @@ Public Class ErrorHandler
             End If
         Next
 
-        Dim techGroupBox As GroupBox = DirectCast(form.Controls("GroupBox1"), GroupBox)
+        ' Check if at least one technology CheckBox is selected.
+        Dim groupTechnologies As GroupBox = DirectCast(form.Controls("GroupTechnologies"), GroupBox)
         Dim anyTechSelected As Boolean = False
 
-        For Each control In techGroupBox.Controls
+        For Each control In groupTechnologies.Controls
             If TypeOf control Is CheckBox Then
                 Dim checkbox As CheckBox = DirectCast(control, CheckBox)
                 If checkbox.Checked Then
@@ -79,7 +85,6 @@ Public Class ErrorHandler
                 End If
             End If
         Next
-
         If Not anyTechSelected Then
             NoTechnologySelected()
             Return False

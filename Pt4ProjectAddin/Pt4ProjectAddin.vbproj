@@ -120,8 +120,8 @@
     <Compile Include="SummaryForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestIcon.vb" />
-    <Compile Include="TraditionalMachiningAssessment.vb" />
+    <Compile Include="IconHelper.vb" />
+    <Compile Include="TraditionalManufacturingAssessment.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pt4ProjectAddin.X.manifest" />

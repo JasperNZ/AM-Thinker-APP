@@ -53,8 +53,8 @@ Public Class CeramicMEX
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -163,8 +163,8 @@ Public Class CeramicMJT
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 0
         Else
             Return 0
@@ -285,8 +285,8 @@ Public Class CeramicBJT
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -407,8 +407,8 @@ Public Class CeramicVPP
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -529,8 +529,8 @@ Public Class CeramicPBF
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -639,8 +639,8 @@ Public Class CeramicDED
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 0
         Else
             Return 0

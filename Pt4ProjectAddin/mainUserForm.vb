@@ -20,43 +20,16 @@ Public Class MainUserForm
     Private _highlightSet As HighlightSet
 
     ' Constructor for the MainUserForm class.
+    ' creates the form itself and initialises the ProfileFactory dictionary.
     Public Sub New()
         InitializeComponent()
-        InitializeProfileFactory()
-    End Sub
-
-    ' Function removes any existing highlights in the Inventor document.
-    Private Sub ClearHighlights()
-        Try
-            If _highlightSet IsNot Nothing Then
-                _highlightSet.Clear()
-                _highlightSet = Nothing
-            End If
-        Catch
-        End Try
-    End Sub
-
-    ' Function highlights the given faces in the Inventor document.
-    Private Sub HighlightFaces(faces As List(Of Face))
-        If faces Is Nothing OrElse faces.Count = 0 Then Exit Sub
-
-        ClearHighlights() ' remove old ones first
-
-        _highlightSet = g_inventorApplication.ActiveDocument.HighlightSets.Add()
-        _highlightSet.Color = g_inventorApplication.TransientObjects.CreateColor(255, 0, 0) ' red
-
-        For Each f As Face In faces
-            Try
-                _highlightSet.AddItem(f)
-            Catch
-            End Try
-        Next
+        InitialiseProfileFactory()
     End Sub
 
     ''' <summary>
-    ''' Initializes the ProfileFactory dictionary with AMProfile instances for each material and technology combination.
+    ''' Initialises the ProfileFactory dictionary with AMProfile instances for each material and technology combination.
     ''' </summary>
-    Public Sub InitializeProfileFactory()
+    Public Sub InitialiseProfileFactory()
         ' Metal profiles.
         ProfileFactory.Add("Metal|MEX", Function() New MetalMEX())
         ProfileFactory.Add("Metal|MJT", Function() New MetalMJT())
@@ -111,45 +84,47 @@ Public Class MainUserForm
 
         ' Loop through all selected AM profiles and adjust weights based on application purpose.
         For Each profile In selectedProfiles
-            profile.AdjustWeightsForPurpose(ComboBoxIntendedUseOfPart.Text)
+            profile.AdjustWeightsForPurpose(ComboBoxIntendedApplication.Text)
         Next
 
         ' Geometrical analysis section.
         Dim geoHelper As New GeometricalHelper(g_inventorApplication)
         Dim doc = TryCast(g_inventorApplication.ActiveDocument, PartDocument)
         Dim selSet = doc.SelectSet
-        Dim referenceFace As Face = CType(selSet.Item(1), Face)
 
         ' Face selection validation (if more checks, should make geometry error handler class for this).
         If doc.SelectSet.Count = 0 Then
-            MessageBox.Show("Please select a single face in Inventor and try again.")
+            MessageBox.Show("Please select a single face in Inventor and try again.", "No Face Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-        If selSet.Count <> 1 OrElse Not TypeOf selSet.Item(1) Is Face Then
-            MessageBox.Show("Please select exactly one planar face as the reference surface before measuring overhang.")
+        If selSet.Count <> 1 OrElse TypeOf selSet.Item(1) IsNot Face Then
+            MessageBox.Show("Please select exactly one planar face as the reference surface before measuring overhang.", "Invalid Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
+
+        Dim referenceFace As Face = CType(selSet.Item(1), Face)
         If referenceFace.SurfaceType <> SurfaceTypeEnum.kPlaneSurface Then
-            MessageBox.Show("Please select a flat planar face — curved surfaces cannot be used as the build reference.")
+            MessageBox.Show("Please select a flat planar face — curved surfaces cannot be used as the build reference.", "Non-Planar Surface Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
         ' Passing Geometrical data to GeometrySummary class for easy access when passing to Summary Form.
         Dim overhangFaces As List(Of Face) = Nothing
-        Dim geoSummary As New GeometrySummary()
-        geoSummary.Volume = geoHelper.GetVolume()
-        geoSummary.SurfaceArea = geoHelper.GetSurfaceArea()
-        geoSummary.BoundingBoxVolume = geoHelper.GetBoundingBoxVolume()
-        geoSummary.ComplexityRatio = geoHelper.CalculatePartComplexity()
-        geoSummary.OverhangArea = geoHelper.CalculateOverhangArea(referenceFace, 45.0, overhangFaces)
-        geoSummary.OverhangPercentage = geoHelper.CalculateOverhangPercentage(geoSummary.SurfaceArea, geoSummary.OverhangArea)
+        Dim geoSummary As New GeometrySummary With {
+            .Volume = geoHelper.GetVolume(),
+            .SurfaceArea = geoHelper.GetSurfaceArea(),
+            .BoundingBoxVolume = geoHelper.GetBoundingBoxVolume(),
+            .ComplexityRatio = geoHelper.CalculatePartComplexity(),
+            .OverhangArea = geoHelper.CalculateOverhangArea(referenceFace, 45.0, overhangFaces) ' 45 degrees as standard, but consider future implementation of allowing user to input angle.
+            }
+        geoSummary.OverhangRatio = geoHelper.CalculateOverhangRatio(geoSummary.SurfaceArea, geoSummary.OverhangArea)
 
         ' Highlight overhang faces if the checkbox is checked.
-        If HighlightCheckBox.Checked Then HighlightFaces(overhangFaces)
+        If CheckBoxHighlight.Checked Then HighlightFaces(overhangFaces)
 
         ' Conventional machining checks section, then passed to class suited for easy access in Summary Form.
-        Dim machiningAssessment As New TraditionalMachiningAssessmentImports(g_inventorApplication, doc)
-        Dim convChecks As ConventionalChecks = machiningAssessment.CheckAllFeatures()
+        Dim machiningAssessment As New TraditionalManufacturingAssessment(g_inventorApplication, doc)
+        Dim convChecks As TraditionalChecks = machiningAssessment.CheckAllFeatures()
 
         ' Assembling all user inputs.
         Dim categoricalInputs As New Dictionary(Of String, String) From {
@@ -160,9 +135,9 @@ Public Class MainUserForm
         }
         Dim numericInputs As New Dictionary(Of String, Double) From {
             {"Complexity", geoSummary.ComplexityRatio},
-            {"Overhang", geoSummary.OverhangPercentage}
+            {"Overhang", geoSummary.OverhangRatio}
         }
-        Dim hasImpossibleFeatures As Boolean = CheckBoxIMFP.Checked
+        Dim hasImpossibleFeatures As Boolean = CheckBoxNonMachinableFeaturesPresent.Checked
 
 
         ' Aggregates inputs into helper class for easy passing to CalculateScore function.
@@ -179,7 +154,7 @@ Public Class MainUserForm
             })
         Next
 
-        ' Show custom results form
+        ' Show custom results form.
         Dim resultsForm As New SummaryForm(scoredProfiles, geoSummary, convChecks)
         resultsForm.ShowDialog()
     End Sub
@@ -196,7 +171,36 @@ Public Class MainUserForm
 
     ' Function toggles visibility of bottom tool tip based on state of CheckboxOverhangHighlight.
     Private Sub CheckBoxOverhangHighlight_CheckedChanged(sender As Object, e As EventArgs) _
-    Handles HighlightCheckBox.CheckedChanged
-        LabelInstructions.Visible = Not HighlightCheckBox.Checked
+    Handles CheckBoxHighlight.CheckedChanged
+        LabelInstructions.Visible = Not CheckBoxHighlight.Checked
     End Sub
+
+    ' Function removes any existing highlights in the Inventor document.
+    Private Sub ClearHighlights()
+        Try
+            If _highlightSet IsNot Nothing Then
+                _highlightSet.Clear()
+                _highlightSet = Nothing
+            End If
+        Catch
+        End Try
+    End Sub
+
+    ' Function highlights the given faces in the Inventor document.
+    Private Sub HighlightFaces(faces As List(Of Face))
+        If faces Is Nothing OrElse faces.Count = 0 Then Exit Sub
+
+        ClearHighlights() ' remove old ones first
+
+        _highlightSet = g_inventorApplication.ActiveDocument.HighlightSets.Add()
+        _highlightSet.Color = g_inventorApplication.TransientObjects.CreateColor(255, 0, 0) ' red
+
+        For Each f As Face In faces
+            Try
+                _highlightSet.AddItem(f)
+            Catch
+            End Try
+        Next
+    End Sub
+
 End Class

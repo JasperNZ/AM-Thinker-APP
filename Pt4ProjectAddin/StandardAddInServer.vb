@@ -1,4 +1,10 @@
-'Imports stdole
+'------------------------------------------------------------------------------
+' <summary>
+'	Backend of the Inventor Add-in, handling the creation of the button in the ribbon and launching the user form.
+' </summary>
+' <author>Jasper Koid</author>
+' <created>24-AUG-2025</created>
+'------------------------------------------------------------------------------
 Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.InteropServices
@@ -17,13 +23,12 @@ Namespace Pt4ProjectAddin
 
 
 #Region "ApplicationAddInServer Members"
-
         ' This method is called by Inventor when it loads the AddIn. The AddInSiteObject provides access  
         ' to the Inventor Application object. The FirstTime flag indicates if the AddIn is loaded for
         ' the first time. However, with the introduction of the ribbon this argument is always true.
         Public Sub Activate(ByVal addInSiteObject As Inventor.ApplicationAddInSite, ByVal firstTime As Boolean) Implements Inventor.ApplicationAddInServer.Activate
             Try
-                ' Initialize AddIn members FIRST
+                ' Initialise AddIn members FIRST
                 g_inventorApplication = addInSiteObject.Application
 
                 ' Connect to the user-interface events to handle a ribbon reset
@@ -132,12 +137,7 @@ Namespace Pt4ProjectAddin
 
     End Class
 End Namespace
-Public Class MachineWeight
-    Public PrescisionOfPart As Double
-    Public PostProcessingEffort As Double
-    Public Overhang As Double
-    Public IntendedUseOfPart As Double
-End Class
+
 Public Module Globals
     ' Inventor application object.
     Public g_inventorApplication As Inventor.Application
@@ -156,91 +156,6 @@ Public Module Globals
 
         Return guid
     End Function
-#End Region
-
-#Region "function to get part complexity"
-    Public Function GetPartComplexity() As Double
-        ' Get the active document.
-        Dim invDoc As Document
-        invDoc = g_inventorApplication.ActiveDocument
-        ' Get the design tracking property set.
-        Dim invDesignInfo As PropertySet
-        invDesignInfo = invDoc.PropertySets.Item("Design Tracking Properties")
-        ' Get the volume property.
-        Dim invPartNumberProperty As [Property]
-        invPartNumberProperty = invDesignInfo.Item("Volume")
-        'Get the surface area property.
-        Dim invPartAreaproperty As [Property]
-        invPartAreaproperty = invDesignInfo.Item("SurfaceArea")
-        'create the complexity ratio
-        Dim complex As Double
-        complex = CDbl(invPartAreaproperty.Value / invPartNumberProperty.Value)
-        'return the complexity ratio
-        Return complex
-
-    End Function
-
-#End Region
-
-#Region "get user to select face to touch build plate"
-
-    'base face funciton works fine, but Getsurface is trying to use a variable not accessible.
-    Public Function GetBaseFace() As Object
-        Dim invDoc As Document
-        invDoc = g_inventorApplication.ActiveDocument
-        Dim BaseFace As Object
-        BaseFace = invDoc.CommandManager.Pick(SelectionFilterEnum.kAllPlanarEntities, "Pick the face for base of print")
-        Return BaseFace
-    End Function
-
-    'Public Function GetSurface() As Double
-    '    Dim oPartDoc As PartDocument
-    '    oPartDoc = g_inventorApplication.ActiveDocument
-
-    '    Dim oPartDef As PartComponentDefinition
-    '    oPartDef = oPartDoc.ComponentDefinition
-
-    '    Dim oSurfaceBody As SurfaceBody
-    '    Dim oFace As Face
-    '    Dim faceCount As Long
-    '    faceCount = 0
-    '    Dim eval As SurfaceEvaluator
-    '    Dim Baseeval As SurfaceEvaluator
-    '    Baseeval = BaseFace.Evaluator
-    '    Dim basecenter(1) As Double
-    '    basecenter(0) = (Baseeval.ParamRangeRect.MinPoint.X + Baseeval.ParamRangeRect.MaxPoint.X) / 2
-    '    basecenter(1) = (Baseeval.ParamRangeRect.MinPoint.Y + Baseeval.ParamRangeRect.MaxPoint.Y) / 2
-    '    Dim Normal(2) As Double
-    '    Call Baseeval.GetNormal(basecenter, Normal)
-    '    Dim Basevector As UnitVector
-    '    Basevector = g_inventorApplication.TransientGeometry.CreateUnitVector(Normal(0), Normal(1), Normal(2))
-    '    Dim TotalArea As Double = 0
-    '    Dim area As Double
-    '    For Each oSurfaceBody In oPartDef.SurfaceBodies
-    '        For Each oFace In oSurfaceBody.Faces
-    '            eval = oFace.Evaluator
-    '            Dim center(1) As Double
-    '            center(0) = (eval.ParamRangeRect.MinPoint.X + eval.ParamRangeRect.MaxPoint.X) / 2
-    '            center(1) = (eval.ParamRangeRect.MinPoint.Y + eval.ParamRangeRect.MaxPoint.Y) / 2
-    '            Dim NormalTest(2) As Double
-    '            Call eval.GetNormal(center, NormalTest)
-    '            Dim Testvector As UnitVector
-    '            Testvector = g_inventorApplication.TransientGeometry.CreateUnitVector(NormalTest(0), NormalTest(1), NormalTest(2))
-    '            Dim angle As Double
-    '            angle = Basevector.AngleTo(Testvector)
-    '            If angle < 0.785 Then
-    '                area = eval.Area
-    '                TotalArea = TotalArea + area
-    '            End If
-    '            area = 0
-    '        Next
-    '    Next
-    '    Dim basearea As Double
-    '    basearea = Baseeval.Area
-    '    TotalArea = TotalArea - basearea
-    '    Return TotalArea
-    'End Function
-
 #End Region
 
 #Region "hWnd Wrapper Class"
@@ -272,8 +187,16 @@ Public Module Globals
     ' an IPictureDisp object which is what the Inventor API requires. A typical
     ' usage is shown below where MyIcon is a bitmap or icon that's available
     ' as a resource of the project.
-    '
-    ' Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(My.Resources.MyIcon)
+    'Private Sub LoadIcon()
+    '    Dim bytes As Byte() = My.Resources.Resources.TestImageIcon
+
+    '    Using ms As New IO.MemoryStream(bytes)
+    '        Dim smallBitmap As New Bitmap(ms)
+    '        Dim smallIcon As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(smallBitmap)
+    '        ' … assign smallIcon to your control definition here …
+    '    End Using
+    'End Sub
+
     <ComImport(), Guid("00020400-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
     Public Interface IPictureDisp
     End Interface
@@ -335,5 +258,4 @@ Public Module Globals
     End Class
 
 #End Region
-
 End Module

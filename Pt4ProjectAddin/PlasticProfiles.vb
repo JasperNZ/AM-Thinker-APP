@@ -54,8 +54,8 @@ Public Class PlasticMEX
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -176,8 +176,8 @@ Public Class PlasticMJT
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -299,8 +299,8 @@ Public Class PlasticBJT
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -421,8 +421,8 @@ Public Class PlasticVPP
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -544,8 +544,8 @@ Public Class PlasticPBF
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 10
         Else
             Return 0
@@ -655,8 +655,8 @@ Public Class PlasticDED
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 0
         Else
             Return 0
