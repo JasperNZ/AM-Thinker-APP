@@ -127,7 +127,12 @@
   <data name="IMG_6627" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\IMG_6627.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+<<<<<<< Updated upstream
   <data name="TestImageIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TestImage.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+=======
+  <data name="SmallTestImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SmallTestImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+>>>>>>> Stashed changes
   </data>
 </root>

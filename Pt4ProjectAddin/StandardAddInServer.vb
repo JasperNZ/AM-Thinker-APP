@@ -37,9 +37,12 @@ Namespace Pt4ProjectAddin
                 ' Create icon using TestIcon helper
                 Dim iconHelper As New IconHelper()
                 Dim bmp As Bitmap = iconHelper.LoadBitmapFromResources()
+                Dim SiconHelper As New SmallTestIcon()
+                Dim Sbmp As Bitmap = SiconHelper.SLoadBitmapFromResources()
 
                 ' Convert to IPictureDisp for Inventor
                 Dim iconDisp As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(bmp)
+                Dim SiconDisp As stdole.IPictureDisp = PictureDispConverter.ToIPictureDisp(Sbmp)
 
                 ' Now you can safely get ControlDefinitions
                 Dim controlDefs As Inventor.ControlDefinitions = g_inventorApplication.CommandManager.ControlDefinitions
@@ -51,7 +54,7 @@ Namespace Pt4ProjectAddin
                     AddInClientID,
                     "Launch AM Thinker Tool",
                     "Open the AM Thinker Add-in for analysis",
-                    iconDisp, iconDisp)
+                    SiconDisp, iconDisp)
                 If firstTime Then
                     AddToUserInterface()
                     'MsgBox("Button Created: " & m_sampleButton.DisplayName)
