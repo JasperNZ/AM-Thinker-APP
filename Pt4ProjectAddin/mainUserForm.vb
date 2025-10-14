@@ -11,6 +11,7 @@ Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports Inventor
+Imports System.Linq
 
 ''' <summary>
 ''' Main user form for the Add-In, paired with a .Designer.vb file.
@@ -154,8 +155,38 @@ Public Class MainUserForm
             })
         Next
 
+        'generate the advice based on the highest scoring profile
+        Dim hasGreen = scoredProfiles.Any(Function(p) p.Score >= 70)
+        Dim hasYellow = scoredProfiles.Any(Function(p) p.Score >= 40 AndAlso p.Score < 70)
+
+        Dim adviceList As New List(Of String)
+        If Not hasGreen AndAlso Not hasYellow Then
+            If criteria.NumericInputs("Complexity") < 0.5 Then
+                adviceList.Add("• Try increasing part complexity or adding non-machinable features.")
+            End If
+
+            If criteria.NumericInputs("Overhang") > 0.3 Then
+                adviceList.Add("• Try reducing overhangs or reorienting the part.")
+            End If
+
+            Dim profile = selectedProfiles.First()
+            Dim userInputScore As Double = 0
+
+            userInputScore += profile.GetCategoryMappings("Precision")(criteria.CategoricalInputs("Precision")) * profile.GetWeights("Precision")
+            userInputScore += profile.GetCategoryMappings("LeadTime")(criteria.CategoricalInputs("LeadTime")) * profile.GetWeights("LeadTime")
+            userInputScore += profile.GetCategoryMappings("PostProcessing")(criteria.CategoricalInputs("PostProcessing")) * profile.GetWeights("PostProcessing")
+            userInputScore += profile.GetCategoryMappings("Volume")(criteria.CategoricalInputs("Volume")) * profile.GetWeights("Volume")
+
+            If userInputScore < 0.5 Then
+                adviceList.Add("• Try adjusting your input requirements to be more AM-friendly.")
+            End If
+
+
+        End If
+
+
         ' Show custom results form.
-        Dim resultsForm As New SummaryForm(scoredProfiles, geoSummary, convChecks)
+        Dim resultsForm As New SummaryForm(scoredProfiles, geoSummary, convChecks, adviceList)
         resultsForm.ShowDialog()
     End Sub
 

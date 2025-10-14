@@ -513,3 +513,9 @@ Public Class TraditionalChecks
     Public Property IsValid As Boolean = False
     Public Property ErrorMessage As String = ""
 End Class
+
+'TODO
+' fix up this class
+' panel glossary terms 
+' panel recommendations to be appended
+' fixup am profiles numbers and weights

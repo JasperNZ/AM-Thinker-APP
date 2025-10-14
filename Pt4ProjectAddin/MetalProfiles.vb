@@ -11,13 +11,13 @@ Public Class MetalMEX
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 1}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 1}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 1}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -134,13 +134,13 @@ Public Class MetalMJT
 
     'Individual mappings for each of the categorical input for each AM profile
     'MJT does not support metal, so all values set to 0
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
             }
         End Get
     End Property
@@ -244,13 +244,13 @@ Public Class MetalBJT
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 9}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 9}, {"High", 1}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -367,13 +367,13 @@ Public Class MetalVPP
 
     'Individual mappings for each of the categorical input for each AM profile
     'VPP does not support metal, so all values should be 0
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
             }
         End Get
     End Property
@@ -477,13 +477,13 @@ Public Class MetalPBF
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 8}, {"Very High", 6}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 8}, {"Very High", 6}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 5}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property
@@ -599,13 +599,13 @@ Public Class MetalDED
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 5}, {"High", 1}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 7}, {"High", 3}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 5}, {"High", 1}, {"Very High", 1}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 7}, {"High", 3}, {"Very High", 1}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
             }
         End Get
     End Property

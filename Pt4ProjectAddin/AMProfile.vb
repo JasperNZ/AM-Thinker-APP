@@ -18,12 +18,12 @@ Public MustInherit Class AMProfile
 	Protected Weights As Dictionary(Of String, Double)
 	Private ReadOnly BaseWeights As Dictionary(Of String, Double)
 
-    'Mapping categorical inputs into numerical values of the criteria using dictionaries.
-    Protected MustOverride ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+	'Mapping categorical inputs into numerical values of the criteria using dictionaries.
+	Protected MustOverride ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
 
 
-    ' Methods of interpreting numeric inputs, outputting a value between 1 and 10.
-    Protected MustOverride Function InterpretPartComplexity(rawComplexity As Double) As Double
+	' Methods of interpreting numeric inputs, outputting a value between 1 and 10.
+	Protected MustOverride Function InterpretPartComplexity(rawComplexity As Double) As Double
 	Protected MustOverride Function InterpretOverhangComplexity(rawOverhang As Double) As Double
     Protected MustOverride Function InterpretImpossibleFeatures(rawImpossibleFeatures As Boolean) As Double
 
@@ -88,6 +88,18 @@ Public MustInherit Class AMProfile
 		score *= 10 ' Normalised values multiplied by 100 to scale.
 		Return Math.Round(Math.Max(0, Math.Min(score, 100))) 'Ideally should constrain values between 0 and 100 with no trailing 0s for a clean UI.
 	End Function
+
+	Public ReadOnly Property GetWeights As Dictionary(Of String, Double)
+		Get
+			Return Weights
+		End Get
+	End Property
+
+	Public ReadOnly Property GetCategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
+		Get
+			Return CategoryMappings
+		End Get
+	End Property
 End Class
 
 '------------------------------------------------------------------------------

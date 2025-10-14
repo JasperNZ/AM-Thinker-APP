@@ -19,6 +19,7 @@ Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
     Private geometry As GeometrySummary
     Private tradResults As TraditionalChecks
+    Private adviceList As List(Of String)
     Private isDetailsExpanded As Boolean = False
     Private DeveloperMode As Boolean = False
 
