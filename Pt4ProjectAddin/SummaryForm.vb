@@ -31,7 +31,7 @@ Public Class SummaryForm
     ' Do not touch these values - used for screen fitting logic.
     Private Const SAFETY_SCREEN_MARGIN As Integer = 8
     Private Const ANIM_STEPS As Integer = 20   ' Number of steps the animation tries to use.
-    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary, trad As TraditionalChecks)
+    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary, trad As TraditionalChecks, advice As List(Of String))
         InitializeComponent()
         ' Create panel if not already done in Designer.
         Dim ListBoxContainerPanel As New Panel With {
@@ -52,6 +52,7 @@ Public Class SummaryForm
         Me.scoredProfiles = profiles
         Me.geometry = geo
         Me.tradResults = trad
+        Me.adviceList = advice
         EnableDoubleBuffer(PanelDetails)
         EnableDoubleBuffer(ListBoxResults)
         EnableDoubleBuffer(ListBoxContainerPanel)
@@ -344,6 +345,8 @@ Public Class SummaryForm
         End If
 
 
+
+
         Dim leftPad As Integer = 10
         Dim rightPad As Integer = 10
         Dim innerWidth As Integer = Math.Max(50, PanelDetails.ClientSize.Width - leftPad - rightPad)
@@ -355,6 +358,11 @@ Public Class SummaryForm
             Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True),
             Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False)
         }
+        If adviceList IsNot Nothing AndAlso adviceList.Count > 0 Then
+            blocks.Add(Tuple.Create("Improvement Suggestions:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+            blocks.Add(Tuple.Create(String.Join(vbCrLf, adviceList), SystemFonts.DefaultFont, False))
+        End If
+
         If Not String.IsNullOrEmpty(unavailableSummary) Then
             blocks.Add(Tuple.Create("Technology Availability:", New Font("Segoe UI", 10, FontStyle.Bold), True))
             blocks.Add(Tuple.Create(unavailableSummary, SystemFonts.DefaultFont, False))
