@@ -9,7 +9,6 @@ Additive Manufacturing (AM) is a relatively new technology that supports the par
 
 The code functions with IPT files and accepts STEP files with some margin of error. Currently functions for Inventor 2025.
 (Note) It does not work with assemblies. STL files once converted to STEP files can be assessed (requires a separate Inventor plugin), however significant computation time should be known proportional to the number of triangles on the model. The geometrical analysis uses a heuristic-based design, meaning the numerous faces could lead to intense CPU usage and time. 
-The heuristic-driven geometrical analysis is deemed out of scope for the project, and is hence removed, but can be uncommented within the code.
 
 The basics of the code utilised the Analytical Hierarchy Process (AHP) and Weighted Sum Model (WSM) to provide a multi-criteria decision-making (MCDM) approach to assess the suitability of AM for a given part. The user is required to input various parameters related to the part and its manufacturing context, which are then processed alongside geometrical analysis of the CAD model to produce a final score indicating the suitability of AM.
 

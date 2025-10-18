@@ -196,6 +196,13 @@ Public Class SummaryForm
         ' target panel height = min(content, available below). If content > available, panel will scroll.
         Dim targetPanelHeight As Integer = If(availableBelow > 0, Math.Min(contentHeight, Math.Max(80, availableBelow)), Math.Min(contentHeight, contentHeight))
 
+        'testing out maximum form height
+        Dim maxFormHeight As Integer = CInt(scrWorking.Height * 0.46)
+        Dim maxAllowedPanelHeight As Integer = maxFormHeight - collapsedFormHeight
+        If targetPanelHeight > maxAllowedPanelHeight Then
+            targetPanelHeight = maxAllowedPanelHeight
+        End If
+
         ' Prepare for animation.
         PanelDetails.Height = 0
         PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
@@ -318,9 +325,9 @@ Public Class SummaryForm
             $"Surface Area: {surfaceArea:0.00} cm²" & vbCrLf &
             $"Volume: {volume:0.00} cm³" & vbCrLf &
             $"Bounding Box Volume: {bbox:0.00} cm³" & vbCrLf &
-            $"Complexity Ratio (A/V): {complexityRatio:0.000}" & vbCrLf &
+            $"Part Complexity (A/V): {complexityRatio:0.000}" & vbCrLf &
             $"Overhang Area (<45° from horizontal): {overhangArea:0.00} cm²" & vbCrLf &
-            $"Overhang Area ratio: {overhangRatio:0.00}"
+            $"Overhang ratio: {overhangRatio:0.00}"
 
         Dim manufacturingSummary As String =
             $"Rotational Symmetry: {tradResults.HasRotationalSymmetry}" & vbCrLf &
@@ -355,10 +362,9 @@ Public Class SummaryForm
         ' Prepare content blocks (text + font + isTitle)
         Dim blocks As New List(Of Tuple(Of String, Font, Boolean)) From {
             Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True),
-            Tuple.Create(geomSummary, SystemFonts.DefaultFont, False)}
-        'Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True),
-        'Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False)
-        '}
+            Tuple.Create(geomSummary, SystemFonts.DefaultFont, False)
+        }
+
         If adviceList IsNot Nothing AndAlso adviceList.Count > 0 Then
             blocks.Add(Tuple.Create("Improvement Suggestions:", New Font("Segoe UI", 10, FontStyle.Bold), True))
             blocks.Add(Tuple.Create(String.Join(vbCrLf, adviceList), SystemFonts.DefaultFont, False))
@@ -368,6 +374,11 @@ Public Class SummaryForm
             blocks.Add(Tuple.Create("Technology Availability:", New Font("Segoe UI", 10, FontStyle.Bold), True))
             blocks.Add(Tuple.Create(unavailableSummary, SystemFonts.DefaultFont, False))
         End If
+
+        ' Add Traditional Manufacturing Assessment at the very end
+        blocks.Add(Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False))
+
 
         'TODO - Felix should be filling this with icon bug fix?
         'blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
