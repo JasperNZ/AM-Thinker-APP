@@ -1,6 +1,16 @@
 ﻿Imports System.Collections.Generic
 Imports System.Drawing
 Imports System.Windows.Forms
+'------------------------------------------------------------------------------
+' <summary>
+'	A custom form to display the summary of results after computation, including expandable details.
+'   Aggregates the score profiles, sorts them with displayed traffic colours system. 
+'   Also shows geometric and conventional manufacturing analysis in an expandable panel.
+' </summary>
+' <author>Jasper Koid</author>
+' <created>05-OCT-2025</created>
+'------------------------------------------------------------------------------
+
 Imports System.Linq
 Imports System.Reflection
 Imports System.Diagnostics
@@ -8,80 +18,83 @@ Imports System.Diagnostics
 Public Class SummaryForm
     Private scoredProfiles As List(Of ScoredProfile)
     Private geometry As GeometrySummary
-    Private convResults As ConventionalChecks
+    Private tradResults As TraditionalChecks
+    Private adviceList As List(Of String)
     Private isDetailsExpanded As Boolean = False
     Private DeveloperMode As Boolean = False
 
-    ' Constants for spacing (relative units work better than absolute)
-    Private Const BUTTON_BOTTOM_MARGIN As Integer = 15  ' Distance from button to form bottom when collapsed
-    Private Const PANEL_BUTTON_GAP As Integer = 5       ' Gap between button and panel
+    ' Constants for spacing (relative units work better than absolute).
+    Private Const BUTTON_BOTTOM_MARGIN As Integer = 15  ' Distance from button to form bottom when collapsed.
+    Private Const PANEL_BUTTON_GAP As Integer = 5       ' Gap between button and panel.
     Private isAnimating As Boolean = False
     Private collapsedFormHeight As Integer = 0
 
-    ' Tweak these as you like
+    ' Do not touch these values - used for screen fitting logic.
     Private Const SAFETY_SCREEN_MARGIN As Integer = 8
-    Private Const ANIM_STEPS As Integer = 20   ' how many steps the animation tries to use
-    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary, conv As ConventionalChecks)
+    Private Const ANIM_STEPS As Integer = 20   ' Number of steps the animation tries to use.
+    Public Sub New(profiles As List(Of ScoredProfile), geo As GeometrySummary, trad As TraditionalChecks, advice As List(Of String))
         InitializeComponent()
-        ' Create panel if not already done in Designer
-        Dim ListBoxContainerPanel As New Panel()
-        ListBoxContainerPanel.Name = "ListBoxContainerPanel"
-        ListBoxContainerPanel.Location = ListBoxResults.Location
-        ListBoxContainerPanel.Size = ListBoxResults.Size
-        ListBoxContainerPanel.Anchor = ListBoxResults.Anchor
-        ListBoxContainerPanel.BorderStyle = BorderStyle.None
+        ' Create panel if not already done in Designer.
+        Dim ListBoxContainerPanel As New Panel With {
+            .Name = "ListBoxContainerPanel",
+            .Location = ListBoxResults.Location,
+            .Size = ListBoxResults.Size,
+            .Anchor = ListBoxResults.Anchor,
+            .BorderStyle = BorderStyle.None
+        }
 
-        ' Reparent the ListBox
+        ' Reparent the ListBox.
         ListBoxResults.Parent = ListBoxContainerPanel
         ListBoxResults.Dock = DockStyle.Fill
 
-        ' Replace old ListBox position with panel
+        ' Replace old ListBox position with panel.
         Me.Controls.Add(ListBoxContainerPanel)
 
         Me.scoredProfiles = profiles
         Me.geometry = geo
-        Me.convResults = conv
+        Me.tradResults = trad
+        Me.adviceList = advice
         EnableDoubleBuffer(PanelDetails)
         EnableDoubleBuffer(ListBoxResults)
         EnableDoubleBuffer(ListBoxContainerPanel)
 
-        ' Initial setup - panel invisible and collapsed
+        ' Initial setup - panel invisible and collapsed.
         PanelDetails.Height = 0
         PanelDetails.Visible = False
 
         PopulateResults()
 
-        ' CRITICAL: Capture the collapsed height AFTER form is fully loaded
+        ' Capture the collapsed height only AFTER form is fully loaded.
         AddHandler Me.Load, Sub(s, e)
-                                ' Ensure PanelDetails doesn't automatically stretch with form height
-                                'PanelDetails.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-
+                                ' Ensure PanelDetails doesn't automatically stretch with form height.
                                 ' Position button at bottom with margin (initial collapsed placement)
                                 ButtonDetails.Top = Me.ClientSize.Height - ButtonDetails.Height - BUTTON_BOTTOM_MARGIN
                                 ButtonDetails.Left = 12
 
-                                ' Position panel directly under button (but invisible)
+                                ' Position panel directly under button (but invisible).
                                 PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
                                 PanelDetails.Left = ButtonDetails.Left
                                 PanelDetails.Width = Me.ClientSize.Width - 2 * ButtonDetails.Left
 
-                                ' Store this as our reference collapsed height
+                                ' Store this as reference collapsed height.
                                 collapsedFormHeight = Me.Height
                             End Sub
     End Sub
 
+    ' Enable double buffering on a control to reduce flicker during animations.
     Private Sub EnableDoubleBuffer(ctrl As Control)
         Dim prop = GetType(Control).GetProperty("DoubleBuffered",
         Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
         prop.SetValue(ctrl, True, Nothing)
     End Sub
 
+    ' Function populates the ListBox with scored profiles and updates assessment labels.
     Private Sub PopulateResults()
         ListBoxResults.Items.Clear()
 
         Dim sortedProfiles = scoredProfiles.OrderByDescending(Function(p) p.Score).Take(6).ToList()
 
-        ' Determine overall suitability
+        ' Determine overall suitability.
         Dim bestScore = sortedProfiles.First().Score
         If bestScore >= 70 Then
             LabelAssessment.Text = "Part is suitable for Additive Manufacturing"
@@ -99,7 +112,7 @@ Public Class SummaryForm
             ListBoxResults.Items.Add(profile)
         Next
 
-        ' Show best options
+        ' Show best options.
         Dim greenProfiles = sortedProfiles.Where(Function(p) p.Score >= 70).ToList()
         If greenProfiles.Any() Then
             Dim bestTechs = String.Join(", ", greenProfiles.Select(Function(p) p.Technology))
@@ -115,6 +128,7 @@ Public Class SummaryForm
         End If
     End Sub
 
+    ' Custom draw item to include colored circle and formatted text.
     Private Sub ListBoxResults_DrawItem(sender As Object, e As DrawItemEventArgs) Handles ListBoxResults.DrawItem
         If e.Index < 0 Then Return
 
@@ -157,6 +171,7 @@ Public Class SummaryForm
         e.DrawFocusRectangle()
     End Sub
 
+    ' Toggle details panel on button click.
     Private Sub ButtonDetails_Click(sender As Object, e As EventArgs) Handles ButtonDetails.Click
         If isDetailsExpanded Then
             CollapseDetails()
@@ -165,22 +180,30 @@ Public Class SummaryForm
         End If
     End Sub
 
+    ' Expand the details panel with animation.
     Private Sub ExpandDetails()
-        ' Ensure panel width is correct before measuring
+        ' Ensure panel width is correct before measuring.
         PanelDetails.Width = Math.Max(120, Me.ClientSize.Width - PanelDetails.Left - 12)
 
-        ' Measure & populate and get the full content height (unclamped)
+        ' Measure & populate and get the full content height (unclamped).
         Dim contentHeight As Integer = 0
         contentHeight = MeasureAndPopulateDetails(contentHeight)
 
-        ' Determine how much vertical space we can use below the form
+        ' Determine how much vertical space we can use below the form.
         Dim scrWorking As Rectangle = Screen.FromControl(Me).WorkingArea
         Dim availableBelow As Integer = Math.Max(0, scrWorking.Bottom - Me.Bottom - SAFETY_SCREEN_MARGIN)
 
         ' target panel height = min(content, available below). If content > available, panel will scroll.
         Dim targetPanelHeight As Integer = If(availableBelow > 0, Math.Min(contentHeight, Math.Max(80, availableBelow)), Math.Min(contentHeight, contentHeight))
 
-        ' Prepare for animation
+        'testing out maximum form height
+        Dim maxFormHeight As Integer = CInt(scrWorking.Height * 0.46)
+        Dim maxAllowedPanelHeight As Integer = maxFormHeight - collapsedFormHeight
+        If targetPanelHeight > maxAllowedPanelHeight Then
+            targetPanelHeight = maxAllowedPanelHeight
+        End If
+
+        ' Prepare for animation.
         PanelDetails.Height = 0
         PanelDetails.Top = ButtonDetails.Bottom + PANEL_BUTTON_GAP
         PanelDetails.Visible = True
@@ -188,7 +211,7 @@ Public Class SummaryForm
         ButtonDetails.Enabled = False
         isAnimating = True
 
-        ' DPI-aware step size
+        ' DPI-aware step size.
         Dim dpiScale As Single = 1.0F
         Try
             dpiScale = If(Me.DeviceDpi > 0, Me.DeviceDpi / 96.0F, Me.CreateGraphics().DpiY / 96.0F)
@@ -200,14 +223,14 @@ Public Class SummaryForm
 
         Dim sw As New Stopwatch()
         sw.Start()
-        Dim durationMs As Integer = 700  ' total animation time
+        Dim durationMs As Integer = 700  ' Total animation time.
         Dim startH As Integer = PanelDetails.Height
         Dim endH As Integer = targetPanelHeight
 
         Dim animTimer As New Timer() With {.Interval = 15}
         AddHandler animTimer.Tick, Sub()
                                        Dim t = Math.Min(1.0, sw.Elapsed.TotalMilliseconds / durationMs)
-                                       ' Use ease-out curve for smoother feel
+                                       ' Use ease-out curve for smoother feel.
                                        Dim easedT = 1 - Math.Pow(1 - t, 3)
                                        Dim newH = CInt(startH + (endH - startH) * easedT)
 
@@ -229,6 +252,7 @@ Public Class SummaryForm
         animTimer.Start()
     End Sub
 
+    ' Collapse the details panel with animation.
     Private Sub CollapseDetails()
         If Not isDetailsExpanded OrElse isAnimating Then
             Return
@@ -282,143 +306,41 @@ Public Class SummaryForm
     End Sub
 
 
-    'Private Sub PopulateDetailsPanel()
-    '    PanelDetails.SuspendLayout()
-    '    PanelDetails.Controls.Clear()
-
-    '    Dim yPosition As Integer = 10
-    '    Dim leftMargin As Integer = 10
-    '    Dim controlWidth As Integer = Math.Max(100, PanelDetails.Width - 2 * leftMargin)
-
-    '    ' Helper: measure word-wrapped text height
-    '    Dim MeasureTextHeight = Function(text As String, fnt As Font, width As Integer) As Integer
-    '                                Dim sz = TextRenderer.MeasureText(text, fnt, New Size(width, Integer.MaxValue), TextFormatFlags.WordBreak)
-    '                                Return sz.Height
-    '                            End Function
-
-    '    ' Section 1: Geometric Analysis (title)
-    '    Dim lblGeoTitle As New Label() With {
-    '    .Text = "Geometric Analysis:",
-    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-    '    .Location = New Point(leftMargin, yPosition),
-    '    .AutoSize = True
-    '}
-    '    PanelDetails.Controls.Add(lblGeoTitle)
-    '    yPosition += lblGeoTitle.Height + 8
-
-    '    ' Section 1 data (measured for wrap)
-    '    Dim geoText = "Surface Area: [Placeholder] cm²" & vbCrLf &
-    '              "Volume: [Placeholder] cm³" & vbCrLf &
-    '              "Complexity Ratio: [Placeholder]" & vbCrLf &
-    '              "Bounding Box: [Placeholder]"
-
-    '    Dim geoHeight = MeasureTextHeight(geoText, SystemFonts.DefaultFont, controlWidth - 10)
-    '    Dim lblGeoData As New Label() With {
-    '    .Text = geoText,
-    '    .Location = New Point(leftMargin + 10, yPosition),
-    '    .Size = New Size(controlWidth - 10, geoHeight)
-    '}
-    '    PanelDetails.Controls.Add(lblGeoData)
-    '    yPosition += lblGeoData.Height + 15
-
-    '    ' Section 2: Technology Limitations
-    '    Dim lblLimitTitle As New Label() With {
-    '    .Text = "Why Other Technologies Scored Lower:",
-    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-    '    .Location = New Point(leftMargin, yPosition),
-    '    .AutoSize = True
-    '}
-    '    PanelDetails.Controls.Add(lblLimitTitle)
-    '    yPosition += lblLimitTitle.Height + 8
-
-    '    Dim limitText = "[Placeholder: Analysis of low-scoring technologies]" & vbCrLf &
-    '                "• Material Jetting: Score penalty due to [reason]" & vbCrLf &
-    '                "• Binder Jetting: Unsuitable because [reason]"
-
-    '    Dim limitHeight = MeasureTextHeight(limitText, SystemFonts.DefaultFont, controlWidth - 10)
-    '    Dim lblLimitData As New Label() With {
-    '    .Text = limitText,
-    '    .Location = New Point(leftMargin + 10, yPosition),
-    '    .Size = New Size(controlWidth - 10, limitHeight)
-    '}
-    '    PanelDetails.Controls.Add(lblLimitData)
-    '    yPosition += lblLimitData.Height + 15
-
-    '    ' Section 3: Improvements
-    '    Dim lblImproveTitle As New Label() With {
-    '    .Text = "Potential Design Improvements:",
-    '    .Font = New Font("Segoe UI", 10, FontStyle.Bold),
-    '    .Location = New Point(leftMargin, yPosition),
-    '    .AutoSize = True
-    '}
-    '    PanelDetails.Controls.Add(lblImproveTitle)
-    '    yPosition += lblImproveTitle.Height + 8
-
-    '    Dim improveText = "[Placeholder: Suggestions for design optimization]" & vbCrLf &
-    '                  "• Consider reducing precision requirements" & vbCrLf &
-    '                  "• Optimize part orientation to minimize overhangs"
-
-    '    Dim improveHeight = MeasureTextHeight(improveText, SystemFonts.DefaultFont, controlWidth - 10)
-    '    Dim lblImproveData As New Label() With {
-    '    .Text = improveText,
-    '    .Location = New Point(leftMargin + 10, yPosition),
-    '    .Size = New Size(controlWidth - 10, improveHeight)
-    '}
-    '    PanelDetails.Controls.Add(lblImproveData)
-    '    yPosition += lblImproveData.Height + 5
-
-    '    ' Set minimum scrollable area equal to content height so AutoScroll works
-    '    PanelDetails.AutoScrollMinSize = New Size(0, yPosition + 10)
-
-    '    PanelDetails.ResumeLayout()
-    'End Sub
-
-
-    'future work would allow adaption of preferred units,currently automatically work in cm, 2, 3.
+    ' Function to measure and populate the details panel, returning total content height.
     Private Function MeasureAndPopulateDetails(ByRef contentTotalHeight As Integer) As Integer
         ' Populates PanelDetails and returns the total content height (unclamped).
         ' Also sets PanelDetails.AutoScrollMinSize so scrolling works when content > available height.
         PanelDetails.SuspendLayout()
         PanelDetails.Controls.Clear()
 
-
-        'testing testing
-        Dim surfaceArea As Double = 0
-        Dim volume As Double = 0
-        Dim bbox As Double = 0
-        Dim complexityRatio As Double = 0
-        Dim overhangArea As Double = 0
-        Dim overhangPercentage As Double = 0
-
-        Try
-            surfaceArea = geometry.SurfaceArea()
-            volume = geometry.Volume()
-            bbox = geometry.BoundingBoxVolume()
-            complexityRatio = geometry.ComplexityRatio()
-
-            ' Optionally, calculate overhang area if user previously selected a reference face
-            ' Dim selectedFace As Face = selectedRefFace
-            overhangArea = geometry.OverhangArea()
-            overhangPercentage = geometry.OverhangPercentage()
-        Catch ex As Exception
-            ' gracefully degrade to zero if part unavailable
-        End Try
+        ' Gather geometric data.
+        Dim surfaceArea As Double = geometry.SurfaceArea()
+        Dim volume As Double = geometry.Volume()
+        Dim bbox As Double = geometry.BoundingBoxVolume()
+        Dim complexityRatio As Double = geometry.ComplexityRatio()
+        Dim overhangArea As Double = geometry.OverhangArea()
+        Dim overhangRatio As Double = geometry.OverhangRatio()
 
         Dim geomSummary As String =
-    $"Surface Area: {surfaceArea:0.00} cm²" & vbCrLf &
-    $"Volume: {volume:0.00} cm³" & vbCrLf &
-    $"Bounding Box: {bbox:0.00} cm³" & vbCrLf &
-    $"Complexity Ratio: {complexityRatio:0.000}" & vbCrLf &
-    $"Overhang Area (>45°): {overhangArea:0.00} cm²" & vbCrLf &
-    $"Overhang Area ratio): {overhangPercentage:0.00}"
+            $"Surface Area: {surfaceArea:0.00} cm²" & vbCrLf &
+            $"Volume: {volume:0.00} cm³" & vbCrLf &
+            $"Bounding Box Volume: {bbox:0.00} cm³" & vbCrLf &
+            $"Part Complexity (A/V): {complexityRatio:0.000}" & vbCrLf &
+            $"Overhang Area (<45° from horizontal): {overhangArea:0.00} cm²" & vbCrLf &
+            $"Overhang ratio: {overhangRatio:0.00}"
 
-        Dim machiningSummary As String =
-    $"Rotational Symmetry: {convResults.HasRotationalSymmetry}" & vbCrLf &
-    $"Simple Surfaces: {convResults.HasSimpleSurfaces}" & vbCrLf &
-    $"External Accessibility: {convResults.HasExternalAccessibility}" & vbCrLf &
-    $"Simple Geometry: {convResults.HasSimpleGeometry}" & vbCrLf &
-    $"Minimal Material Removal: {convResults.HasMinimalMaterialRemoval}" & vbCrLf &
-    $"No Undercuts: {convResults.HasNoUndercuts}"
+        Dim manufacturingSummary As String =
+            $"Rotational Symmetry: {tradResults.HasRotationalSymmetry}" & vbCrLf &
+            $"Simple Surfaces: {tradResults.HasSimpleSurfaces}" & vbCrLf &
+            $"External Accessibility: {tradResults.HasExternalAccessibility}" & vbCrLf &
+            $"Simple Geometry: {tradResults.HasSimpleGeometry}" & vbCrLf &
+            $"Minimal Material Removal: {tradResults.HasMinimalMaterialRemoval}" & vbCrLf &
+            $"No Undercuts: {tradResults.HasNoUndercuts}" & vbCrLf &
+            $"Minimum (2mm) Wall Thickness: {tradResults.HasMinimumWallThickness}" & vbCrLf &
+            $"Uniform Wall Thickness: {tradResults.HasUniformWallThickness}" & vbCrLf &
+            $"Draft Angles Present: {tradResults.HasDraftAngles}" & vbCrLf &
+            $"Acceptable Aspect Ratios: {tradResults.HasAcceptableAspectRatios}" & vbCrLf &
+            $"No Sharp Corners: {tradResults.HasNoSharpCorners}"
 
         Dim sortedProfiles = scoredProfiles.OrderByDescending(Function(p) p.Score).Take(6).ToList()
         Dim unavailableSummary As String = ""
@@ -431,26 +353,40 @@ Public Class SummaryForm
         End If
 
 
+
+
         Dim leftPad As Integer = 10
         Dim rightPad As Integer = 10
         Dim innerWidth As Integer = Math.Max(50, PanelDetails.ClientSize.Width - leftPad - rightPad)
 
         ' Prepare content blocks (text + font + isTitle)
-        Dim blocks As New List(Of Tuple(Of String, Font, Boolean))
-        blocks.Add(Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True))
-        blocks.Add(Tuple.Create(geomSummary, SystemFonts.DefaultFont, False))
-        blocks.Add(Tuple.Create("Conventional Machining Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True))
-        blocks.Add(Tuple.Create(machiningSummary, SystemFonts.DefaultFont, False))
+        Dim blocks As New List(Of Tuple(Of String, Font, Boolean)) From {
+            Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True),
+            Tuple.Create(geomSummary, SystemFonts.DefaultFont, False)
+        }
+
+        If adviceList IsNot Nothing AndAlso adviceList.Count > 0 Then
+            blocks.Add(Tuple.Create("Improvement Suggestions:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+            blocks.Add(Tuple.Create(String.Join(vbCrLf, adviceList), SystemFonts.DefaultFont, False))
+        End If
+
         If Not String.IsNullOrEmpty(unavailableSummary) Then
             blocks.Add(Tuple.Create("Technology Availability:", New Font("Segoe UI", 10, FontStyle.Bold), True))
             blocks.Add(Tuple.Create(unavailableSummary, SystemFonts.DefaultFont, False))
         End If
+
+        ' Add Traditional Manufacturing Assessment at the very end
+        blocks.Add(Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True))
+        blocks.Add(Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False))
+
+
+        'TODO - Felix should be filling this with icon bug fix?
         'blocks.Add(Tuple.Create("Why Other Technologies Scored Lower:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         'blocks.Add(Tuple.Create("• Material Jetting: [reason]" & vbCrLf & "• Binder Jetting: [reason]" & vbCrLf & "[More explanation...]", SystemFonts.DefaultFont, False))
         'blocks.Add(Tuple.Create("Potential Improvements:", New Font("Segoe UI", 10, FontStyle.Bold), True))
         'blocks.Add(Tuple.Create("• Optimize orientation" & vbCrLf & "• Reduce overhangs" & vbCrLf & "[Other items...]", SystemFonts.DefaultFont, False))
 
-        ' helper to measure wrapped text height using TextRenderer (WordBreak)
+        ' Helper to measure wrapped text height using TextRenderer (WordBreak).
         Dim MeasureWrappedHeight = Function(txt As String, fnt As Font, width As Integer) As Integer
                                        Dim flags As TextFormatFlags = TextFormatFlags.WordBreak Or TextFormatFlags.TextBoxControl
                                        ' high height limit; measure in pixels
@@ -458,7 +394,7 @@ Public Class SummaryForm
                                        Return measured.Height
                                    End Function
 
-        ' First pass: measure using innerWidth
+        ' First pass: measure using innerWidth.
         Dim yPos As Integer = 10
         For Each b In blocks
             Dim isTitle = b.Item3
@@ -521,15 +457,15 @@ Public Class SummaryForm
                 h = MeasureWrappedHeight(txt, f, w)
             End If
 
-            Dim lbl As New Label() With {
-            .Text = txt,
-            .Font = f,
-            .Location = New Point(leftPad, curY),
-            .Size = New Size(w, h),
-            .AutoSize = False
-        }
             ' use word-wrap style
-            lbl.BorderStyle = BorderStyle.None
+            Dim lbl As New Label With {
+                .Text = txt,
+                .Font = f,
+                .Location = New Point(leftPad, curY),
+                .Size = New Size(w, h),
+                .AutoSize = False,
+                .BorderStyle = BorderStyle.None
+            }
 
             PanelDetails.Controls.Add(lbl)
             curY += h + 6

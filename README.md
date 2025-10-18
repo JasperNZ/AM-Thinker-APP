@@ -1,69 +1,29 @@
 # AM-Technology-APP
-MECHENG 700A/B (Project #24)
+## MECHENG 700A/B (Project #24)
+### Introduction: <br>
+This is a part 4 project undertaken in 2025 by Jasper Koid and Felix Clark within the Department of Mechanical and Mechatronic engineering at the University of Auckland. <br>
+Significants thanks and acknowledgements directed towards Dr. Olaf Diegel for setting the premise of the project, and allowing freedom of modification and interpretation to  allow the students to decide the direction of our final solution. Without his expertise and guidance, this project would have had a much more significantly difficult challenge in getting started while completed within the deadline.
 
+### Background: <br>
+Additive Manufacturing (AM) is a relatively new technology that supports the paradigm shift towards Industry 4.0 with the transformation of digital technology being applied to the manufacturing industry. This drives motivation to the improvement of highly customisable products of low volume, contrary to regular manufacturing of high volume, low customisation. As a result, AM is of unique interst to various industries. However, because it widely differs to regular Traditional Manufacturing (TM) there is a lack of foundational knowledge to adjust to AM technology. This results in AM being underutilised or applied ineffectively. To address this gap, this software tool aims to be integreated with Inventor using its respectiveAPI platform for convenient access to assess CAD models with user-defined parameters and geometrical analysis to provide a quantitative indication of a part's suitability for AM.
 
-Instructions to use Github:<br>
-1.) Download Github Desktop - a software created by Github that makes using software features much easier and accessible compared to hand typing the code for it  
-2.) File --> Clone Repository and then select a folder (directory path) and the repository to clone  - Create a folder that essentially stores a local copy of the code you've created.  
-3.) Select editor using options - This ensures we use Visual Studio instead of some of the automatic IDEs, such as VS code.  
-4.) Add the files into the folder - Git is a separate software that should be downloaded automatically with Github Desktop, this is the free software that tracks changes to a code and decides how they are managed. Adding files should be detected on yourhub Desktop app (example of such changes is below)
-![Screenshot 2025-05-02 031759](https://github.com/user-attachments/assets/888d07c1-5873-464c-a62b-c58c85bf9a4c)
-5.) Update AM-Technology-APP - textbox to write a commit message, text that states a summarised explanation of changes made with the Description box intended to be more verbose.  
-6.) Commit n file to main - tells Git to  finalise what changes should be noted in the local repository to be sent to the remote repository  
-7.) Push to origin - located on the header bar, this finalises the files to be sent to the remote repository (origin) to be stored and shared among users.  
-8.) Fetch/Pull from origin - you may see this when other users edit the code. This is the act of extracting the files from the remote repository. Pull completely replaces the local repository with the files relevant to the remote repository, e.g files not uploaded, specific to your device like a json path file, etc. Fetch is likely to be used when we need to merge changes where you may have made local changes and another user has already made progress and uploaded to the remote repository. This requires the changes to be merged as it could laed to potential conflict in logic and is resolved within the IDE.  
-9.) Branches - This creates copies of the main code that allows divergence for when multiple users are editing the main code. Each individual can save their progress and later merge it together to keep their changes intact.
+The code functions with IPT files and accepts STEP files with some margin of error. Currently functions for Inventor 2025.
+(Note) It does not work with assemblies. STL files once converted to STEP files can be assessed (requires a separate Inventor plugin), however significant computation time should be known proportional to the number of triangles on the model. The geometrical analysis uses a heuristic-based design, meaning the numerous faces could lead to intense CPU usage and time. 
 
+The basics of the code utilised the Analytical Hierarchy Process (AHP) and Weighted Sum Model (WSM) to provide a multi-criteria decision-making (MCDM) approach to assess the suitability of AM for a given part. The user is required to input various parameters related to the part and its manufacturing context, which are then processed alongside geometrical analysis of the CAD model to produce a final score indicating the suitability of AM.
 
-TODO list:
-URGENT:
-- create helper functions in a separate file/class (geometry stuff like part complexity and overhang)
-- pure functionalities, putting the right numbers for all combinations. Scores and weighting modifications
-- Might replace simple WSM --> WA --> TOPSIS.
-- report about future-proofing and considerations for advancements
-- improve coding comments and consistent coding conventions to unionize the code
-- fix scores for lead time - instead of lead time significance.
-- Might add a special comment property for each AM profile. Incompatible profiles can then be noted
-- Double check geometry features output correct numbers and units
-- Consider if we can do this for multiple parts, STL files and assemblies.
-- Post Processing Effort Calculator
+How to Download: <br>
+1.) From our Github page, please download the "Pt4ProjectAddin.dll" and "Autodesk.Pt4ProjectAddin.Inventor.addin" files. The .dll file contains the logic of the program while the .addin contains information for the setup.<br>
+2.) For local utilisation of the program, send the 2 files to AppData\Roaming\Autodesk\ApplicationPlugins, which could be further sent to a folder for tidiness if desired.<br>
+3.) Load up Inventor. Click on "Add-Ins" on the Tools ribbon panel leading to the "Add-In Manager". <br>
+<img width="419" height="652" alt="Screenshot 2025-10-12 025614" src="https://github.com/user-attachments/assets/adc6a187-bdf9-4329-90d2-4d7767adc3a9" /> <br>
+4.) Ensure the "Load Automatically" and "Loaded/Unloaded" is ticked. Close and re-open Inventor with a CAD model of your choosing. <br>
+5.) Click on the Tools panel and select AM Thinker. <br>
+<img width="1221" height="972" alt="Screenshot 2025-10-12 030127" src="https://github.com/user-attachments/assets/ae97609c-4f9f-446f-8fb2-50a4d7c77b8b" /> <br>
+6.) This opens the user form which you may fill out yourself and the contextual information related to the part.  <br>
+<img width="1915" height="985" alt="Screenshot 2025-10-12 030308" src="https://github.com/user-attachments/assets/147d7bce-00ee-4664-bdc0-e76c8a79b6c9" /> <br>
+7.) Press the "Compute" button to reveal the results form. <br>
+<img width="1916" height="987" alt="Screenshot 2025-10-12 030859" src="https://github.com/user-attachments/assets/212c8425-6df7-4f93-a669-0213168d6fd0" /> <br>
 
-
-
-UNLIKELY TO COMPLETE:
-- testing testing (missing data)
-- Temporary messagebox to inform user of selecting base face to print. (need to test Felix function - unusually buggy, might replace with own function)
-- icon as tooltips - not feasible because lack of 16x16 question mark professional icons, might need to use SystemIcons
-- shifting tooltip comments away from interfering drop down - currently can only be done manually using Show.
-
-NICE TO HAVE:
-- other nice design features for user 
-- The user form feels suffocating because of how close the dropdown menus are, low priority to space them out.
-
-COMPLETED:
-- make bug fixing and error handler (ErrorHandler.vb) DONE
-- improve the UI/UX DONE
-- Considering adding a little icon next to the AM thinker? DONE
-- Apply tooltips to all relevant sections DONE
-- Preferably apply group boxes in the mainUserForm Designer form. for easier readability (fixed bugs in error handler from this) DONE
-- fix the select profile loop (trying to use tuples, but it's not working???????)
-- Big Improvement are using ENUMS for security, but dropdownlist are strings, so don't mind it. constrained dropdown menu already mitigates this issue anyways DONE
-- Fix messages on tooltips to be more useful and not in the way of user selection options. Manually shifted below the mouse. DONE
-- Final message box and interpretation. Layout is done, just needs everything else to come together DONE.
-- score, traffic color, and feedback/comment file (helper message handler file). Layout finished, needs finalisation. DONE
-- Fix dictionary to look through valid machine selection. goes through second groupings. DONE
-- Developer mode for copying pasting data. DONE
-- Fix looping dictionary for errors to be in proper order of visual selection. DONE
-
-
-
-
-Backup notes on code:
-- Think GeoHelper on-part bug of potentially reading wrong Parts is fixed, because it activates on compute button press!
-Surprisingly the form follows the broswer and is not stationary relative to the window, compared to other built in feature windows like fillet or measure
-should the result form be as wide as the input form
-double check the up and down arrows (unicode) on details button don't crash the system
-ask about visiblity and readability of the colours.
-Preference of UI text?
-Are the tooltip descriptions too verbose
-Mathematic  signs too distracting, or can we assume users are intuitive? (e.g <=3 days vs 1-3 days)
+Hope you enjoy our plug-in!
+\- Jasper Koid

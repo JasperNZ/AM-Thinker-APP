@@ -12,51 +12,59 @@ Public Class PlasticMEX
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 5}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 6}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
-            }
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+            {"Precision", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.4}, {"High", 0.2}, {"Very High", 0.1}
+            }},
+            {"LeadTime", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.3}, {"High", 0.1}, {"Very High", 0}
+            }},
+            {"PostProcessing", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }},
+            {"Volume", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }}}
         End Get
     End Property
 
+
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.2 Then
-            Return 2
-        ElseIf rawComplexity < 0.6 Then
-            Return 4
-        ElseIf rawComplexity < 1.5 Then
-            Return 6
-        ElseIf rawComplexity < 4.0 Then
-            Return 8
+        If rawComplexity <= 0.527 Then
+            Return 0.2
+        ElseIf rawComplexity <= 1.21 Then
+            Return 0.4
+        ElseIf rawComplexity <= 3.046 Then
+            Return 0.6
+        ElseIf rawComplexity <= 9.051 Then
+            Return 0.8
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
-        If rawOverhangPercent < 5 Then
-            Return 10
-        ElseIf rawOverhangPercent < 15 Then
-            Return 8
-        ElseIf rawOverhangPercent < 30 Then
-            Return 6
-        ElseIf rawOverhangPercent < 50 Then
-            Return 4
+        If rawOverhangPercent <= 0.05 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.15 Then
+            Return 0.8
+        ElseIf rawOverhangPercent <= 0.3 Then
+            Return 0.6
+        ElseIf rawOverhangPercent <= 0.5 Then
+            Return 0.4
         Else
-            Return 2
+            Return 0.2
         End If
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
-            Return 10
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
+            Return 1
         Else
             Return 0
         End If
@@ -69,49 +77,49 @@ Public Class PlasticMEX
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
-
-            Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
                 m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
-                m("Complexity") = 0.6
-                m("Overhang") = 0.7
-                m("ImpossibleFeatures") = 0.2
-
-            Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
                 m("ImpossibleFeatures") = 1.0
 
+            Case "Critical Spare Part"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.5
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Mass Production"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.5
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Functional Prototype"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.5
+
             Case "Aesthetic Prototype"
-                m("Precision") = 1.4
-                m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
-                m("ImpossibleFeatures") = 0.3
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
 
             Case Else
                 For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
@@ -134,51 +142,59 @@ Public Class PlasticMJT
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 8}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 6}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
-            }
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+            {"Precision", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 1.0}, {"High", 1.0}, {"Very High", 1.0}
+            }},
+            {"LeadTime", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.3}, {"High", 0.1}, {"Very High", 0}
+            }},
+            {"PostProcessing", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }},
+            {"Volume", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }}}
         End Get
     End Property
 
+
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.2 Then
-            Return 2
-        ElseIf rawComplexity < 0.6 Then
-            Return 4
-        ElseIf rawComplexity < 1.5 Then
-            Return 6
-        ElseIf rawComplexity < 4.0 Then
-            Return 8
+        If rawComplexity <= 0.527 Then
+            Return 0.2
+        ElseIf rawComplexity <= 1.21 Then
+            Return 0.4
+        ElseIf rawComplexity <= 3.046 Then
+            Return 0.6
+        ElseIf rawComplexity <= 9.051 Then
+            Return 0.8
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
-        If rawOverhangPercent < 5 Then
-            Return 10
-        ElseIf rawOverhangPercent < 15 Then
-            Return 8
-        ElseIf rawOverhangPercent < 30 Then
-            Return 6
-        ElseIf rawOverhangPercent < 50 Then
-            Return 4
+        If rawOverhangPercent <= 0.05 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.15 Then
+            Return 0.8
+        ElseIf rawOverhangPercent <= 0.3 Then
+            Return 0.6
+        ElseIf rawOverhangPercent <= 0.5 Then
+            Return 0.4
         Else
-            Return 2
+            Return 0.2
         End If
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
-            Return 10
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
+            Return 1
         Else
             Return 0
         End If
@@ -191,49 +207,49 @@ Public Class PlasticMJT
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
-
-            Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
                 m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
-                m("Complexity") = 0.6
-                m("Overhang") = 0.7
-                m("ImpossibleFeatures") = 0.2
-
-            Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
                 m("ImpossibleFeatures") = 1.0
 
+            Case "Critical Spare Part"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.5
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Mass Production"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.5
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Functional Prototype"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.5
+
             Case "Aesthetic Prototype"
-                m("Precision") = 1.4
-                m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
-                m("ImpossibleFeatures") = 0.3
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
 
             Case Else
                 For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
@@ -257,51 +273,59 @@ Public Class PlasticBJT
 
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 8}, {"Medium", 5}, {"High", 1}, {"Very High", 1}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 9}, {"Medium", 6}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
-            }
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+            {"Precision", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.4}, {"High", 0.5}, {"Very High", 0.25}
+            }},
+            {"LeadTime", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.3}, {"High", 0.1}, {"Very High", 0}
+            }},
+            {"PostProcessing", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }},
+            {"Volume", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }}}
         End Get
     End Property
 
+
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.2 Then
-            Return 2
-        ElseIf rawComplexity < 0.6 Then
-            Return 4
-        ElseIf rawComplexity < 1.5 Then
-            Return 6
-        ElseIf rawComplexity < 4.0 Then
-            Return 8
+        If rawComplexity <= 0.527 Then
+            Return 0.2
+        ElseIf rawComplexity <= 1.21 Then
+            Return 0.4
+        ElseIf rawComplexity <= 3.046 Then
+            Return 0.6
+        ElseIf rawComplexity <= 9.051 Then
+            Return 0.8
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
-        If rawOverhangPercent < 5 Then
-            Return 10
-        ElseIf rawOverhangPercent < 15 Then
-            Return 10
-        ElseIf rawOverhangPercent < 30 Then
-            Return 10
-        ElseIf rawOverhangPercent < 50 Then
-            Return 10
+        If rawOverhangPercent <= 0.05 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.15 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.3 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.5 Then
+            Return 1
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
-            Return 10
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
+            Return 1
         Else
             Return 0
         End If
@@ -314,49 +338,49 @@ Public Class PlasticBJT
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
-
-            Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
                 m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
-                m("Complexity") = 0.6
-                m("Overhang") = 0.7
-                m("ImpossibleFeatures") = 0.2
-
-            Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
                 m("ImpossibleFeatures") = 1.0
 
+            Case "Critical Spare Part"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.5
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Mass Production"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.5
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Functional Prototype"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.5
+
             Case "Aesthetic Prototype"
-                m("Precision") = 1.4
-                m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
-                m("ImpossibleFeatures") = 0.3
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
 
             Case Else
                 For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
@@ -379,51 +403,59 @@ Public Class PlasticVPP
     End Sub
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 8}, {"Very High", 6}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 6}, {"High", 1}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
-            }
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+            {"Precision", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 1.0}, {"High", 0.67}, {"Very High", 0.33}
+            }},
+            {"LeadTime", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.3}, {"High", 0.1}, {"Very High", 0}
+            }},
+            {"PostProcessing", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }},
+            {"Volume", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }}}
         End Get
     End Property
 
+
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.2 Then
-            Return 2
-        ElseIf rawComplexity < 0.6 Then
-            Return 4
-        ElseIf rawComplexity < 1.5 Then
-            Return 6
-        ElseIf rawComplexity < 4.0 Then
-            Return 8
+        If rawComplexity <= 0.527 Then
+            Return 0.2
+        ElseIf rawComplexity <= 1.21 Then
+            Return 0.4
+        ElseIf rawComplexity <= 3.046 Then
+            Return 0.6
+        ElseIf rawComplexity <= 9.051 Then
+            Return 0.8
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
-        If rawOverhangPercent < 5 Then
-            Return 10
-        ElseIf rawOverhangPercent < 15 Then
-            Return 8
-        ElseIf rawOverhangPercent < 30 Then
-            Return 6
-        ElseIf rawOverhangPercent < 50 Then
-            Return 4
+        If rawOverhangPercent <= 0.05 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.15 Then
+            Return 0.8
+        ElseIf rawOverhangPercent <= 0.3 Then
+            Return 0.6
+        ElseIf rawOverhangPercent <= 0.5 Then
+            Return 0.4
         Else
-            Return 2
+            Return 0.2
         End If
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
-            Return 10
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
+            Return 1
         Else
             Return 0
         End If
@@ -436,49 +468,49 @@ Public Class PlasticVPP
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
-
-            Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
                 m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
-                m("Complexity") = 0.6
-                m("Overhang") = 0.7
-                m("ImpossibleFeatures") = 0.2
-
-            Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
                 m("ImpossibleFeatures") = 1.0
 
+            Case "Critical Spare Part"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.5
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Mass Production"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.5
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Functional Prototype"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.5
+
             Case "Aesthetic Prototype"
-                m("Precision") = 1.4
-                m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
-                m("ImpossibleFeatures") = 0.3
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
 
             Case Else
                 For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
@@ -502,51 +534,59 @@ Public Class PlasticPBF
 
 
     'Individual mappings for each of the categorical input for each AM profile
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 10}, {"High", 8}, {"Very High", 6}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 10}, {"Medium", 8}, {"High", 6}, {"Very High", 1}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 10}, {"Low", 7}, {"Medium", 5}, {"High", 3}, {"Very High", 1}}}
-            }
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+            {"Precision", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.67}, {"High", 0.33}, {"Very High", 0.17}
+            }},
+            {"LeadTime", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 1.0}, {"Medium", 0.3}, {"High", 0.1}, {"Very High", 0}
+            }},
+            {"PostProcessing", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }},
+            {"Volume", New Dictionary(Of String, Double) From {
+                {"Very Low", 1.0}, {"Low", 0.7}, {"Medium", 0.5}, {"High", 0.3}, {"Very High", 0.1}
+            }}}
         End Get
     End Property
 
+
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.2 Then
-            Return 2
-        ElseIf rawComplexity < 0.6 Then
-            Return 4
-        ElseIf rawComplexity < 1.5 Then
-            Return 6
-        ElseIf rawComplexity < 4.0 Then
-            Return 8
+        If rawComplexity <= 0.527 Then
+            Return 0.2
+        ElseIf rawComplexity <= 1.21 Then
+            Return 0.4
+        ElseIf rawComplexity <= 3.046 Then
+            Return 0.6
+        ElseIf rawComplexity <= 9.051 Then
+            Return 0.8
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
     Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
-        If rawOverhangPercent < 5 Then
-            Return 10
-        ElseIf rawOverhangPercent < 15 Then
-            Return 10
-        ElseIf rawOverhangPercent < 30 Then
-            Return 10
-        ElseIf rawOverhangPercent < 50 Then
-            Return 10
+        If rawOverhangPercent <= 0.05 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.15 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.3 Then
+            Return 1
+        ElseIf rawOverhangPercent <= 0.5 Then
+            Return 1
         Else
-            Return 10
+            Return 1
         End If
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
-            Return 10
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
+            Return 1
         Else
             Return 0
         End If
@@ -559,49 +599,49 @@ Public Class PlasticPBF
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
-
-            Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
                 m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
-                m("Complexity") = 0.6
-                m("Overhang") = 0.7
-                m("ImpossibleFeatures") = 0.2
-
-            Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
                 m("ImpossibleFeatures") = 1.0
 
+            Case "Critical Spare Part"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.5
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Mass Production"
+                m("Precision") = 1.5
+                m("LeadTime") = 1.0
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.5
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
+
+            Case "Functional Prototype"
+                m("Precision") = 1.0
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.0
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.5
+
             Case "Aesthetic Prototype"
-                m("Precision") = 1.4
-                m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
-                m("ImpossibleFeatures") = 0.3
+                m("Precision") = 1.5
+                m("LeadTime") = 1.5
+                m("PostProcessing") = 1.5
+                m("Volume") = 1.0
+                m("Complexity") = 1.0
+                m("Overhang") = 1.0
+                m("ImpossibleFeatures") = 1.0
 
             Case Else
                 For Each key In New String() {"Precision", "LeadTime", "PostProcessing", "Volume", "Complexity", "Overhang", "ImpossibleFeatures"}
@@ -613,7 +653,7 @@ Public Class PlasticPBF
     End Function
 End Class
 
-'Plastic DED class 
+'Plastic DED class - 0
 Public Class PlasticDED
     Inherits AMProfile
 
@@ -625,20 +665,26 @@ Public Class PlasticDED
 
     'Individual mappings for each of the categorical input for each AM profile
     'As DED does not support plastics, all values are 0
-    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Integer))
+    Protected Overrides ReadOnly Property CategoryMappings As Dictionary(Of String, Dictionary(Of String, Double))
         Get
-            Return New Dictionary(Of String, Dictionary(Of String, Integer)) From {
-                {"Precision", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"LeadTime", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"PostProcessing", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
-                {"Volume", New Dictionary(Of String, Integer) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
+            Return New Dictionary(Of String, Dictionary(Of String, Double)) From {
+                {"Precision", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"LeadTime", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"PostProcessing", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}},
+                {"Volume", New Dictionary(Of String, Double) From {{"Very Low", 0}, {"Low", 0}, {"Medium", 0}, {"High", 0}, {"Very High", 0}}}
             }
         End Get
     End Property
 
     'Receives part complexity, a high enough value indicates suitaible for DfAM
     Protected Overrides Function InterpretPartComplexity(rawComplexity As Double) As Double
-        If rawComplexity < 0.35 Then
+        If rawComplexity < 0.2 Then
+            Return 0
+        ElseIf rawComplexity < 0.6 Then
+            Return 0
+        ElseIf rawComplexity < 1.5 Then
+            Return 0
+        ElseIf rawComplexity < 4.0 Then
             Return 0
         Else
             Return 0
@@ -646,8 +692,14 @@ Public Class PlasticDED
     End Function
 
     ' Receives overhang area, a low enough value indicates good/ideal DfAM
-    Protected Overrides Function InterpretOverhangComplexity(rawOverhang As Double) As Double
-        If rawOverhang < 20 Then
+    Protected Overrides Function InterpretOverhangComplexity(rawOverhangPercent As Double) As Double
+        If rawOverhangPercent < 5 Then
+            Return 0
+        ElseIf rawOverhangPercent < 15 Then
+            Return 0
+        ElseIf rawOverhangPercent < 30 Then
+            Return 0
+        ElseIf rawOverhangPercent < 50 Then
             Return 0
         Else
             Return 0
@@ -655,8 +707,8 @@ Public Class PlasticDED
     End Function
 
     ' Function outputs a value by checking if user states impossible features are present
-    Protected Overrides Function InterpretImpossibleFeatures(impossibleFeaturesPresent As Boolean) As Double
-        If impossibleFeaturesPresent Then
+    Protected Overrides Function InterpretImpossibleFeatures(nonMachinableFeaturesPresent As Boolean) As Double
+        If nonMachinableFeaturesPresent Then
             Return 0
         Else
             Return 0
@@ -670,48 +722,48 @@ Public Class PlasticDED
 
         Select Case partPurpose
             Case "Unique Custom Part"
-                m("Precision") = 0.8
-                m("LeadTime") = 0.9
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.2
-                m("Complexity") = 1.5
-                m("Overhang") = 1.3
-                m("ImpossibleFeatures") = 1.6
+                m("Precision") = 1.0
+                m("LeadTime") = 0.7
+                m("PostProcessing") = 1.3
+                m("Volume") = 0.4
+                m("Complexity") = 1.3
+                m("Overhang") = 1.1
+                m("ImpossibleFeatures") = 1.4
 
             Case "Critical Spare Part"
-                m("Precision") = 1.2
-                m("LeadTime") = 1.7
-                m("PostProcessing") = 1.0
-                m("Volume") = 0.3
-                m("Complexity") = 0.8
-                m("Overhang") = 0.9
-                m("ImpossibleFeatures") = 0.7
-
-            Case "Mass Production"
-                m("Precision") = 1.0
-                m("LeadTime") = 1.1
-                m("PostProcessing") = 1.3
-                m("Volume") = 2.2
+                m("Precision") = 1.5
+                m("LeadTime") = 1.4
+                m("PostProcessing") = 1.4
+                m("Volume") = 0.5
                 m("Complexity") = 0.6
                 m("Overhang") = 0.7
+                m("ImpossibleFeatures") = 0.5
+
+            Case "Mass Production"
+                m("Precision") = 1.2
+                m("LeadTime") = 0.9
+                m("PostProcessing") = 1.6
+                m("Volume") = 1.8
+                m("Complexity") = 0.4
+                m("Overhang") = 0.5
                 m("ImpossibleFeatures") = 0.2
 
             Case "Functional Prototype"
-                m("Precision") = 0.7
-                m("LeadTime") = 1.6
-                m("PostProcessing") = 0.6
-                m("Volume") = 0.3
-                m("Complexity") = 1.3
-                m("Overhang") = 1.1
-                m("ImpossibleFeatures") = 1.0
+                m("Precision") = 0.9
+                m("LeadTime") = 1.2
+                m("PostProcessing") = 0.8
+                m("Volume") = 0.4
+                m("Complexity") = 1.1
+                m("Overhang") = 0.9
+                m("ImpossibleFeatures") = 0.8
 
             Case "Aesthetic Prototype"
                 m("Precision") = 1.4
                 m("LeadTime") = 0.8
-                m("PostProcessing") = 1.6
-                m("Volume") = 0.4
-                m("Complexity") = 0.9
-                m("Overhang") = 0.8
+                m("PostProcessing") = 1.5
+                m("Volume") = 0.5
+                m("Complexity") = 0.7
+                m("Overhang") = 0.6
                 m("ImpossibleFeatures") = 0.3
 
             Case Else

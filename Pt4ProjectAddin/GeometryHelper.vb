@@ -1,22 +1,27 @@
-﻿Imports System.Collections.Generic
+﻿'------------------------------------------------------------------------------
+' <summary>
+'	Helper class used for any geometrical related calculations and analysis required. 
+'   Used for Overhang ratio, Part complexity, etc in an automated manner.
+' </summary>
+' <author>Jasper Koid</author>
+' <created>26-AUG-2025</created>
+'------------------------------------------------------------------------------
+
+Imports System.Collections.Generic
 Imports System.Runtime.InteropServices
 Imports Inventor
 Imports System.Text
 
-'Helper class used for any geometrical related calculations and analysis required. 
-'Used for Overhang, Part complexity, etc in an automated manner (untested)
-'TryCast usually means we only read the active part document the user is currently viewing.
+
 Public Class GeometricalHelper
     Private ReadOnly _app As Inventor.Application
 
-    'constructor essentially passing the Inventor application object to the class
-    'that's how we can access the properties of the part
+    ' Constructor to initialise Inventor application instance.
     Public Sub New(app As Inventor.Application)
         _app = app
     End Sub
 
-    'basic function to obtain the volume of the part (in cm3)
-    'needs testing with other units like inches to ensure consistency
+    ' Function to obtain the volume of the part (in cm3).
     Public Function GetVolume() As Double
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.") 'plan to replace with Error handler 
@@ -24,8 +29,7 @@ Public Class GeometricalHelper
         Return compDef.MassProperties.Volume
     End Function
 
-    'function to calculate the surface area of the part (in cm^2)
-    ' it's off by a scale of 100??? scaling up to match iproperties
+    ' Function to calculate the surface area of the part (in cm^2).
     Public Function GetSurfaceArea() As Double
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.")
@@ -33,9 +37,7 @@ Public Class GeometricalHelper
         Return compDef.MassProperties.Area
     End Function
 
-    'basic function to obtain the bounding box dimensions of the part (in cm)
-    'tuples are a thing in vb,net???
-    ' ensures immutable parameters, avoiding accidental overwrite.
+    ' Function to obtain the bounding box dimensions of the part (in cm, cm, cm).
     Public Function GetBoundingBox() As Tuple(Of Double, Double, Double)
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Throw New InvalidOperationException("No active PartDocument.")
@@ -47,15 +49,19 @@ Public Class GeometricalHelper
         Return New Tuple(Of Double, Double, Double)(length, width, height)
     End Function
 
-    'function to obtain the bounding box volume of the part (in cm^3)
+    ' Function to obtain the bounding box volume of the part (in cm^3).
     Public Function GetBoundingBoxVolume() As Double
         Dim box = GetBoundingBox()
         Return box.Item1 * box.Item2 * box.Item3
     End Function
 
-    'Archived functions
-    'maybe aspect ratio might be considered?
-    'spies ratio by extending bounding box with other primitive shapes
+    ''' <summary>
+    '''     Archived functions
+    '''     TODO - maybe aspect ratio might be considered?
+    '''     TODO - spies ratio by extending bounding box with other primitive shapes?
+    '''     TODO - could be used to prevent excessive computation time, but that interferes with user freedom...
+    ''' </summary>
+    ''' <returns></returns>
     Public Function GetNumberOfFaces() As Integer
         Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
         If doc Is Nothing Then Return 0
@@ -84,37 +90,20 @@ Public Class GeometricalHelper
         Return doc.ComponentDefinition.SurfaceBodies.Count
     End Function
 
-    'function to calculate the overhang area of the part (in cm^2)
-    'Public Function CalculateOverhangArea(overhangAngle As Double) As Double
-    '    Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
-    '    If doc Is Nothing Then Throw New InvalidOperationException("No part document is active.")
-    '    Dim compDef = doc.ComponentDefinition
-    '    Dim totalOverhangArea As Double = 0.0
-    '    ' Iterate through all faces in the part
-    '    For Each face As Face In compDef.SurfaceBodies(1).Faces
-    '        ' Get the normal vector of the face
-    '        Dim normal As Vector = face.Evaluator.GetNormalAtPoint(face.PointOnFace)
-    '        ' Calculate the angle between the face normal and the build direction (assumed to be Z-axis)
-    '        Dim buildDirection As New Vector(0, 0, 1)
-    '        Dim angle As Double = Math.Acos(normal.DotProduct(buildDirection) / (normal.Length * buildDirection.Length)) * (180.0 / Math.PI)
-    '        ' If the angle exceeds the overhang threshold, add the face area to the total overhang area
-    '        If angle > overhangAngle Then
-    '            totalOverhangArea += face.Evaluator.Area
-    '        End If
-    '    Next
-    '    Return totalOverhangArea
-    'End Function
-
-    'function considers internal overhangs, not sure how to mitigate this.
-
-    ''' <summary>
-    ''' TRULY CORRECTED: Calculates overhang area with proper angle interpretation.
-    ''' The key insight: We need angle from HORIZONTAL, not vertical!
+    ''' / <summary>
+    '''     Main function to calculate overhang area based on a reference face and overhang angle. 
+    '''     Significant issues arise from arbitrary thresholds, lack of coplanar surfaces detected well, as well as complex curves correctly detecting segments of the face.
     ''' </summary>
+    ''' <param name="referenceFace">The planar face used to determine build direction.</param>
+    ''' <param name="overhangAngleDeg">The overhang angle threshold in degrees, measured from the horizontal.</param>
+    ''' <param name="overhangFaces">Output list of faces identified as overhangs.</param>
+    ''' <param name="enableDebug">Enable detailed debug output.</param>
+    ''' <returns>Total overhang area in cm2.</returns>
     Public Function CalculateOverhangArea(referenceFace As Face,
                                           overhangAngleDeg As Double,
                                           ByRef overhangFaces As List(Of Face),
                                           Optional enableDebug As Boolean = False) As Double
+        ' Always check for validity, but redundant with main form validation.
         If referenceFace Is Nothing Then
             Throw New ArgumentNullException(NameOf(referenceFace))
         End If
@@ -137,48 +126,45 @@ Public Class GeometricalHelper
             Throw New InvalidOperationException("Failed to get plane geometry.")
         End If
 
-        ' === CRITICAL FIX 1: Determine build direction properly ===
-        ' The build direction should point AWAY from the build plate INTO the part
-        ' We need to figure out which way is "up" based on the part geometry
-
+        ' First get's the face normal, check flips it back if needed and normalizes it.
         Dim rawNormal As Vector = plane.Normal.AsVector()
         If referenceFace.IsParamReversed Then
             rawNormal.ScaleBy(-1)
         End If
         rawNormal.Normalize()
 
-        ' Get part centroid and reference face center
+        ' Get part centroid and reference face center.
         Dim centroid As Point = compDef.MassProperties.CenterOfMass
         Dim refFaceCenter As Point = referenceFace.PointOnFace
 
-        ' Vector from reference face to centroid
+        ' Vector pointing from reference face to centroid.
         Dim faceToCentroid = _app.TransientGeometry.CreateVector(
             centroid.X - refFaceCenter.X,
             centroid.Y - refFaceCenter.Y,
             centroid.Z - refFaceCenter.Z
         )
 
-        ' Build direction should point toward the part (toward centroid)
-        ' If rawNormal points away from centroid, flip it
+        ' Checks if the normalis pointing towards the centroid, an indicator of build direction.
+        ' If rawNormal points away from centroid, flip it.
         Dim buildDir As Vector
         If rawNormal.DotProduct(faceToCentroid) < 0 Then
-            ' Normal points away from part - flip it
+            ' Normal points away from part - flip it.
             buildDir = _app.TransientGeometry.CreateVector(-rawNormal.X, -rawNormal.Y, -rawNormal.Z)
         Else
-            ' Normal points toward part - use as is
+            ' Normal points toward part - use as is.
             buildDir = rawNormal
         End If
         buildDir.Normalize()
 
         Dim totalOverhangArea As Double = 0.0
-        Dim thresholdRad As Double = overhangAngleDeg * Math.PI / 180.0
+        Dim thresholdRad As Double = overhangAngleDeg * Math.PI / 180.0 ' Converting input angle to radians.
 
-        ' Debug output
+        ' Debugger toggled by optional input parameter as true or false.
         Dim debugInfo As New StringBuilder()
         If enableDebug Then
-            debugInfo.AppendLine("═══════════════════════════════════════")
-            debugInfo.AppendLine("     OVERHANG ANALYSIS - DEEP DEBUG")
-            debugInfo.AppendLine("═══════════════════════════════════════")
+            debugInfo.AppendLine("=======================================")
+            debugInfo.AppendLine("     OVERHANG ANALYSIS - DEBUG")
+            debugInfo.AppendLine("=======================================")
             debugInfo.AppendLine()
             debugInfo.AppendLine("REFERENCE FACE:")
             debugInfo.AppendLine($"  Center: ({refFaceCenter.X:F2}, {refFaceCenter.Y:F2}, {refFaceCenter.Z:F2})")
@@ -194,7 +180,7 @@ Public Class GeometricalHelper
             debugInfo.AppendLine($"  • Horizontal down (0°) = Maximum overhang")
             debugInfo.AppendLine($"  • Vertical (90°) = Self-supporting")
             debugInfo.AppendLine()
-            debugInfo.AppendLine("───────────────────────────────────────")
+            debugInfo.AppendLine("=======================================")
             debugInfo.AppendLine()
         End If
 
@@ -204,15 +190,14 @@ Public Class GeometricalHelper
         Dim tooSteepCount As Integer = 0
         Dim overhangCount As Integer = 0
 
-        ' === CRITICAL FIX 2: Less aggressive internal face filtering ===
-        ' Process all solid bodies
+        ' Process all solid bodies.
         For Each sBody As SurfaceBody In compDef.SurfaceBodies
             If Not sBody.IsSolid Then Continue For
 
             For Each f As Face In sBody.Faces
                 faceIndex += 1
 
-                ' Skip the reference face itself
+                ' Skip the reference face itself.
                 If f Is referenceFace Then
                     If enableDebug Then
                         debugInfo.AppendLine($"Face {faceIndex}: REFERENCE FACE (skipped)")
@@ -222,7 +207,7 @@ Public Class GeometricalHelper
                 End If
 
                 Try
-                    ' Get face normal at a point on the face
+                    ' Get face normal at a point on the face.
                     Dim facePoint As Point = f.PointOnFace
                     Dim faceNormal As Vector = GetFaceNormalAtPoint(f, facePoint)
 
@@ -235,8 +220,7 @@ Public Class GeometricalHelper
                     End If
                     faceNormal.Normalize()
 
-                    ' === IMPROVED internal face detection ===
-                    ' Method 1: Centroid-based (less aggressive threshold)
+                    ' Computes vector from face to centroid.
                     Dim vectorToCentroid = _app.TransientGeometry.CreateVector(
                         centroid.X - facePoint.X,
                         centroid.Y - facePoint.Y,
@@ -245,7 +229,7 @@ Public Class GeometricalHelper
                     vectorToCentroid.Normalize()
                     Dim dotToCenter = faceNormal.DotProduct(vectorToCentroid)
 
-                    ' Method 2: Distance from centroid (faces far from center are likely external)
+                    ' Computes distance from face to centroid.
                     Dim distFromCenter = Math.Sqrt(
                         Math.Pow(facePoint.X - centroid.X, 2) +
                         Math.Pow(facePoint.Y - centroid.Y, 2) +
@@ -253,7 +237,7 @@ Public Class GeometricalHelper
                     )
 
                     ' Use more lenient threshold: 0.3 instead of 0.1
-                    ' OR if face is far from centroid, likely external
+                    ' OR if face is far from centroid, likely external.
                     Dim isExternal = (dotToCenter <= 0.3) OrElse (distFromCenter > 1.0)
 
                     If Not isExternal Then
@@ -266,14 +250,14 @@ Public Class GeometricalHelper
                         Continue For
                     End If
 
-                    ' Calculate dot product with build direction
+                    ' Calculate dot product with build direction.
                     Dim dot = faceNormal.DotProduct(buildDir)
                     dot = Math.Max(-1.0, Math.Min(1.0, dot))
 
-                    ' === CORE OVERHANG LOGIC ===
+                    ' Overhang Logic:
                     ' dot > 0: Face points same direction as build (upward) - NOT overhang
                     ' dot < 0: Face points opposite to build (downward) - potential overhang
-                    ' dot ≈ 0: Face is perpendicular (vertical)
+                    ' dot = 0: Face is perpendicular (vertical)
 
                     Dim isDownwardFacing = dot < -0.01 ' Small threshold to handle numerical errors
 
@@ -286,16 +270,16 @@ Public Class GeometricalHelper
                         Continue For
                     End If
 
-                    ' For downward faces, calculate angle from horizontal
-                    ' We want: arccos(-dot) which gives angle from horizontal plane
-                    ' dot = -1 (straight down) → arccos(1) = 0° from horizontal
-                    ' dot = -0.707 (45° down) → arccos(0.707) = 45° from horizontal  
-                    ' dot = 0 (vertical) → arccos(0) = 90° from horizontal
+                    ' For downward faces, calculate angle from horizontal.
+                    ' We want: arccos(-dot) which gives angle from horizontal plane.
+                    ' dot = -1 (straight down) → arccos(1) = 0° from horizontal.
+                    ' dot = -0.707 (45° down) → arccos(0.707) = 45° from horizontal.
+                    ' dot = 0 (vertical) → arccos(0) = 90° from horizontal.
 
                     Dim angleFromHorizontalRad = Math.Acos(-dot)
                     Dim angleFromHorizontalDeg = angleFromHorizontalRad * 180.0 / Math.PI
 
-                    ' Overhang if angle ≤ threshold
+                    ' Overhang if angle ≤ threshold.
                     Dim needsSupport = angleFromHorizontalDeg <= overhangAngleDeg
 
                     If enableDebug Then
@@ -315,12 +299,12 @@ Public Class GeometricalHelper
                         overhangCount += 1
 
                         If enableDebug Then
-                            debugInfo.AppendLine($"  ✓ OVERHANG! Area: {faceArea:F2} cm²")
+                            debugInfo.AppendLine($" OVERHANG FOUND! Area: {faceArea:F2} cm²")
                         End If
                     Else
                         tooSteepCount += 1
                         If enableDebug Then
-                            debugInfo.AppendLine($"  ✗ Too steep (self-supporting)")
+                            debugInfo.AppendLine($"self-supporting")
                         End If
                     End If
 
@@ -339,9 +323,9 @@ Public Class GeometricalHelper
         Next
 
         If enableDebug Then
-            debugInfo.AppendLine("═══════════════════════════════════════")
+            debugInfo.AppendLine("=======================================")
             debugInfo.AppendLine("              SUMMARY")
-            debugInfo.AppendLine("═══════════════════════════════════════")
+            debugInfo.AppendLine("=======================================")
             debugInfo.AppendLine($"Total faces analyzed: {faceIndex}")
             debugInfo.AppendLine($"  • Internal faces: {internalCount}")
             debugInfo.AppendLine($"  • Upward/vertical faces: {upwardCount}")
@@ -349,7 +333,7 @@ Public Class GeometricalHelper
             debugInfo.AppendLine($"  • OVERHANGS DETECTED: {overhangCount}")
             debugInfo.AppendLine()
             debugInfo.AppendLine($"Total overhang area: {totalOverhangArea:F2} cm²")
-            debugInfo.AppendLine("═══════════════════════════════════════")
+            debugInfo.AppendLine("=======================================")
 
             ' Show debug output
             Dim result = System.Windows.Forms.MessageBox.Show(
@@ -362,77 +346,56 @@ Public Class GeometricalHelper
         Return totalOverhangArea
     End Function
 
-    ''' <summary>
-    ''' Alternative: Simple Z-axis vertical build assumption
-    ''' Use this if the reference face method isn't working
-    ''' </summary>
-    Public Function CalculateOverhangAreaZUp(overhangAngleDeg As Double,
-                                             ByRef overhangFaces As List(Of Face),
-                                             Optional enableDebug As Boolean = False) As Double
-        Dim doc As PartDocument = TryCast(_app.ActiveDocument, PartDocument)
-        If doc Is Nothing Then
-            Throw New InvalidOperationException("No active PartDocument.")
-        End If
+    ' Archived functions, tried to mitigate coplanar detection and face sampling for obtuse curves with minimal overhang.
+    ' Testing function to check if two faces are coplanar within a tolerance (good for stl). It didn't work... 
+    ' Overtly sensitive and difficulty in assessing for parallel faces with an offset. Also fails to detect at least 1 coplanar surface.
+    Private Function CheckFacesCoplanar(f1 As Face, f2 As Face, tol As Double) As Boolean
+        Dim n1 = GetFaceNormalAtPoint(f1, f1.PointOnFace)
+        Dim n2 = GetFaceNormalAtPoint(f2, f2.PointOnFace)
+        n1.Normalize() : n2.Normalize()
+        If Math.Abs(n1.DotProduct(n2) - 1.0) > tol Then Return False
 
-        Dim compDef = doc.ComponentDefinition
-        overhangFaces = New List(Of Face)()
+        Dim p1 = f1.PointOnFace
+        Dim p2 = f2.PointOnFace
+        Dim planeDiff = Math.Abs(n1.X * (p2.X - p1.X) + n1.Y * (p2.Y - p1.Y) + n1.Z * (p2.Z - p1.Z))
+        Return planeDiff < tol
+    End Function
 
-        ' Simple: Z-axis is UP
-        Dim buildDir = _app.TransientGeometry.CreateVector(0, 0, 1)
-        Dim centroid As Point = compDef.MassProperties.CenterOfMass
+    ' Get multiple sample points on a face (simple grid sampling).
+    Private Function GetSamplePointsOnFace(f As Face, divisionsU As Integer, divisionsV As Integer) As List(Of Point)
+        Dim points As New List(Of Point)
 
-        Dim totalOverhangArea As Double = 0.0
-        Dim thresholdRad As Double = overhangAngleDeg * Math.PI / 180.0
+        ' Get UV parameter bounds
+        Dim paramRange As Double() = {}
+        f.Evaluator.GetParamExtents(paramRange)
 
-        For Each sBody As SurfaceBody In compDef.SurfaceBodies
-            If Not sBody.IsSolid Then Continue For
+        Dim uMin As Double = paramRange(0)
+        Dim uMax As Double = paramRange(1)
+        Dim vMin As Double = paramRange(2)
+        Dim vMax As Double = paramRange(3)
 
-            For Each f As Face In sBody.Faces
-                Try
-                    Dim facePoint As Point = f.PointOnFace
-                    Dim faceNormal As Vector = GetFaceNormalAtPoint(f, facePoint)
+        For i As Integer = 0 To divisionsU
+            For j As Integer = 0 To divisionsV
+                Dim u = uMin + (uMax - uMin) * i / divisionsU
+                Dim v = vMin + (vMax - vMin) * j / divisionsV
 
-                    If faceNormal Is Nothing Then Continue For
-                    faceNormal.Normalize()
+                ' Inventor expects parameter array and returns coordinate array
+                Dim param(1) As Double
+                param(0) = u
+                param(1) = v
 
-                    ' Simple internal filter
-                    Dim vectorToCentroid = _app.TransientGeometry.CreateVector(
-                        centroid.X - facePoint.X,
-                        centroid.Y - facePoint.Y,
-                        centroid.Z - facePoint.Z
-                    )
-                    vectorToCentroid.Normalize()
+                Dim coord(2) As Double
+                f.Evaluator.GetPointAtParam(param, coord)
 
-                    If faceNormal.DotProduct(vectorToCentroid) > 0.3 Then
-                        Continue For
-                    End If
-
-                    ' Overhang check
-                    Dim dot = faceNormal.DotProduct(buildDir)
-                    dot = Math.Max(-1.0, Math.Min(1.0, dot))
-
-                    If dot < -0.01 Then ' Downward facing
-                        Dim angleFromHorizontal = Math.Acos(-dot) * 180.0 / Math.PI
-
-                        If angleFromHorizontal <= overhangAngleDeg Then
-                            Dim faceArea As Double = GetFaceArea(f)
-                            totalOverhangArea += faceArea
-                            overhangFaces.Add(f)
-                        End If
-                    End If
-
-                Catch
-                    Continue For
-                End Try
+                Dim p As Point = f.Evaluator.Parent.SurfaceBody.Parent.ComponentDefinition.Application.TransientGeometry.CreatePoint(coord(0), coord(1), coord(2))
+                points.Add(p)
             Next
         Next
 
-        Return totalOverhangArea
+        Return points
     End Function
 
-    ''' <summary>
-    ''' Helper function to get face normal vector at a specific point
-    ''' </summary>
+    ' Helper function to get face normal vector at a specific point.
     Public Function GetFaceNormalAtPoint(f As Face, pt As Point) As Vector
         Try
             Dim ptArr() As Double = {pt.X, pt.Y, pt.Z}
@@ -455,9 +418,7 @@ Public Class GeometricalHelper
         End Try
     End Function
 
-    ''' <summary>
-    ''' Helper function to safely get face area
-    ''' </summary>
+    'Helper function to safely get face area.
     Public Function GetFaceArea(f As Face) As Double
         Try
             Return f.Evaluator.Area
@@ -471,14 +432,16 @@ Public Class GeometricalHelper
             End Try
         End Try
     End Function
-    'function to calculate part complexity (based on surface area to volume ratio)
+
+    'Function to calculate part complexity (based on surface area to volume ratio).
     Public Function CalculatePartComplexity() As Double
         Dim volume As Double = GetVolume()
         Dim surfaceArea As Double = GetSurfaceArea()
-        If volume = 0 Then Return 0 ' edge case to somehow avoid crashing by dividing by 0
+        If volume = 0 Then Return 0 ' Edge case to somehow avoid crashing by dividing by 0.
         Return (surfaceArea / volume) ' Higher ratio indicates higher complexity
     End Function
 
+    ' Function to calculate volume ratio (part volume to bounding box volume).
     Public Function CalculateVolumeRatio() As Double
         Dim volume As Double = GetVolume()
         Dim bbvolume As Double = GetBoundingBoxVolume()
@@ -486,12 +449,20 @@ Public Class GeometricalHelper
         Return (volume / bbvolume)
     End Function
 
-    Public Function CalculateOverhangPercentage(totalSurfaceArea As Double, totalOverhangArea As Double) As Double
+    ' Function to calculate overhang ratio (overhang area to total surface area).
+    Public Function CalculateOverhangRatio(totalSurfaceArea As Double, totalOverhangArea As Double) As Double
         If totalSurfaceArea <= 0 Then Return 0
-        Return (totalOverhangArea / totalSurfaceArea) * 100.0
+        Return (totalOverhangArea / totalSurfaceArea)
     End Function
 End Class
 
+'------------------------------------------------------------------------------
+' <summary>
+'	Class to hold a summary of geometrical properties for easy access and transfer.
+' </summary>
+' <author>Jasper Koid</author>
+' <created>26-AUG-2025</created>
+'------------------------------------------------------------------------------
 Public Class GeometrySummary
     Public Property Volume As Double
     Public Property SurfaceArea As Double
@@ -499,6 +470,5 @@ Public Class GeometrySummary
     Public Property ComplexityRatio As Double
     Public Property OverhangArea As Double
     Public Property VolumeRatio As Double
-    Public Property OverhangPercentage As Double
-
+    Public Property OverhangRatio As Double
 End Class

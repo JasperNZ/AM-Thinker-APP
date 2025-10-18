@@ -1,12 +1,19 @@
-﻿' File contains the design layout of the main user form and the backend logic.
-' Stylistic decision to use dropdownlists to avoid user input errors.
-' Material selection as dropdown list to avoid AM analysis conflicts.
+﻿'------------------------------------------------------------------------------
+' <summary>
+'   Handles static design of the MainUserForm, including all labels, buttons, checkboxes and comboboxes.
+'   Recommend changes done by using the Visual Studio Designer, do not allow auto-adjust of size due to text resizing issues.
+'   Note the choice of singular materials needing to be justified and implementation of dropdownmenus for user-friendliness.
+' </summary>
+' <author>Jasper Koid</author>
+' <created>24-AUG-2025</created>
+'------------------------------------------------------------------------------
+
 Imports System.Drawing
 Imports System.Windows.Forms
 
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class mainUserForm
+Partial Class MainUserForm
     Inherits System.Windows.Forms.Form
 
     Private toolTip1 As System.Windows.Forms.ToolTip
@@ -32,21 +39,21 @@ Partial Class mainUserForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(mainUserForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainUserForm))
         Me.toolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.HighlightCheckBox = New System.Windows.Forms.CheckBox()
+        Me.LabelPrecisionOfPart = New System.Windows.Forms.Label()
+        Me.LabelLeadTime = New System.Windows.Forms.Label()
+        Me.LabelVolumeOfProduction = New System.Windows.Forms.Label()
+        Me.LabelPostProcessingEffort = New System.Windows.Forms.Label()
+        Me.LabelIntendedApplication = New System.Windows.Forms.Label()
+        Me.LabelMaterial = New System.Windows.Forms.Label()
+        Me.CheckBoxHighlight = New System.Windows.Forms.CheckBox()
         Me.ButtonCompute = New System.Windows.Forms.Button()
         Me.ComboBoxPrecisionOfPart = New System.Windows.Forms.ComboBox()
         Me.ComboBoxLeadTime = New System.Windows.Forms.ComboBox()
         Me.ComboBoxVolumeOfProduction = New System.Windows.Forms.ComboBox()
         Me.ComboBoxPostProcessingEffort = New System.Windows.Forms.ComboBox()
-        Me.ComboBoxIntendedUseOfPart = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxIntendedApplication = New System.Windows.Forms.ComboBox()
         Me.ComboBoxMaterial = New System.Windows.Forms.ComboBox()
         Me.CheckBoxDirectedEnergyDeposition = New System.Windows.Forms.CheckBox()
         Me.CheckBoxPowederBedFusion = New System.Windows.Forms.CheckBox()
@@ -54,14 +61,14 @@ Partial Class mainUserForm
         Me.CheckBoxBinderJetting = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMaterialJetting = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMaterialExtrusion = New System.Windows.Forms.CheckBox()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.CheckBoxIMFP = New System.Windows.Forms.CheckBox()
-        Me.groupRequirements = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.GroupTechnologies = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxNonMachinableFeaturesPresent = New System.Windows.Forms.CheckBox()
+        Me.GroupRequirements = New System.Windows.Forms.GroupBox()
+        Me.ButtonPostProcess = New System.Windows.Forms.Button()
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.LabelInstructions = New System.Windows.Forms.Label()
-        Me.GroupBox1.SuspendLayout()
-        Me.groupRequirements.SuspendLayout()
+        Me.GroupTechnologies.SuspendLayout()
+        Me.GroupRequirements.SuspendLayout()
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -72,90 +79,90 @@ Partial Class mainUserForm
         Me.toolTip1.ReshowDelay = 10
         Me.toolTip1.ShowAlways = True
         '
-        'Label1
+        'LabelPrecisionOfPart
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(14, 30)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(84, 13)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Precision of Part"
-        Me.toolTip1.SetToolTip(Me.Label1, "Select the required accuracy of the part." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 1mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 0.5mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium: 0.2" &
+        Me.LabelPrecisionOfPart.AutoSize = True
+        Me.LabelPrecisionOfPart.Location = New System.Drawing.Point(14, 30)
+        Me.LabelPrecisionOfPart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelPrecisionOfPart.Name = "LabelPrecisionOfPart"
+        Me.LabelPrecisionOfPart.Size = New System.Drawing.Size(84, 13)
+        Me.LabelPrecisionOfPart.TabIndex = 1
+        Me.LabelPrecisionOfPart.Text = "Precision of Part"
+        Me.toolTip1.SetToolTip(Me.LabelPrecisionOfPart, "Select the required accuracy of the part." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 1mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 0.5mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium: 0.2" &
         "mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "High: 0.1mm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very High: 0.05mm")
         '
-        'Label2
+        'LabelLeadTime
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(14, 51)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(57, 13)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Lead Time"
-        Me.toolTip1.SetToolTip(Me.Label2, "Select the allowable lead time of the part." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 3 days" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 1 week" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Mediu" &
+        Me.LabelLeadTime.AutoSize = True
+        Me.LabelLeadTime.Location = New System.Drawing.Point(14, 51)
+        Me.LabelLeadTime.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelLeadTime.Name = "LabelLeadTime"
+        Me.LabelLeadTime.Size = New System.Drawing.Size(57, 13)
+        Me.LabelLeadTime.TabIndex = 3
+        Me.LabelLeadTime.Text = "Lead Time"
+        Me.toolTip1.SetToolTip(Me.LabelLeadTime, "Select the allowable lead time of the part." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 3 days" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 1 week" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Mediu" &
         "m: 3 weeks" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "High: 2 months" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very High: 3 months")
         '
-        'Label3
+        'LabelVolumeOfProduction
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(14, 96)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(108, 13)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Volume of Production"
-        Me.toolTip1.SetToolTip(Me.Label3, "Select expected production quantity." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 5 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 6-50 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium:" &
+        Me.LabelVolumeOfProduction.AutoSize = True
+        Me.LabelVolumeOfProduction.Location = New System.Drawing.Point(14, 96)
+        Me.LabelVolumeOfProduction.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelVolumeOfProduction.Name = "LabelVolumeOfProduction"
+        Me.LabelVolumeOfProduction.Size = New System.Drawing.Size(108, 13)
+        Me.LabelVolumeOfProduction.TabIndex = 7
+        Me.LabelVolumeOfProduction.Text = "Volume of Production"
+        Me.toolTip1.SetToolTip(Me.LabelVolumeOfProduction, "Select expected production quantity." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 5 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 6-50 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium:" &
         " 51-200 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "High: 201-1000 units" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very High: +1000 units")
         '
-        'Label4
+        'LabelPostProcessingEffort
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(14, 73)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(111, 13)
-        Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Post-Processing Effort"
-        Me.toolTip1.SetToolTip(Me.Label4, "Select level of post-processing required." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 1 hour" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 6 hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium" &
+        Me.LabelPostProcessingEffort.AutoSize = True
+        Me.LabelPostProcessingEffort.Location = New System.Drawing.Point(14, 73)
+        Me.LabelPostProcessingEffort.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelPostProcessingEffort.Name = "LabelPostProcessingEffort"
+        Me.LabelPostProcessingEffort.Size = New System.Drawing.Size(111, 13)
+        Me.LabelPostProcessingEffort.TabIndex = 5
+        Me.LabelPostProcessingEffort.Text = "Post-Processing Effort"
+        Me.toolTip1.SetToolTip(Me.LabelPostProcessingEffort, "Select level of post-processing required." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very Low: 1 hour" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Low: 6 hours" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Medium" &
         ": 1 day" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "High: 3 days" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Very High: +1 week")
         '
-        'Label5
+        'LabelIntendedApplication
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(14, 118)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(104, 13)
-        Me.Label5.TabIndex = 9
-        Me.Label5.Text = "Intended Application"
-        Me.toolTip1.SetToolTip(Me.Label5, "Select the purpose of the part.")
+        Me.LabelIntendedApplication.AutoSize = True
+        Me.LabelIntendedApplication.Location = New System.Drawing.Point(14, 118)
+        Me.LabelIntendedApplication.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelIntendedApplication.Name = "LabelIntendedApplication"
+        Me.LabelIntendedApplication.Size = New System.Drawing.Size(104, 13)
+        Me.LabelIntendedApplication.TabIndex = 9
+        Me.LabelIntendedApplication.Text = "Intended Application"
+        Me.toolTip1.SetToolTip(Me.LabelIntendedApplication, "Select the purpose of the part.")
         '
-        'Label6
+        'LabelMaterial
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(14, 140)
-        Me.Label6.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(44, 13)
-        Me.Label6.TabIndex = 12
-        Me.Label6.Text = "Material"
-        Me.toolTip1.SetToolTip(Me.Label6, "Select the base material type for manufacturing.")
+        Me.LabelMaterial.AutoSize = True
+        Me.LabelMaterial.Location = New System.Drawing.Point(14, 140)
+        Me.LabelMaterial.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelMaterial.Name = "LabelMaterial"
+        Me.LabelMaterial.Size = New System.Drawing.Size(44, 13)
+        Me.LabelMaterial.TabIndex = 12
+        Me.LabelMaterial.Text = "Material"
+        Me.toolTip1.SetToolTip(Me.LabelMaterial, "Select the base material type for manufacturing.")
         '
-        'HighlightCheckBox
+        'CheckBoxHighlight
         '
-        Me.HighlightCheckBox.AutoSize = True
-        Me.HighlightCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.HighlightCheckBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.HighlightCheckBox.Location = New System.Drawing.Point(362, 184)
-        Me.HighlightCheckBox.Margin = New System.Windows.Forms.Padding(2)
-        Me.HighlightCheckBox.Name = "HighlightCheckBox"
-        Me.HighlightCheckBox.Size = New System.Drawing.Size(117, 17)
-        Me.HighlightCheckBox.TabIndex = 25
-        Me.HighlightCheckBox.Text = "Highlight Overhang"
-        Me.toolTip1.SetToolTip(Me.HighlightCheckBox, "Select a reference face in your model before running analysis." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "When checked, hig" &
+        Me.CheckBoxHighlight.AutoSize = True
+        Me.CheckBoxHighlight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBoxHighlight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBoxHighlight.Location = New System.Drawing.Point(362, 184)
+        Me.CheckBoxHighlight.Margin = New System.Windows.Forms.Padding(2)
+        Me.CheckBoxHighlight.Name = "CheckBoxHighlight"
+        Me.CheckBoxHighlight.Size = New System.Drawing.Size(117, 17)
+        Me.CheckBoxHighlight.TabIndex = 25
+        Me.CheckBoxHighlight.Text = "Highlight Overhang"
+        Me.toolTip1.SetToolTip(Me.CheckBoxHighlight, "Select a reference face in your model before running analysis." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "When checked, hig" &
         "hlight faces that exceed overhang angle.")
-        Me.HighlightCheckBox.UseVisualStyleBackColor = True
+        Me.CheckBoxHighlight.UseVisualStyleBackColor = True
         '
         'ButtonCompute
         '
@@ -215,17 +222,17 @@ Partial Class mainUserForm
         Me.ComboBoxPostProcessingEffort.Size = New System.Drawing.Size(122, 21)
         Me.ComboBoxPostProcessingEffort.TabIndex = 6
         '
-        'ComboBoxIntendedUseOfPart
+        'ComboBoxIntendedApplication
         '
-        Me.ComboBoxIntendedUseOfPart.AllowDrop = True
-        Me.ComboBoxIntendedUseOfPart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxIntendedUseOfPart.FormattingEnabled = True
-        Me.ComboBoxIntendedUseOfPart.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare Part", "Mass Production", "Functional Prototype", "Aesthetic Prototype"})
-        Me.ComboBoxIntendedUseOfPart.Location = New System.Drawing.Point(133, 116)
-        Me.ComboBoxIntendedUseOfPart.Margin = New System.Windows.Forms.Padding(2)
-        Me.ComboBoxIntendedUseOfPart.Name = "ComboBoxIntendedUseOfPart"
-        Me.ComboBoxIntendedUseOfPart.Size = New System.Drawing.Size(122, 21)
-        Me.ComboBoxIntendedUseOfPart.TabIndex = 10
+        Me.ComboBoxIntendedApplication.AllowDrop = True
+        Me.ComboBoxIntendedApplication.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxIntendedApplication.FormattingEnabled = True
+        Me.ComboBoxIntendedApplication.Items.AddRange(New Object() {"Unique Custom Part", "Critical Spare Part", "Mass Production", "Functional Prototype", "Aesthetic Prototype"})
+        Me.ComboBoxIntendedApplication.Location = New System.Drawing.Point(133, 116)
+        Me.ComboBoxIntendedApplication.Margin = New System.Windows.Forms.Padding(2)
+        Me.ComboBoxIntendedApplication.Name = "ComboBoxIntendedApplication"
+        Me.ComboBoxIntendedApplication.Size = New System.Drawing.Size(122, 21)
+        Me.ComboBoxIntendedApplication.TabIndex = 10
         '
         'ComboBoxMaterial
         '
@@ -305,69 +312,69 @@ Partial Class mainUserForm
         Me.CheckBoxMaterialExtrusion.Text = "Material Extrusion"
         Me.CheckBoxMaterialExtrusion.UseVisualStyleBackColor = True
         '
-        'GroupBox1
+        'GroupTechnologies
         '
-        Me.GroupBox1.Controls.Add(Me.CheckBoxMaterialExtrusion)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxDirectedEnergyDeposition)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxMaterialJetting)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxPowederBedFusion)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxBinderJetting)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxVatPhotopolymerisation)
-        Me.GroupBox1.Location = New System.Drawing.Point(309, 15)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(183, 165)
-        Me.GroupBox1.TabIndex = 20
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Select Available AM Technology"
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxMaterialExtrusion)
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxDirectedEnergyDeposition)
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxMaterialJetting)
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxPowederBedFusion)
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxBinderJetting)
+        Me.GroupTechnologies.Controls.Add(Me.CheckBoxVatPhotopolymerisation)
+        Me.GroupTechnologies.Location = New System.Drawing.Point(309, 15)
+        Me.GroupTechnologies.Margin = New System.Windows.Forms.Padding(2)
+        Me.GroupTechnologies.Name = "GroupTechnologies"
+        Me.GroupTechnologies.Padding = New System.Windows.Forms.Padding(2)
+        Me.GroupTechnologies.Size = New System.Drawing.Size(183, 165)
+        Me.GroupTechnologies.TabIndex = 20
+        Me.GroupTechnologies.TabStop = False
+        Me.GroupTechnologies.Text = "Select Available AM Technology"
         '
-        'CheckBoxIMFP
+        'CheckBoxNonMachinableFeaturesPresent
         '
-        Me.CheckBoxIMFP.AutoSize = True
-        Me.CheckBoxIMFP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBoxIMFP.Location = New System.Drawing.Point(17, 184)
-        Me.CheckBoxIMFP.Margin = New System.Windows.Forms.Padding(2)
-        Me.CheckBoxIMFP.Name = "CheckBoxIMFP"
-        Me.CheckBoxIMFP.Size = New System.Drawing.Size(187, 17)
-        Me.CheckBoxIMFP.TabIndex = 22
-        Me.CheckBoxIMFP.Text = "Non-Machinable Features Present"
-        Me.CheckBoxIMFP.UseVisualStyleBackColor = True
+        Me.CheckBoxNonMachinableFeaturesPresent.AutoSize = True
+        Me.CheckBoxNonMachinableFeaturesPresent.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBoxNonMachinableFeaturesPresent.Location = New System.Drawing.Point(17, 184)
+        Me.CheckBoxNonMachinableFeaturesPresent.Margin = New System.Windows.Forms.Padding(2)
+        Me.CheckBoxNonMachinableFeaturesPresent.Name = "CheckBoxNonMachinableFeaturesPresent"
+        Me.CheckBoxNonMachinableFeaturesPresent.Size = New System.Drawing.Size(187, 17)
+        Me.CheckBoxNonMachinableFeaturesPresent.TabIndex = 22
+        Me.CheckBoxNonMachinableFeaturesPresent.Text = "Non-Machinable Features Present"
+        Me.CheckBoxNonMachinableFeaturesPresent.UseVisualStyleBackColor = True
         '
-        'groupRequirements
+        'GroupRequirements
         '
-        Me.groupRequirements.Controls.Add(Me.Label6)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxMaterial)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxIntendedUseOfPart)
-        Me.groupRequirements.Controls.Add(Me.Label5)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxVolumeOfProduction)
-        Me.groupRequirements.Controls.Add(Me.Label3)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxPostProcessingEffort)
-        Me.groupRequirements.Controls.Add(Me.Label4)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxLeadTime)
-        Me.groupRequirements.Controls.Add(Me.Label2)
-        Me.groupRequirements.Controls.Add(Me.ComboBoxPrecisionOfPart)
-        Me.groupRequirements.Controls.Add(Me.Label1)
-        Me.groupRequirements.Location = New System.Drawing.Point(11, 15)
-        Me.groupRequirements.Margin = New System.Windows.Forms.Padding(2)
-        Me.groupRequirements.Name = "groupRequirements"
-        Me.groupRequirements.Padding = New System.Windows.Forms.Padding(2)
-        Me.groupRequirements.Size = New System.Drawing.Size(269, 165)
-        Me.groupRequirements.TabIndex = 23
-        Me.groupRequirements.TabStop = False
-        Me.groupRequirements.Text = "Input Part Requirements"
+        Me.GroupRequirements.Controls.Add(Me.LabelMaterial)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxMaterial)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxIntendedApplication)
+        Me.GroupRequirements.Controls.Add(Me.LabelIntendedApplication)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxVolumeOfProduction)
+        Me.GroupRequirements.Controls.Add(Me.LabelVolumeOfProduction)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxPostProcessingEffort)
+        Me.GroupRequirements.Controls.Add(Me.LabelPostProcessingEffort)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxLeadTime)
+        Me.GroupRequirements.Controls.Add(Me.LabelLeadTime)
+        Me.GroupRequirements.Controls.Add(Me.ComboBoxPrecisionOfPart)
+        Me.GroupRequirements.Controls.Add(Me.LabelPrecisionOfPart)
+        Me.GroupRequirements.Location = New System.Drawing.Point(11, 15)
+        Me.GroupRequirements.Margin = New System.Windows.Forms.Padding(2)
+        Me.GroupRequirements.Name = "GroupRequirements"
+        Me.GroupRequirements.Padding = New System.Windows.Forms.Padding(2)
+        Me.GroupRequirements.Size = New System.Drawing.Size(269, 165)
+        Me.GroupRequirements.TabIndex = 23
+        Me.GroupRequirements.TabStop = False
+        Me.GroupRequirements.Text = "Input Part Requirements"
         '
-        'Button1
+        'ButtonPostProcess
         '
-        Me.Button1.BackColor = System.Drawing.SystemColors.InactiveBorder
-        Me.Button1.ForeColor = System.Drawing.SystemColors.InactiveCaption
-        Me.Button1.Location = New System.Drawing.Point(337, 210)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(2)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(142, 34)
-        Me.Button1.TabIndex = 24
-        Me.Button1.Text = "Post-Processing Calculator"
-        Me.Button1.UseVisualStyleBackColor = False
+        Me.ButtonPostProcess.BackColor = System.Drawing.SystemColors.InactiveBorder
+        Me.ButtonPostProcess.ForeColor = System.Drawing.SystemColors.InactiveCaption
+        Me.ButtonPostProcess.Location = New System.Drawing.Point(337, 210)
+        Me.ButtonPostProcess.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonPostProcess.Name = "ButtonPostProcess"
+        Me.ButtonPostProcess.Size = New System.Drawing.Size(142, 34)
+        Me.ButtonPostProcess.TabIndex = 24
+        Me.ButtonPostProcess.Text = "Post-Processing Calculator"
+        Me.ButtonPostProcess.UseVisualStyleBackColor = False
         '
         'LabelInstructions
         '
@@ -381,27 +388,27 @@ Partial Class mainUserForm
         Me.LabelInstructions.TabIndex = 13
         Me.LabelInstructions.Text = "Tip: Select a face before clicking Compute to detect overhangs."
         '
-        'mainUserForm
+        'MainUserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(503, 279)
         Me.Controls.Add(Me.LabelInstructions)
-        Me.Controls.Add(Me.HighlightCheckBox)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.CheckBoxIMFP)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.CheckBoxHighlight)
+        Me.Controls.Add(Me.ButtonPostProcess)
+        Me.Controls.Add(Me.CheckBoxNonMachinableFeaturesPresent)
+        Me.Controls.Add(Me.GroupTechnologies)
         Me.Controls.Add(Me.ButtonCompute)
-        Me.Controls.Add(Me.groupRequirements)
+        Me.Controls.Add(Me.GroupRequirements)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MaximizeBox = False
-        Me.Name = "mainUserForm"
+        Me.Name = "MainUserForm"
         Me.Text = "AM Thinker - Analysing your parts and needs!"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.groupRequirements.ResumeLayout(False)
-        Me.groupRequirements.PerformLayout()
+        Me.GroupTechnologies.ResumeLayout(False)
+        Me.GroupTechnologies.PerformLayout()
+        Me.GroupRequirements.ResumeLayout(False)
+        Me.GroupRequirements.PerformLayout()
         CType(Me.BindingSource1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -410,39 +417,39 @@ Partial Class mainUserForm
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Underline all labels that act as tooltips
-        Me.Label1.Font = New Font(Me.Label1.Font, FontStyle.Underline)
-        Me.Label2.Font = New Font(Me.Label2.Font, FontStyle.Underline)
-        Me.Label3.Font = New Font(Me.Label3.Font, FontStyle.Underline)
-        Me.Label4.Font = New Font(Me.Label4.Font, FontStyle.Underline)
-        Me.Label5.Font = New Font(Me.Label5.Font, FontStyle.Underline)
-        Me.Label6.Font = New Font(Me.Label6.Font, FontStyle.Underline)
+        Me.LabelPrecisionOfPart.Font = New Font(Me.LabelPrecisionOfPart.Font, FontStyle.Underline)
+        Me.LabelLeadTime.Font = New Font(Me.LabelLeadTime.Font, FontStyle.Underline)
+        Me.LabelVolumeOfProduction.Font = New Font(Me.LabelVolumeOfProduction.Font, FontStyle.Underline)
+        Me.LabelPostProcessingEffort.Font = New Font(Me.LabelPostProcessingEffort.Font, FontStyle.Underline)
+        Me.LabelIntendedApplication.Font = New Font(Me.LabelIntendedApplication.Font, FontStyle.Underline)
+        Me.LabelMaterial.Font = New Font(Me.LabelMaterial.Font, FontStyle.Underline)
     End Sub
 
     'Form controls declaration
     Friend WithEvents ButtonCompute As Windows.Forms.Button
-    Friend WithEvents Label1 As Windows.Forms.Label
+    Friend WithEvents LabelPrecisionOfPart As Windows.Forms.Label
     Friend WithEvents BindingSource1 As Windows.Forms.BindingSource
     Friend WithEvents ComboBoxPrecisionOfPart As Windows.Forms.ComboBox
     Friend WithEvents ComboBoxLeadTime As Windows.Forms.ComboBox
-    Friend WithEvents Label2 As Windows.Forms.Label
+    Friend WithEvents LabelLeadTime As Windows.Forms.Label
     Friend WithEvents ComboBoxVolumeOfProduction As Windows.Forms.ComboBox
-    Friend WithEvents Label3 As Windows.Forms.Label
+    Friend WithEvents LabelVolumeOfProduction As Windows.Forms.Label
     Friend WithEvents ComboBoxPostProcessingEffort As Windows.Forms.ComboBox
-    Friend WithEvents Label4 As Windows.Forms.Label
-    Friend WithEvents ComboBoxIntendedUseOfPart As Windows.Forms.ComboBox
-    Friend WithEvents Label5 As Windows.Forms.Label
+    Friend WithEvents LabelPostProcessingEffort As Windows.Forms.Label
+    Friend WithEvents ComboBoxIntendedApplication As Windows.Forms.ComboBox
+    Friend WithEvents LabelIntendedApplication As Windows.Forms.Label
     Friend WithEvents ComboBoxMaterial As Windows.Forms.ComboBox
-    Friend WithEvents Label6 As Windows.Forms.Label
+    Friend WithEvents LabelMaterial As Windows.Forms.Label
     Friend WithEvents CheckBoxDirectedEnergyDeposition As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxPowederBedFusion As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxVatPhotopolymerisation As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxBinderJetting As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxMaterialJetting As Windows.Forms.CheckBox
     Friend WithEvents CheckBoxMaterialExtrusion As Windows.Forms.CheckBox
-    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
-    Friend WithEvents CheckBoxIMFP As Windows.Forms.CheckBox
-    Friend WithEvents groupRequirements As Windows.Forms.GroupBox
-    Friend WithEvents Button1 As Windows.Forms.Button
-    Friend WithEvents HighlightCheckBox As CheckBox
+    Friend WithEvents GroupTechnologies As Windows.Forms.GroupBox
+    Friend WithEvents CheckBoxNonMachinableFeaturesPresent As Windows.Forms.CheckBox
+    Friend WithEvents GroupRequirements As Windows.Forms.GroupBox
+    Friend WithEvents ButtonPostProcess As Windows.Forms.Button
+    Friend WithEvents CheckBoxHighlight As CheckBox
     Friend WithEvents LabelInstructions As Label
 End Class
