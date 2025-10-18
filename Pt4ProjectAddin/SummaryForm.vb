@@ -199,19 +199,18 @@ Public Class SummaryForm
         ' Decide multiplier based on screen height
         Dim multiplier As Double
 
-        If scrWorking.Height >= 1000 Then
-            ' Large desktop monitor
+        If scrWorking.Height >= 1015 Then
+            ' Small desktop monitor :( 1032
             multiplier = 0.46
-        ElseIf scrWorking.Height >= 900 Then
-            ' Mid-size screen (typical laptop)
+        ElseIf scrWorking.Height >= 1008 Then
+            ' Laptop Screen case for presentation 1008
             multiplier = 0.6
         Else
             ' Otherwise very small screens
             multiplier = 0.7
         End If
 
-
-        MessageBox.Show($"Working area height = {scrWorking.Height}")
+        'MessageBox.Show($"Working area height = {scrWorking.Height}")
 
         Dim maxFormHeight As Integer = CInt(scrWorking.Height * multiplier)
         Dim maxAllowedPanelHeight As Integer = maxFormHeight - collapsedFormHeight
