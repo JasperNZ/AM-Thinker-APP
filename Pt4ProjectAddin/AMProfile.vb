@@ -85,7 +85,7 @@ Public MustInherit Class AMProfile
 		score += interpretedComplexity * Weights("Complexity")
 		score += interpretedOverhang * Weights("Overhang")
 		score += impossibleFeatureValue * Weights("ImpossibleFeatures")
-		score *= 10 ' Normalised values multiplied by 100 to scale.
+		score *= 100 ' Normalised values multiplied by 100 to scale.
 		Return Math.Round(Math.Max(0, Math.Min(score, 100))) 'Ideally should constrain values between 0 and 100 with no trailing 0s for a clean UI.
 	End Function
 

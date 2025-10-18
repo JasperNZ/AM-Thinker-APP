@@ -519,3 +519,4 @@ End Class
 ' panel glossary terms 
 ' panel recommendations to be appended
 ' fixup am profiles numbers and weights
+'need to really fix the scaling, overhang ratio from overhang percentage.

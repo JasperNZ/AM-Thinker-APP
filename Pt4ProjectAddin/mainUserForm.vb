@@ -160,8 +160,8 @@ Public Class MainUserForm
         Dim hasYellow = scoredProfiles.Any(Function(p) p.Score >= 40 AndAlso p.Score < 70)
 
         Dim adviceList As New List(Of String)
-        If Not hasGreen AndAlso Not hasYellow Then
-            If criteria.NumericInputs("Complexity") < 0.5 Then
+        If Not hasGreen AndAlso hasYellow Then
+            If criteria.NumericInputs("Complexity") <= 3.046 Then
                 adviceList.Add("• Try increasing part complexity or adding non-machinable features.")
             End If
 

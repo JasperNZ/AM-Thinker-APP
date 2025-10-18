@@ -355,10 +355,10 @@ Public Class SummaryForm
         ' Prepare content blocks (text + font + isTitle)
         Dim blocks As New List(Of Tuple(Of String, Font, Boolean)) From {
             Tuple.Create("Geometric Analysis:", New Font("Segoe UI", 10, FontStyle.Bold), True),
-            Tuple.Create(geomSummary, SystemFonts.DefaultFont, False),
-            Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True),
-            Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False)
-        }
+            Tuple.Create(geomSummary, SystemFonts.DefaultFont, False)}
+        'Tuple.Create("Traditional Manufacturing Assessment:", New Font("Segoe UI", 10, FontStyle.Bold), True),
+        'Tuple.Create(manufacturingSummary, SystemFonts.DefaultFont, False)
+        '}
         If adviceList IsNot Nothing AndAlso adviceList.Count > 0 Then
             blocks.Add(Tuple.Create("Improvement Suggestions:", New Font("Segoe UI", 10, FontStyle.Bold), True))
             blocks.Add(Tuple.Create(String.Join(vbCrLf, adviceList), SystemFonts.DefaultFont, False))
