@@ -196,12 +196,29 @@ Public Class SummaryForm
         ' target panel height = min(content, available below). If content > available, panel will scroll.
         Dim targetPanelHeight As Integer = If(availableBelow > 0, Math.Min(contentHeight, Math.Max(80, availableBelow)), Math.Min(contentHeight, contentHeight))
 
-        'testing out maximum form height
-        Dim maxFormHeight As Integer = CInt(scrWorking.Height * 0.46)
+        ' Decide multiplier based on screen height
+        Dim multiplier As Double
+
+        If scrWorking.Height >= 1000 Then
+            ' Large desktop monitor
+            multiplier = 0.46
+        ElseIf scrWorking.Height >= 900 Then
+            ' Mid-size screen (typical laptop)
+            multiplier = 0.6
+        Else
+            ' Otherwise very small screens
+            multiplier = 0.7
+        End If
+
+
+        MessageBox.Show($"Working area height = {scrWorking.Height}")
+
+        Dim maxFormHeight As Integer = CInt(scrWorking.Height * multiplier)
         Dim maxAllowedPanelHeight As Integer = maxFormHeight - collapsedFormHeight
         If targetPanelHeight > maxAllowedPanelHeight Then
             targetPanelHeight = maxAllowedPanelHeight
         End If
+
 
         ' Prepare for animation.
         PanelDetails.Height = 0
