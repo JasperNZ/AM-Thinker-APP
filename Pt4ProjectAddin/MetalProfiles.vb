@@ -548,13 +548,13 @@ Public Class MetalPBF
         If rawOverhangPercent <= 0.05 Then
             Return 1
         ElseIf rawOverhangPercent <= 0.15 Then
-            Return 1
+            Return 0.8
         ElseIf rawOverhangPercent <= 0.3 Then
-            Return 1
+            Return 0.6
         ElseIf rawOverhangPercent <= 0.5 Then
-            Return 1
+            Return 0.4
         Else
-            Return 1
+            Return 0.2
         End If
     End Function
 
